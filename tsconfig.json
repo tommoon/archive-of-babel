@@ -27,6 +27,6 @@
       ]
     }
   },
-  "include": ["src", "components"],
+  "include": ["src", "components", "src/Screen/Game/SubComponents/LibraryCornerPiece.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

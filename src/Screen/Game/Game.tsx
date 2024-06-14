@@ -3,30 +3,36 @@ import { Physics } from "@react-three/rapier";
 import { Suspense } from "react";
 import { Vector3 } from "three";
 import { Player } from "./SubComponents/Player";
+import { KeyboardControls, OrbitControls, PointerLockControls } from "@react-three/drei";
+import { Cell } from "./SubComponents/Cell";
+
+const keyboardMap = [
+  { name: "forward", keys: ["ArrowUp", "KeyW"] },
+  { name: "backward", keys: ["ArrowDown", "KeyS"] },
+  { name: "leftward", keys: ["ArrowLeft", "KeyA"] },
+  { name: "rightward", keys: ["ArrowRight", "KeyD"] },
+  { name: "jump", keys: ["Space"] },
+  { name: "run", keys: ["Shift"] },
+  { name: "action1", keys: ["1"] },
+  { name: "action2", keys: ["2"] },
+  { name: "action3", keys: ["3"] },
+  { name: "action4", keys: ["KeyF"] },
+];
 
 export const Game = () => {
   return (
-    <Canvas
-      shadows
-      camera={{
-        position: new Vector3(-5, 5, 0),
-        fov: 65,
-        near: 0.1,
-        far: 1000,
-      }}
-      onPointerDown={(e) => {
-        if (e.pointerType === "mouse") {
-          (e.target as HTMLCanvasElement).requestPointerLock();
-        }
-      }}
-    >
+    <KeyboardControls map={keyboardMap}>
+    <Canvas shadows>
       <Suspense>
-        <Physics>
-          <group position={new Vector3(-2.5, 3, 1)}>
-            <Player />
-          </group>
+        <ambientLight />
+        <directionalLight />
+        <Physics debug>
+          <Player />
+          <Cell position={new Vector3(0, 0, 0)} />
         </Physics>
-      </Suspense>
-    </Canvas>
+        </Suspense>
+        <PointerLockControls />
+      </Canvas>
+      </KeyboardControls>
   );
 };
