@@ -4,32 +4,50 @@ Command: npx gltfjsx@6.2.18 LibraryStairsFloors.glb -t -k -i -T
 Files: LibraryStairsFloors.glb [12.96KB] > /home/tomoon/Documents/archiveOfBabel/public/LibraryStairsFloors-transformed.glb [2.68KB] (79%)
 */
 
-import * as THREE from 'three'
-import React, { useRef } from 'react'
-import { useGLTF } from '@react-three/drei'
-import { GLTF } from 'three-stdlib'
+import * as THREE from "three";
+import React, { useRef } from "react";
+import { useGLTF } from "@react-three/drei";
+import { GLTF } from "three-stdlib";
 
 type GLTFResult = GLTF & {
   nodes: {
-    floor001: THREE.Mesh
-    ramp: THREE.Mesh
-  }
+    floor001: THREE.Mesh;
+    ramp: THREE.Mesh;
+  };
   materials: {
-    ['Sandstone_Floor.009']: THREE.MeshStandardMaterial
-  }
-  animations: GLTFAction[]
-}
+    ["Sandstone_Floor.009"]: THREE.MeshStandardMaterial;
+  };
+  animations: GLTFAction[];
+};
 
-type ContextType = Record<string, React.ForwardRefExoticComponent<JSX.IntrinsicElements['mesh']>>
+type ContextType = Record<
+  string,
+  React.ForwardRefExoticComponent<JSX.IntrinsicElements["mesh"]>
+>;
 
-export function Model(props: JSX.IntrinsicElements['group']) {
-  const { nodes, materials } = useGLTF('/LibraryStairsFloors-transformed.glb') as GLTFResult
+export function Model(props: JSX.IntrinsicElements["group"]) {
+  const { nodes, materials } = useGLTF(
+    "/LibraryStairsFloors-transformed.glb",
+  ) as GLTFResult;
   return (
     <group {...props} dispose={null}>
-      <mesh name="floor001" geometry={nodes.floor001.geometry} material={materials['Sandstone_Floor.009']} position={[-4, -0.9, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[1, 1, 0.5]} />
-      <mesh name="ramp" geometry={nodes.ramp.geometry} material={'transparent'} position={[-2, -1.9, -1]} rotation={[Math.PI / 2, 0, Math.PI / 2]} />
+      <mesh
+        name="floor001"
+        geometry={nodes.floor001.geometry}
+        material={materials["Sandstone_Floor.009"]}
+        position={[-4, -0.9, 0]}
+        rotation={[Math.PI / 2, 0, 0]}
+        scale={[1, 1, 0.5]}
+      />
+      <mesh
+        name="ramp"
+        geometry={nodes.ramp.geometry}
+        material={"transparent"}
+        position={[-2, -1.9, -1]}
+        rotation={[Math.PI / 2, 0, Math.PI / 2]}
+      />
     </group>
-  )
+  );
 }
 
-useGLTF.preload('/LibraryStairsFloors-transformed.glb')
+useGLTF.preload("/LibraryStairsFloors-transformed.glb");

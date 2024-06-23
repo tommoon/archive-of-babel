@@ -1,9 +1,10 @@
-import { locationController } from "@/Controllers/locationController";
-import { useKeyboardControls } from "@react-three/drei";
+import { gameController } from "@/Controllers/gameController";
+import { Plane, useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { CapsuleCollider, RigidBody } from "@react-three/rapier";
-import { useEffect, useRef } from "react";
-import { Vector3 } from "three";
+import { useRef } from "react";
+import { PlaneGeometry, Vector3 } from "three";
+import { Camera } from "./Camera";
 
 const SPEED = 2;
 const direction = new Vector3();
@@ -15,7 +16,7 @@ export const Player = () => {
   const ref = useRef();
 
   const [, get] = useKeyboardControls();
-  const { setPlayerPosition } = locationController();
+  const { setPlayerPosition } = gameController();
 
   useFrame((state) => {
     if (ref.current) {
@@ -54,6 +55,8 @@ export const Player = () => {
   }, []); */
 
   return (
+    <group>
+      <Camera />
     <RigidBody
       canSleep={false}
       ref={ref}
@@ -61,8 +64,9 @@ export const Player = () => {
       type="dynamic"
       enabledRotations={[false, false, false]}
       position={[3, 1, 1]}
-    >
+      >
       <CapsuleCollider args={[0.2, 0.18]} />
-    </RigidBody>
+      </RigidBody>
+    </group>
   );
 };

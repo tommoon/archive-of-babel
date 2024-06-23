@@ -1,14 +1,15 @@
-import { locationController } from "@/Controllers/locationController";
+import { gameController } from "@/Controllers/gameController";
 import { Cell } from "./components/Cell/Cell";
 import { useMemo } from "react";
 import { LibraryStairs } from "./components/Cell/Stairs/LibraryStairs";
 
 export const Cells = () => {
-  const { playerPosition } = locationController();
+  const { playerPosition } = gameController();
 
   return useMemo(
     () => [
       <Cell
+        centralCell
         key={`${playerPosition.x}-${playerPosition.y}-${playerPosition.z}`}
         position={playerPosition}
       />,

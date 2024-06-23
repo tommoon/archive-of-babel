@@ -1,11 +1,12 @@
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
-import { Suspense } from "react";
-import { Player } from "./components/Player";
+import { Suspense, useEffect, useRef } from "react";
+import { Player } from "./components/Player/Player";
 import { KeyboardControls, PointerLockControls } from "@react-three/drei";
 import { Cells } from "./Cells";
-import { locationController } from "@/Controllers/locationController";
+import { gameController } from "@/Controllers/gameController";
 import { Vector3 } from "three";
+import { BookInterior } from "./components/BookInterior/BookInterior";
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
@@ -21,17 +22,35 @@ const keyboardMap = [
 ];
 
 export const Game = () => {
-  const { playerPosition, debug } = locationController();
+  const pointerLockRef = useRef();
+  const { playerPosition, selectedSeed, debug, screenLocked } =
+    gameController();
+
+  useEffect(() => {
+    if (pointerLockRef.current) {
+      if (screenLocked) {
+        setTimeout(() => {
+          pointerLockRef.current.unlock();
+        }, 110);
+      } else if (!screenLocked && !pointerLockRef.current.isLocked) {
+        setTimeout(() => {
+          pointerLockRef.current.lock();
+        }, 110);
+      }
+    }
+  }, [screenLocked]);
 
   return (
     <KeyboardControls map={keyboardMap}>
-      <div className="fixed z-10 p-4 bg-white/100">{`x:${playerPosition.x}, y: ${playerPosition.y}, z: ${playerPosition.z}`}</div>
+      {debug && (
+        <div className="fixed z-10 p-4 bg-white/100">{`x:${playerPosition.x}, y: ${playerPosition.y}, z: ${playerPosition.z}`}</div>
+      )}
       <Canvas shadows>
-      <color attach="background" args={["black"]} />
+        <color attach="background" args={["black"]} />
         <Suspense>
           <ambientLight />
           <directionalLight />
-          {!debug && <fogExp2 attach={'fog'} args={['black', 0.1]} />}
+          {!debug && <fogExp2 attach={"fog"} args={["black", 0.1]} />}
           <Physics debug={debug}>
             <Player />
             <group position={new Vector3(3, 0, 3)}>
@@ -39,9 +58,10 @@ export const Game = () => {
             </group>
           </Physics>
         </Suspense>
-        <PointerLockControls />
+        <PointerLockControls ref={pointerLockRef} />
       </Canvas>
       <div className="absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-2 border-white"></div>
+      {selectedSeed && <BookInterior selectedSeed={selectedSeed} />}
     </KeyboardControls>
   );
 };

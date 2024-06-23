@@ -10,10 +10,10 @@ interface StairSetProps {
 export const LibraryStairs: React.FC<StairSetProps> = ({ position }) => {
   return (
     <>
-    <group>
-      <LibraryStairSet position={position} />
-      <LibraryStairSet position={position} horizontal />
+      <group>
+        <LibraryStairSet position={position} />
+        <LibraryStairSet position={position} horizontal />
       </group>
-      </>
+    </>
   );
 };
