@@ -13,7 +13,7 @@ type gameState = {
 export const gameController = create<gameState>()((set, get) => ({
   playerPosition: new Vector3(0, 0, 0),
   selectedSeed: null,
-  debug: false,
+  debug: true,
   screenLocked: false,
   setPlayerPosition: (playerPosition: cellLocation) => {
     set(() => ({

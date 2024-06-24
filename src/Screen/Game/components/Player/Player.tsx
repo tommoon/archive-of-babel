@@ -63,7 +63,7 @@ export const Player = () => {
       colliders={false}
       type="dynamic"
       enabledRotations={[false, false, false]}
-      position={[3, 1, 1]}
+      position={[3, 3, 1]}
       >
       <CapsuleCollider args={[0.2, 0.18]} />
       </RigidBody>

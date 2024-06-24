@@ -6,7 +6,7 @@ import React, {
   useState,
   useCallback,
 } from "react";
-import { Instance, Instances, useGLTF } from "@react-three/drei";
+import { Instance, Instances, useGLTF, Text } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useFrame } from "@react-three/fiber";
 import { cellLocation } from "@/types/CommonTypes";
