@@ -15,6 +15,8 @@ import { _objectIsEqual } from "@/lib/comparisons";
 import { gameController } from "@/Controllers/gameController";
 import { useCellLocation } from "../hooks/useCellLocation";
 import { Text } from "@react-three/drei";
+import { Cabinet } from "../props/Cabinet";
+import { Books } from "../props/Books";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -79,7 +81,7 @@ export const LibraryMainRoom: React.FC<{
           <meshNormalMaterial />
         </Text>
       )}
-      {hasColliders && (
+      {hasColliders ? (
         <>
           <RigidBody
             key={`${cellLocation.x}-${cellLocation.y}-${cellLocation.z}-main-wall-colliders`}
@@ -126,9 +128,19 @@ export const LibraryMainRoom: React.FC<{
               rotation={[Math.PI / 2, 0, -Math.PI]}
               scale={[1, 1, 0.75]}
             />
+            <Cabinet/>
+            <Cabinet rotation={[0,Math.PI,0]}/>
+            <Cabinet rotation={[0,Math.PI/2,0]}/>
+            <Cabinet rotation={[0,-Math.PI/2,0]}/>
           </RigidBody>
+          <Books cellLocation={cellLocation} shelfIndex={0}/>
         </>
-      )}
+      ) : <>
+                  <Cabinet/>
+            <Cabinet rotation={[0,Math.PI,0]}/>
+            <Cabinet rotation={[0,Math.PI/2,0]}/>
+        <Cabinet rotation={[0, -Math.PI / 2, 0]} />
+      </>}
  <mesh name="lowerwallCol" geometry={nodes.lowerwallCol.geometry} material={materials.WallBake} rotation={[Math.PI / 2, 0, 0]} />
       <mesh name="floorCol" geometry={nodes.floorCol.geometry} material={materials.floor} rotation={[Math.PI / 2, 0, Math.PI]} />
       <mesh name="railing1" geometry={nodes.railing1.geometry} material={materials.oldwood} rotation={[Math.PI / 2, 0, 0]} scale={[1, 1, 0.75]} />

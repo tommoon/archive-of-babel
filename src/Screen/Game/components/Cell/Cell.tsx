@@ -3,7 +3,7 @@ import { _objectIsEqual } from "@/lib/comparisons";
 import { LibraryMainRoom } from "./components/LibraryMainRoom";
 import { LibraryCorridor } from "./components/LibraryCorridor";
 import { SubCell } from "./components/SubCell";
-import { LibraryStairs } from "./Stairs/LibraryStairs";
+import { LibraryStairs } from "./components/LibraryStairs";
 
 export const Cell = () => {
   const { playerPosition, debug } = gameController();
@@ -36,7 +36,10 @@ export const Cell = () => {
       <LibraryCorridor cellLocation={playerPosition} orientation="N" />
       <LibraryCorridor cellLocation={playerPosition} orientation="S" />
 
-      <LibraryStairs position={playerPosition}/>
+      <LibraryStairs cellLocation={playerPosition} orientation="N"/>
+{/*       <LibraryStairs cellLocation={playerPosition} orientation="S"/>
+      <LibraryStairs cellLocation={playerPosition} orientation="W"/>
+      <LibraryStairs cellLocation={playerPosition} orientation="E"/> */}
       <SubCell
         cellLocation={{ ...playerPosition, z: playerPosition.z + 1 }}
         omit={["S"]}

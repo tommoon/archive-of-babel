@@ -46,7 +46,7 @@ const Book: React.FC<BookProps> = ({
   const seed = `${Object.values(cellLocation).join("")}${shelfIndex}${cabinet}${row}${bookUnit}`;
   const RNumber = seededRandom(seed);
   const startVector = useMemo(
-    () => new THREE.Vector3(0.03, RNumber * 0.025 + 0.075, -0.131),
+    () => new THREE.Vector3(0.06, RNumber * 0.025 + 0.075, -0.131),
     [RNumber],
   );
   const scale = RNumber * 0.1;
@@ -133,7 +133,7 @@ export const Books: React.FC<BooksProps> = ({ cellLocation, shelfIndex }) => {
   }, []);
 
   return (
-    <group rotation={new THREE.Euler(0, Math.PI / 4, 0)}>
+    <group rotation={[0, Math.PI / 4, 0]}>
       <Instances
         frustumCulled={false}
         rotation={new THREE.Euler(Math.PI / 2, 0, 0)}

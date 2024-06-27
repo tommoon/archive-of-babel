@@ -24,9 +24,9 @@ type ContextType = Record<
   React.ForwardRefExoticComponent<JSX.IntrinsicElements["mesh"]>
 >;
 
-export function Model(props: JSX.IntrinsicElements["group"]) {
+export function Cabinet(props: JSX.IntrinsicElements["group"]) {
   const { nodes, materials } = useGLTF(
-    "/cabinet-transformed.glb",
+    "/models/cabinet-transformed.glb",
   ) as GLTFResult;
   return (
     <group {...props} dispose={null}>
