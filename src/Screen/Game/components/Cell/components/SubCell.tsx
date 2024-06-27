@@ -1,0 +1,19 @@
+import React from "react";
+import { Orientation, CellLocation } from "@/types/CommonTypes";
+import { LibraryMainRoom } from "./LibraryMainRoom";
+import { LibraryCorridor } from "./LibraryCorridor";
+
+export const SubCell: React.FC<{ cellLocation: CellLocation; omit?: Orientation[] | null, hasColliders?: boolean }> = ({ cellLocation, omit = null, hasColliders = true }) => {
+  const orientations: Orientation[] = ["N", "S", "E", "W"];
+
+  return (
+    <>
+      <LibraryMainRoom hasColliders={hasColliders} cellLocation={cellLocation} />
+      {orientations.map((orientation) =>
+        !omit?.includes(orientation) ? (
+          <LibraryCorridor key={orientation} hasColliders={false} cellLocation={cellLocation} orientation={orientation} />
+        ) : null
+      )}
+    </>
+  );
+};

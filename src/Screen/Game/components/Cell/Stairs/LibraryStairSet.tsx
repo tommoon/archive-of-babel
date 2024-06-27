@@ -1,15 +1,14 @@
-import { Model as LibraryStairsNoColliders } from "./components/LibraryStairsNoColliders";
-import { Model as LibraryStairsFloors } from "./components/LibraryStairsFloors";
-import { Model as LibraryStairsWalls } from "./components/LibraryStairsWalls";
+
 import { Box3, Euler, Vector3 } from "three";
 import { RigidBody } from "@react-three/rapier";
 import { useEffect, useMemo, useRef } from "react";
 import { gameController } from "@/Controllers/gameController";
 import { playerPos } from "../../Player/Player";
-import { cellLocation } from "@/types/CommonTypes";
+import { CellLocation } from "@/types/CommonTypes";
+import { LibraryStairsNew } from "./components/LibraryStairsNew";
 
 type FloorProps = {
-  position: cellLocation;
+  position: CellLocation;
   colliders?: boolean;
   horizontal?: boolean;
 };
@@ -26,17 +25,13 @@ const Floor: React.FC<FloorProps> = ({ position, horizontal }) => {
       position={adjustedPosition.clone().add(horizontal ? XVector : ZVector)}
       rotation={horizontal ? new Euler(0, -Math.PI / 2, 0) : new Euler(0, 0, 0)}
     >
-      <LibraryStairsNoColliders />
-      <RigidBody type="fixed" colliders="trimesh">
-        <LibraryStairsFloors />
-        <LibraryStairsWalls />
-      </RigidBody>
+      <LibraryStairsNew/>
     </group>
   );
 };
 
 type LibraryStairSetProps = {
-  position: cellLocation;
+  position: CellLocation;
   horizontal?: boolean;
 };
 export const LibraryStairSet: React.FC<LibraryStairSetProps> = ({

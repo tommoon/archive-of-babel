@@ -57,15 +57,15 @@ export const Player = () => {
   return (
     <group>
       <Camera />
-    <RigidBody
-      canSleep={false}
-      ref={ref}
-      colliders={false}
-      type="dynamic"
-      enabledRotations={[false, false, false]}
-      position={[3, 3, 1]}
+      <RigidBody
+        canSleep={false}
+        ref={ref}
+        colliders={false}
+        type="dynamic"
+        enabledRotations={[false, false, false]}
+        position={[3, 1, 5]}
       >
-      <CapsuleCollider args={[0.2, 0.18]} />
+        <CapsuleCollider args={[0.2, 0.18]} />
       </RigidBody>
     </group>
   );

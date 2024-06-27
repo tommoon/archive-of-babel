@@ -10,7 +10,7 @@ export function seededRandom(seed: string) {
 export function generateSeededText(
   seed: string,
   lineLength: number = 58,
-  linesCount: number = 20
+  linesCount: number = 20,
 ): string {
   const characters = "abcdefghijklmnopqrstuvwxyz, . ";
 

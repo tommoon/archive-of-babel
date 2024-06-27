@@ -3,10 +3,10 @@ import { Physics } from "@react-three/rapier";
 import { Suspense, useEffect, useRef } from "react";
 import { Player } from "./components/Player/Player";
 import { KeyboardControls, PointerLockControls } from "@react-three/drei";
-import { Cells } from "./Cells";
 import { gameController } from "@/Controllers/gameController";
 import { Vector3 } from "three";
 import { BookInterior } from "./components/BookInterior/BookInterior";
+import { Cell } from "./components/Cell/Cell";
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
@@ -52,10 +52,11 @@ export const Game = () => {
           <directionalLight />
           {!debug && <fogExp2 attach={"fog"} args={["black", 0.1]} />}
           <Physics debug={debug}>
-            <Player />
             <group position={new Vector3(3, 0, 3)}>
-              <Cells />
+              <Cell />
             </group>
+            <Player />
+
           </Physics>
         </Suspense>
         <PointerLockControls ref={pointerLockRef} />

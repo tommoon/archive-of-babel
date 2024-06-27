@@ -3,49 +3,40 @@ import { Model as LibraryMainFloorsWalls } from "./components/LibraryMainFloorsW
 import { Model as LibraryMainNoColliders } from "./components/LibraryMainNoColliders";
 import { Model as LibraryMainRailing } from "./components/LibraryMainRailing";
 import { useGLTF } from "@react-three/drei";
-import { cellLocation } from "@/types/CommonTypes";
+import { CellLocation } from "@/types/CommonTypes";
 import { Shelves } from "./components/Shelves";
 import { useEffect, useRef } from "react";
 
 interface MainRoomProps {
   noColliders?: boolean;
-  playerPosition?: cellLocation;
+  playerPosition?: CellLocation;
 }
 
-export const MainRoom: React.FC<MainRoomProps> = ({
-  noColliders = false,
-  playerPosition,
-}) => 
-     {  const testref = useRef()
+export const MainRoom: React.FC<MainRoomProps> = ({ noColliders = false }) => {
+  const testref = useRef();
   useEffect(() => {
-    if(testref.current)
-        console.log("test",testref.current.translation())
-  }, [testref])
-  
-    return (<group>
-    <LibraryMainNoColliders />
-    {playerPosition &&
-      [0, 1, 2, 3].map((rotation) => (
-        <Shelves
-          key={rotation}
-          rotationDegrees={rotation}
-          cellLocation={playerPosition}
-        />
-      ))}
-    {!noColliders ? (
-      <RigidBody ref={testref} type="fixed" colliders="trimesh">
+    if (testref.current) console.log("test", testref.current.translation());
+  }, [testref]);
+
+  return (
+    <group>
+      <LibraryMainNoColliders />
+
+      {!noColliders ? (
+        <RigidBody ref={testref} type="fixed" colliders="trimesh">
+          <LibraryMainFloorsWalls />
+        </RigidBody>
+      ) : (
         <LibraryMainFloorsWalls />
-      </RigidBody>
-    ) : (
-      <LibraryMainFloorsWalls />
-    )}
-    {!noColliders ? (
-      <RigidBody type="fixed" colliders="hull">
+      )}
+      {!noColliders ? (
+        <RigidBody type="fixed" colliders="hull">
+          <LibraryMainRailing />
+        </RigidBody>
+      ) : (
         <LibraryMainRailing />
-      </RigidBody>
-    ) : (
-      <LibraryMainRailing />
-    )}
-  </group>)
-  }
+      )}
+    </group>
+  );
+};
 useGLTF.preload("/book-transformed.glb");

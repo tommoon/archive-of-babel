@@ -1,10 +1,10 @@
 import { Euler, Vector3 } from "three";
 import { LibraryStairSet } from "./LibraryStairSet";
 import { useMemo } from "react";
-import { cellLocation } from "@/types/CommonTypes";
+import { CellLocation } from "@/types/CommonTypes";
 
 interface StairSetProps {
-  position: cellLocation;
+  position: CellLocation;
 }
 
 export const LibraryStairs: React.FC<StairSetProps> = ({ position }) => {

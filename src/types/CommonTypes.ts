@@ -14,7 +14,7 @@ export type StaticElementProps = {
   onPointerOut?: () => void;
 };
 
-export type cellLocation = {
+export type CellLocation = {
   x: number;
   y: number;
   z: number;

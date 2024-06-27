@@ -9,7 +9,7 @@ import React, {
 import { Instance, Instances, useGLTF, Text } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useFrame } from "@react-three/fiber";
-import { cellLocation } from "@/types/CommonTypes";
+import { CellLocation } from "@/types/CommonTypes";
 import { seededRandom } from "@/lib/randomFunctions";
 import { setScreenLocked, setSelectedSeed } from "@/Controllers/gameController";
 
@@ -32,7 +32,7 @@ interface BookProps {
   bookUnit: number;
   row: number;
   cabinet: number;
-  cellLocation: cellLocation;
+  cellLocation: CellLocation;
   shelfIndex: number;
 }
 
@@ -113,12 +113,12 @@ const Book: React.FC<BookProps> = ({
 };
 
 interface BooksProps {
-  cellLocation: cellLocation;
+  cellLocation: CellLocation;
   shelfIndex: number;
 }
 
 export const Books: React.FC<BooksProps> = ({ cellLocation, shelfIndex }) => {
-  const { nodes } = useGLTF("/book-transformed.glb") as GLTFResult;
+  const { nodes } = useGLTF("/models/book-transformed.glb") as GLTFResult;
 
   const bookArray = useMemo(() => {
     const holderArray = [];

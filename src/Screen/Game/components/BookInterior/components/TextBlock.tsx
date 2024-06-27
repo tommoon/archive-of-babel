@@ -8,7 +8,9 @@ type TextBlockProps = {
 export const TextBlock: React.FC<TextBlockProps> = ({ seed }) => {
   const blockRef = useRef<HTMLDivElement | null>(null);
   const [lines, setLines] = useState<number | undefined>(undefined);
-  const [maxCharsPerLine, setMaxCharsPerLine] = useState<number | undefined>(undefined);
+  const [maxCharsPerLine, setMaxCharsPerLine] = useState<number | undefined>(
+    undefined,
+  );
 
   useLayoutEffect(() => {
     if (blockRef.current) {
@@ -28,7 +30,10 @@ export const TextBlock: React.FC<TextBlockProps> = ({ seed }) => {
   }, [blockRef.current]);
 
   return (
-    <div ref={blockRef} className="grow whitespace-pre-wrap w-full h-full overflow-hidden">
+    <div
+      ref={blockRef}
+      className="grow whitespace-pre-wrap w-full h-full overflow-hidden"
+    >
       {generateSeededText(`${seed}`, maxCharsPerLine, lines)}
     </div>
   );

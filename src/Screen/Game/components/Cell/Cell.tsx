@@ -1,29 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { LibraryCorridor } from "./Corridor/LibraryCorridor";
-import { cellLocation as CellLocation } from "@/types/CommonTypes";
-import { Box3, Vector3 } from "three";
-import { playerPos } from "../Player/Player";
-import { MainRoom } from "./MainRoom/MainRoom";
 import { gameController } from "@/Controllers/gameController";
 import { _objectIsEqual } from "@/lib/comparisons";
-import { Text } from "@react-three/drei";
-import { Books } from "./MainRoom/components/Books";
+import { LibraryMainRoom } from "./components/LibraryMainRoom";
+import { LibraryCorridor } from "./components/LibraryCorridor";
+import { SubCell } from "./components/SubCell";
+import { LibraryStairs } from "./Stairs/LibraryStairs";
 
-interface CellProps {
-  position: CellLocation;
-  noColliders?: boolean;
-  noExtras?: boolean;
-  centralCell?: boolean;
-}
-
-export const Cell: React.FC<CellProps> = ({
-  position,
-  noColliders = false,
-  noExtras = false,
-}) => {
-  const cellRef = useRef();
-  const { playerPosition, setPlayerPosition, debug } = gameController();
-
+export const Cell = () => {
+  const { playerPosition, debug } = gameController();
+  /* 
   const adjustedPosition = useMemo(
     () => new Vector3(position.x * 11, position.y * 2, position.z * 11),
     [position],
@@ -43,32 +27,40 @@ export const Cell: React.FC<CellProps> = ({
 
     return () => clearInterval(interval);
   }, [cellRef, playerPosition, position]);
+ */
+  return (
+    <group>
+      <LibraryMainRoom cellLocation={playerPosition} />
+      <LibraryCorridor cellLocation={playerPosition} orientation="E" />
+      <LibraryCorridor cellLocation={playerPosition} orientation="W" />
+      <LibraryCorridor cellLocation={playerPosition} orientation="N" />
+      <LibraryCorridor cellLocation={playerPosition} orientation="S" />
 
-  return noExtras ? (
-    <group position={adjustedPosition}>
-      <MainRoom noColliders />
-    </group>
-  ) : (
-    <group ref={cellRef} position={adjustedPosition}>
-      {debug && (
-        <Text position={new Vector3(0, 1, 0)}>
-          {`${position.x}_${position.y}_${position.z}`}
-          <meshNormalMaterial />
-        </Text>
-      )}
-      <MainRoom playerPosition={playerPosition} noColliders={noColliders} />
-      <LibraryCorridor noColliders={noColliders} corridor="N" />
-      <LibraryCorridor noColliders={noColliders} corridor="E" />
-      <group position={new Vector3(0, -2, 0)}>
-        <MainRoom noColliders />
-        <LibraryCorridor noColliders corridor="N" />
-        <LibraryCorridor noColliders corridor="E" />
-      </group>
-      <group position={new Vector3(0, 2, 0)}>
-        <MainRoom noColliders />
-        <LibraryCorridor noColliders corridor="N" />
-        <LibraryCorridor noColliders corridor="E" />
-      </group>
+      <LibraryStairs position={playerPosition}/>
+      <SubCell
+        cellLocation={{ ...playerPosition, z: playerPosition.z + 1 }}
+        omit={["S"]}
+      />
+      <SubCell
+        cellLocation={{ ...playerPosition, z: playerPosition.z - 1 }}
+        omit={["N"]}
+      />
+      <SubCell
+        cellLocation={{ ...playerPosition, x: playerPosition.x + 1 }}
+        omit={["E"]}
+      />
+      <SubCell
+        cellLocation={{ ...playerPosition, x: playerPosition.x - 1 }}
+        omit={["W"]}
+      />
+
+      {/* Above*/}
+      <SubCell omit={['W','E','S','N']} hasColliders={false} cellLocation={{ ...playerPosition, y: playerPosition.y + 1 }} />
+      <SubCell omit={['W','E','S','N']} hasColliders={false} cellLocation={{ ...playerPosition, y: playerPosition.y + 2 }} />
+
+      {/* Below */}
+      <SubCell  hasColliders={false} cellLocation={{ ...playerPosition, y: playerPosition.y - 1 }} />
+
     </group>
   );
 };
