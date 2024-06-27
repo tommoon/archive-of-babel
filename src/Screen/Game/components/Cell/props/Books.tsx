@@ -12,6 +12,7 @@ import { useFrame } from "@react-three/fiber";
 import { CellLocation } from "@/types/CommonTypes";
 import { seededRandom } from "@/lib/randomFunctions";
 import { setScreenLocked, setSelectedSeed } from "@/Controllers/gameController";
+import { degrees_to_radians } from "@/lib/utils";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -132,8 +133,8 @@ export const Books: React.FC<BooksProps> = ({ cellLocation, shelfIndex }) => {
     return holderArray;
   }, []);
 
-  return (
-    <group rotation={[0, Math.PI / 4, 0]}>
+  return [45,135,225,315].map((deg) => (
+    <group key={deg} rotation={[0, degrees_to_radians(deg), 0]}>
       <Instances
         frustumCulled={false}
         rotation={new THREE.Euler(Math.PI / 2, 0, 0)}
@@ -152,7 +153,7 @@ export const Books: React.FC<BooksProps> = ({ cellLocation, shelfIndex }) => {
         ))}
       </Instances>
     </group>
-  );
+  ));
 };
 
 useGLTF.preload("/book-transformed.glb");

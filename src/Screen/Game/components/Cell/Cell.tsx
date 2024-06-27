@@ -4,6 +4,7 @@ import { LibraryMainRoom } from "./components/LibraryMainRoom";
 import { LibraryCorridor } from "./components/LibraryCorridor";
 import { SubCell } from "./components/SubCell";
 import { LibraryStairs } from "./components/LibraryStairs";
+import { Books } from "./props/Books";
 
 export const Cell = () => {
   const { playerPosition, debug } = gameController();
@@ -36,27 +37,29 @@ export const Cell = () => {
       <LibraryCorridor cellLocation={playerPosition} orientation="N" />
       <LibraryCorridor cellLocation={playerPosition} orientation="S" />
 
-      <LibraryStairs cellLocation={playerPosition} orientation="N"/>
-{/*       <LibraryStairs cellLocation={playerPosition} orientation="S"/>
+      <LibraryStairs cellLocation={playerPosition} orientation="N" />
+      <LibraryStairs cellLocation={playerPosition} orientation="S"/>
       <LibraryStairs cellLocation={playerPosition} orientation="W"/>
-      <LibraryStairs cellLocation={playerPosition} orientation="E"/> */}
+      <LibraryStairs cellLocation={playerPosition} orientation="E" />
+      
       <SubCell
         cellLocation={{ ...playerPosition, z: playerPosition.z + 1 }}
-        omit={["S"]}
+        omit={["E", "S", "W"]}
       />
       <SubCell
         cellLocation={{ ...playerPosition, z: playerPosition.z - 1 }}
-        omit={["N"]}
+        omit={["E", "N", "W"]}
       />
       <SubCell
         cellLocation={{ ...playerPosition, x: playerPosition.x + 1 }}
-        omit={["E"]}
+        omit={["N", "E", "S"]}
       />
       <SubCell
         cellLocation={{ ...playerPosition, x: playerPosition.x - 1 }}
-        omit={["W"]}
+        omit={["N", "W", "S"]}
       />
 
+      <Books cellLocation={playerPosition} shelfIndex={0} />
       {/* Above*/}
       <SubCell omit={['W','E','S','N']} hasColliders={false} cellLocation={{ ...playerPosition, y: playerPosition.y + 1 }} />
       <SubCell omit={['W','E','S','N']} hasColliders={false} cellLocation={{ ...playerPosition, y: playerPosition.y + 2 }} />

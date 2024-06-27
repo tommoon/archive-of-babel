@@ -42,7 +42,7 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({ cellLocation, orie
   const { playerPosition, setPlayerPosition } = gameController();
   const staircaseRef = useRef<THREE.Group>(null);
 
-  const { adjustedPosition } = useCellLocation({
+  const { isVertical, adjustedPosition } = useCellLocation({
     cellLocation,
     orientation,
   });
@@ -74,9 +74,11 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({ cellLocation, orie
   }, [playerPosition, setPlayerPosition, cellLocation]);
 
   return (
-    <group ref={staircaseRef}>
+    <group
+      rotation={new THREE.Euler(0, !isVertical ? -Math.PI / 2 : 0, 0)}
+    position={adjustedPosition} ref={staircaseRef}>
       {[0, 2, 4].map((floor) => (
-        <group key={`stair-${floor}`} position={adjustedPosition.clone().add(new THREE.Vector3(0, floor, 0))} dispose={null}>
+        <group key={`stair-${floor}`} position={[0, floor, 0]} dispose={null}>
           <RigidBody key={`stair-${cellLocation.x}-${cellLocation.y + floor}-${cellLocation.z}-rigidbody`} type="fixed" colliders="trimesh">
             <Box scale={[2.1, 2, 1.1]} position={[-2.5, 0, 0]} />
             <mesh name="floor2" geometry={colliders.floor2.geometry} material={colliderMat.floor} position={[-1, 0.1, -1]} rotation={[Math.PI / 2, 0, Math.PI]} />

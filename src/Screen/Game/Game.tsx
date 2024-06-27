@@ -45,7 +45,7 @@ export const Game = () => {
       {debug && (
         <div className="fixed z-10 p-4 bg-white/100">{`x:${playerPosition.x}, y: ${playerPosition.y}, z: ${playerPosition.z}`}</div>
       )}
-      <Canvas shadows>
+      <Canvas frameloop="demand">
         <color attach="background" args={["black"]} />
         <Suspense>
           <ambientLight />
