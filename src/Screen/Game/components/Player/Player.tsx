@@ -19,7 +19,7 @@ const getInitialPosition = (playerPosition: CellLocation) =>
     playerPosition.x * 11,
     playerPosition.y * 2,
     playerPosition.z * 11,
-  ).add(new Vector3(3, 1, 5));
+  ).add(new Vector3(3, 2, 5));
 
 export const Player = () => {
   const ref = useRef();

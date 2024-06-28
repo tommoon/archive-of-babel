@@ -27,24 +27,44 @@ type GLTFResult = GLTF & {
 
 const BOOK_UNIT = 10;
 const ROWS = 4;
-const CABINETS = 4; // Including 3 more cabinets
+const UNITS = 4;
+const CABINETS = 4;
 const COLOR = new THREE.Color();
+const rotations = [0, 90, 180, 270].map(degrees_to_radians);
+
+const getPositions = ({ bookUnit, cabinet, row, unit }) => {
+  switch (cabinet) {
+    case 0:
+      return new THREE.Vector3(0.043 * bookUnit + unit * 0.5, 0, -0.24 * row);
+    case 1:
+      return new THREE.Vector3(0, 0.043 * bookUnit - (unit - 3) * 0.5, -0.24 * row);
+    case 2:
+      return new THREE.Vector3(-0.043 * bookUnit + (unit - 3) * 0.5, 0, -0.24 * row);
+    default:
+      return new THREE.Vector3(0, -0.043 * bookUnit + (unit - 3) * 0.5, -0.24 * row);
+  }
+};
 
 interface BookProps {
   bookUnit: number;
   row: number;
+  unit: number;
   cabinet: number;
   cellLocation: CellLocation;
-  shelfIndex: number;
 }
 
 const Book: React.FC<BookProps> = React.memo(
-  ({ bookUnit, row, cabinet, cellLocation, shelfIndex }) => {
-    const seed = `${Object.values(cellLocation).join("")}${shelfIndex}${cabinet}${row}${bookUnit}`;
+  ({ bookUnit, row, cabinet, cellLocation, unit }) => {
+    const seed = `${Object.values(cellLocation).join("")}${cabinet}${unit}${row}${bookUnit}`;
     const RNumber = useMemo(() => seededRandom(seed), [seed]);
     const startVector = useMemo(
-      () => new THREE.Vector3(0.06, RNumber * 0.025 + 0.075, -0.131),
-      [RNumber],
+      () => [
+        new THREE.Vector3(-0.94, -2.75, -0.15),
+        new THREE.Vector3(2.75, -0.94, -0.15),
+        new THREE.Vector3(0.94, 2.75, -0.15),
+        new THREE.Vector3(-2.75, 0.94, -0.15),
+      ],
+      []
     );
     const scale = useMemo(() => RNumber * 0.1, [RNumber]);
     const ref = useRef<THREE.Mesh>();
@@ -56,36 +76,54 @@ const Book: React.FC<BookProps> = React.memo(
           seededRandom(seed + "green") / 2,
           seededRandom(seed + "blue") / 2,
         ),
-      [seed],
+      [seed]
     );
 
     useLayoutEffect(() => {
       if (ref.current) {
         ref.current.position.copy(
-          startVector.add(
-            new THREE.Vector3(
-              0.043 * bookUnit + (cabinet - 2) * 0.5,
-              -0.05,
-              -0.25 * row,
-            ),
-          ),
+          startVector[cabinet].clone().add(getPositions({ bookUnit, cabinet, row, unit }))
         );
-        ref.current.scale.set(0.6, 0.6, 0.5 + scale);
         ref.current.color.copy(startColor);
+        ref.current.scale.set(0.6, 0.4, 0.4 + scale);
+        ref.current.rotation.set(0, 0, rotations[cabinet]);
       }
-    }, [ref, startVector, bookUnit, cabinet, row, scale, startColor]);
+    }, [ref, startVector, bookUnit, cabinet, row, scale, startColor, unit]);
 
     useFrame(() => {
       if (ref.current) {
-        ref.current.position.y = THREE.MathUtils.lerp(
-          ref.current.position.y,
-          hovered ? startVector.y + 0.05 : startVector.y,
-          0.1,
-        );
+        if (cabinet === 0) {
+          ref.current.position.y = THREE.MathUtils.lerp(
+            ref.current.position.y,
+            hovered ? startVector[cabinet].y + 0.05 : startVector[cabinet].y,
+            0.1,
+          );
+        }
+        if (cabinet === 2) {
+          ref.current.position.y = THREE.MathUtils.lerp(
+            ref.current.position.y,
+            hovered ? startVector[cabinet].y - 0.05 : startVector[cabinet].y,
+            0.1,
+          );
+        }
+        if (cabinet === 3) {
+          ref.current.position.x = THREE.MathUtils.lerp(
+            ref.current.position.x,
+            hovered ? startVector[cabinet].x + 0.05 : startVector[cabinet].x,
+            0.1,
+          );
+        }
+        if (cabinet === 1) {
+          ref.current.position.x = THREE.MathUtils.lerp(
+            ref.current.position.x,
+            hovered ? startVector[cabinet].x + 0.05 : startVector[cabinet].x,
+            0.1,
+          );
+        }
         ref.current.color.lerp(
           COLOR.set(hovered ? "white" : startColor),
           hovered ? 1 : 0.1,
-        );
+        ); 
       }
     });
 
@@ -104,7 +142,7 @@ const Book: React.FC<BookProps> = React.memo(
         setSelectedSeed(seed);
         setScreenLocked(true);
       },
-      [seed],
+      [seed]
     );
 
     return (
@@ -117,7 +155,7 @@ const Book: React.FC<BookProps> = React.memo(
         />
       </group>
     );
-  },
+  }
 );
 
 interface BooksProps {
@@ -130,41 +168,33 @@ export const Books: React.FC<BooksProps> = ({ cellLocation }) => {
 
   const bookArray = useMemo(() => {
     const holderArray = [];
-    for (let k = 0; k < CABINETS; k++) {
-      for (let j = 0; j < ROWS; j++) {
-        for (let i = 0; i < BOOK_UNIT; i++) {
-          holderArray.push({ bookUnit: i, row: j, cabinet: k });
+    for (let l = 0; l < CABINETS; l++) {
+      for (let k = 0; k < UNITS; k++) {
+        for (let j = 0; j < ROWS; j++) {
+          for (let i = 0; i < BOOK_UNIT; i++) {
+            holderArray.push({ bookUnit: i, row: j, cabinet: l, unit: k });
+          }
         }
       }
     }
     return holderArray;
   }, []);
 
-  return [45, 135, 225, 315].map((deg, index) => (
-    <group
-      key={deg}
-      position={adjustedPosition}
-      rotation={[0, degrees_to_radians(deg), 0]}
-    >
+  return (
+    <group rotation={[0, Math.PI / 4, 0]} position={adjustedPosition}>
       <Instances
         frustumCulled={false}
         rotation={new THREE.Euler(Math.PI / 2, 0, 0)}
-        position={new THREE.Vector3(0, 0, -2.8)}
-        range={BOOK_UNIT * ROWS * CABINETS}
+        range={BOOK_UNIT * ROWS * CABINETS * UNITS}
         material={nodes.Book.material}
         geometry={nodes.Book.geometry}
       >
         {bookArray.map((props, i) => (
-          <Book
-            key={i}
-            shelfIndex={index}
-            cellLocation={cellLocation}
-            {...props}
-          />
+          <Book key={i} cellLocation={cellLocation} {...props} />
         ))}
       </Instances>
     </group>
-  ));
+  );
 };
 
 useGLTF.preload("/models/book-transformed.glb");

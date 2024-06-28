@@ -2,7 +2,8 @@ import { gameController } from "@/Controllers/gameController";
 import { _objectIsEqual } from "@/lib/comparisons";
 import { SubCell } from "./components/SubCell";
 import { LibraryStairs } from "./components/LibraryStairs";
-//import { Books } from "./props/Books";
+import { Books } from "./props/Books";
+import { Suspense } from "react";
 
 export const Cell = () => {
   const { playerPosition, debug } = gameController();
@@ -41,7 +42,9 @@ export const Cell = () => {
           omit={["N", "W", "S"]}
         />
 
-        {/*  <Books cellLocation={playerPosition} /> */}
+        <Suspense>
+          <Books cellLocation={playerPosition}/>
+        </Suspense>
         {/* Above*/}
         <SubCell
           omit={["W", "E", "S", "N"]}
