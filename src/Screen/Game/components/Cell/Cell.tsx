@@ -8,28 +8,9 @@ import { Books } from "./props/Books";
 
 export const Cell = () => {
   const { playerPosition, debug } = gameController();
-  /* 
-  const adjustedPosition = useMemo(
-    () => new Vector3(position.x * 11, position.y * 2, position.z * 11),
-    [position],
-  );
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (cellRef.current) {
-        const bb = new Box3().setFromObject(cellRef.current);
-        const inside = bb.containsPoint(playerPos);
-        if (inside && !_objectIsEqual(position, playerPosition)) {
-          console.log(position, playerPosition, inside);
-          setPlayerPosition(position);
-        }
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [cellRef, playerPosition, position]);
- */
-  return (
+  debug && console.log("rerender cell")
+  
+  return playerPosition && (
     <group>
       <LibraryMainRoom cellLocation={playerPosition} />
       <LibraryCorridor cellLocation={playerPosition} orientation="E" />

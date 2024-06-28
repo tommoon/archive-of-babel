@@ -7,6 +7,7 @@ import { gameController } from "@/Controllers/gameController";
 import { Vector3 } from "three";
 import { BookInterior } from "./components/BookInterior/BookInterior";
 import { Cell } from "./components/Cell/Cell";
+import { useQueryString } from "@/hooks/useQueryString";
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
@@ -26,6 +27,8 @@ export const Game = () => {
   const { playerPosition, selectedSeed, debug, screenLocked } =
     gameController();
 
+    useQueryString({cellLocation:playerPosition})
+  
   useEffect(() => {
     if (pointerLockRef.current) {
       if (screenLocked) {
@@ -40,7 +43,7 @@ export const Game = () => {
     }
   }, [screenLocked]);
 
-  return (
+  return playerPosition && (
     <KeyboardControls map={keyboardMap}>
       {debug && (
         <div className="fixed z-10 p-4 bg-white/100">{`x:${playerPosition.x}, y: ${playerPosition.y}, z: ${playerPosition.z}`}</div>

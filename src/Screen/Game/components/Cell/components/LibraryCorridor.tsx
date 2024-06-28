@@ -10,7 +10,7 @@ import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { Orientation, CellLocation } from "@/types/CommonTypes";
 import { RigidBody } from "@react-three/rapier";
-import { useCellLocation } from "../hooks/useCellLocation";
+import { useCellLocation } from "../../../../../hooks/useCellLocation";
 
 type GLTFResult = GLTF & {
   nodes: {

@@ -3,15 +3,17 @@ import { Vector3 } from "three";
 import { create } from "zustand";
 
 type gameState = {
-  playerPosition: CellLocation;
+  playerPosition: CellLocation | undefined;
   selectedSeed: string | null;
   debug: boolean;
   screenLocked: boolean;
   setPlayerPosition: (playerPosition: CellLocation) => void;
 };
 
+const getUrlPosition = () => {};
+
 export const gameController = create<gameState>()((set, get) => ({
-  playerPosition: new Vector3(0, 0, 0),
+  playerPosition: undefined,
   selectedSeed: null,
   debug: true,
   screenLocked: false,

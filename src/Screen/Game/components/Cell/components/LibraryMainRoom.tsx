@@ -13,7 +13,7 @@ import { CellLocation } from "@/types/CommonTypes";
 import { playerPos } from "../../Player/Player";
 import { _objectIsEqual } from "@/lib/comparisons";
 import { gameController } from "@/Controllers/gameController";
-import { useCellLocation } from "../hooks/useCellLocation";
+import { useCellLocation } from "../../../../../hooks/useCellLocation";
 import { Text } from "@react-three/drei";
 import { Cabinet } from "../props/Cabinet";
 import { Books } from "../props/Books";
@@ -58,6 +58,7 @@ export const LibraryMainRoom: React.FC<{
   const { playerPosition, setPlayerPosition, debug } = gameController();
   const roomRef = useRef(undefined);
   const { adjustedPosition } = useCellLocation({ cellLocation });
+  
   useEffect(() => {
     const interval = setInterval(() => {
       if (roomRef.current) {

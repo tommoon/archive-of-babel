@@ -2,9 +2,10 @@ import { gameController } from "@/Controllers/gameController";
 import { Plane, useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { CapsuleCollider, RigidBody } from "@react-three/rapier";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { PlaneGeometry, Vector3 } from "three";
 import { Camera } from "./Camera";
+import { CellLocation } from "@/types/CommonTypes";
 
 const SPEED = 2;
 const direction = new Vector3();
@@ -12,11 +13,19 @@ const frontVector = new Vector3();
 const sideVector = new Vector3();
 
 export const playerPos = new Vector3();
+
+const getInitialPosition = (playerPosition:CellLocation) =>  new Vector3(
+        playerPosition.x * 11,
+        playerPosition.y * 2,
+        playerPosition.z * 11
+        ).add(new Vector3(3, 1, 5))
+
 export const Player = () => {
   const ref = useRef();
 
   const [, get] = useKeyboardControls();
-  const { setPlayerPosition } = gameController();
+  const { playerPosition } = gameController();
+
 
   useFrame((state) => {
     if (ref.current) {
@@ -54,7 +63,7 @@ export const Player = () => {
     return () => clearInterval(interval);
   }, []); */
 
-  return (
+  return playerPosition && (
     <group>
       <Camera />
       <RigidBody
@@ -63,7 +72,7 @@ export const Player = () => {
         colliders={false}
         type="dynamic"
         enabledRotations={[false, false, false]}
-        position={[3, 1, 5]}
+        position={getInitialPosition(playerPosition)}
       >
         <CapsuleCollider args={[0.2, 0.18]} />
       </RigidBody>
