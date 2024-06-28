@@ -27,8 +27,8 @@ export const Game = () => {
   const { playerPosition, selectedSeed, debug, screenLocked } =
     gameController();
 
-    useQueryString({cellLocation:playerPosition})
-  
+  useQueryString({ cellLocation: playerPosition });
+
   useEffect(() => {
     if (pointerLockRef.current) {
       if (screenLocked) {
@@ -42,30 +42,31 @@ export const Game = () => {
       }
     }
   }, [screenLocked]);
-
-  return playerPosition && (
-    <KeyboardControls map={keyboardMap}>
-      {debug && (
-        <div className="fixed z-10 p-4 bg-white/100">{`x:${playerPosition.x}, y: ${playerPosition.y}, z: ${playerPosition.z}`}</div>
-      )}
-      <Canvas frameloop="demand">
-        <color attach="background" args={["black"]} />
-        <Suspense>
-          <ambientLight />
-          <directionalLight />
-          {!debug && <fogExp2 attach={"fog"} args={["black", 0.1]} />}
-          <Physics debug={debug}>
-            <group position={new Vector3(3, 0, 3)}>
-              <Cell />
-            </group>
-            <Player />
-
-          </Physics>
-        </Suspense>
-        <PointerLockControls ref={pointerLockRef} />
-      </Canvas>
-      <div className="absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-2 border-white"></div>
-      {selectedSeed && <BookInterior selectedSeed={selectedSeed} />}
-    </KeyboardControls>
+  
+  return (
+    playerPosition && (
+      <KeyboardControls map={keyboardMap}>
+        {debug && (
+          <div className="fixed z-10 p-4 bg-white/100">{`x:${playerPosition.x}, y: ${playerPosition.y}, z: ${playerPosition.z}`}</div>
+        )}
+        <Canvas frameloop="demand">
+          <color attach="background" args={["black"]} />
+          <Suspense>
+            <ambientLight />
+            <directionalLight />
+            {!debug && <fogExp2 attach={"fog"} args={["black", 0.1]} />}
+            <Physics debug={debug}>
+              <group position={new Vector3(3, 0, 3)}>
+                <Cell />
+              </group>
+              <Player />
+            </Physics>
+          </Suspense>
+          <PointerLockControls ref={pointerLockRef} />
+        </Canvas>
+        <div className="absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-2 border-white"></div>
+        {selectedSeed && <BookInterior selectedSeed={selectedSeed} />}
+      </KeyboardControls>
+    )
   );
 };

@@ -38,14 +38,14 @@ export const useCellLocation = ({
         ? new Vector3(
             cellLocation.x * 11 + horizontalAdjustment[orientation],
             cellLocation.y * 2,
-            cellLocation.z * 11 + verticalAdjustment[orientation]
+            cellLocation.z * 11 + verticalAdjustment[orientation],
           )
         : new Vector3(
             cellLocation.x * 11,
             cellLocation.y * 2,
-            cellLocation.z * 11
+            cellLocation.z * 11,
           ),
-    [cellLocation, orientation]
+    [cellLocation, orientation],
   );
 
   return {

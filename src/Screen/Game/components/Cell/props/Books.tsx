@@ -133,7 +133,7 @@ export const Books: React.FC<BooksProps> = ({ cellLocation, shelfIndex }) => {
     return holderArray;
   }, []);
 
-  return [45,135,225,315].map((deg) => (
+  return [45, 135, 225, 315].map((deg) => (
     <group key={deg} rotation={[0, degrees_to_radians(deg), 0]}>
       <Instances
         frustumCulled={false}

@@ -14,13 +14,13 @@ import { useCellLocation } from "../../../../../hooks/useCellLocation";
 
 type GLTFResult = GLTF & {
   nodes: {
-    col: THREE.Mesh
-    door: THREE.Mesh
-    object1007: THREE.Mesh
-    object1008: THREE.Mesh
-    lightGem004: THREE.Mesh
-    object1063: THREE.Mesh
-    object2008: THREE.Mesh
+    col: THREE.Mesh;
+    door: THREE.Mesh;
+    object1007: THREE.Mesh;
+    object1008: THREE.Mesh;
+    lightGem004: THREE.Mesh;
+    object1063: THREE.Mesh;
+    object2008: THREE.Mesh;
   };
   materials: {
     floor: THREE.MeshStandardMaterial;
@@ -64,7 +64,6 @@ export const LibraryCorridor: React.FC<{
     >
       {hasColliders && (
         <RigidBody
-          key={`${cellLocation.x}-${cellLocation.y}-${cellLocation.z}-corridor-colliders`}
           colliders={"trimesh"}
           type="fixed"
         >
@@ -77,13 +76,58 @@ export const LibraryCorridor: React.FC<{
           />
         </RigidBody>
       )}
- <mesh name="col" geometry={nodes.col.geometry} material={materials.floor} position={[0, 0.1, 0]} rotation={[Math.PI / 2, 0, 0]} />
-      <mesh name="door" geometry={nodes.door.geometry} material={materials.wall} position={[0, 0.1, -0.1]} rotation={[Math.PI / 2, 0, Math.PI]} />
-      <mesh name="object1007" geometry={nodes.object1007.geometry} material={materials['Sandstone_5.005']} position={[1, 0.1, -1.1]} rotation={[Math.PI / 2, 0, 0]} />
-      <mesh name="object1008" geometry={nodes.object1008.geometry} material={materials.sandstonetrim} position={[1, 0.1, -0.1]} rotation={[Math.PI / 2, 0, Math.PI]} />
-      <mesh name="lightGem004" geometry={nodes.lightGem004.geometry} material={materials['fresnelGlow.004']} position={[0, 0.664, 0.443]} rotation={[2.955, 0, Math.PI]} scale={10} />
-      <mesh name="object1063" geometry={nodes.object1063.geometry} material={materials['floor.001']} position={[0, 0.333, 0.332]} rotation={[Math.PI / 2, 0, Math.PI]} scale={0.5} />
-      <mesh name="object2008" geometry={nodes.object2008.geometry} material={materials.oldwood} position={[0, 0.333, 0.332]} rotation={[Math.PI / 2, 0, Math.PI]} scale={0.5} />
+      <mesh
+        name="col"
+        geometry={nodes.col.geometry}
+        material={materials.floor}
+        position={[0, 0.1, 0]}
+        rotation={[Math.PI / 2, 0, 0]}
+      />
+      <mesh
+        name="door"
+        geometry={nodes.door.geometry}
+        material={materials.wall}
+        position={[0, 0.1, -0.1]}
+        rotation={[Math.PI / 2, 0, Math.PI]}
+      />
+      <mesh
+        name="object1007"
+        geometry={nodes.object1007.geometry}
+        material={materials["Sandstone_5.005"]}
+        position={[1, 0.1, -1.1]}
+        rotation={[Math.PI / 2, 0, 0]}
+      />
+      <mesh
+        name="object1008"
+        geometry={nodes.object1008.geometry}
+        material={materials.sandstonetrim}
+        position={[1, 0.1, -0.1]}
+        rotation={[Math.PI / 2, 0, Math.PI]}
+      />
+      <mesh
+        name="lightGem004"
+        geometry={nodes.lightGem004.geometry}
+        material={materials["fresnelGlow.004"]}
+        position={[0, 0.664, 0.443]}
+        rotation={[2.955, 0, Math.PI]}
+        scale={10}
+      />
+      <mesh
+        name="object1063"
+        geometry={nodes.object1063.geometry}
+        material={materials["floor.001"]}
+        position={[0, 0.333, 0.332]}
+        rotation={[Math.PI / 2, 0, Math.PI]}
+        scale={0.5}
+      />
+      <mesh
+        name="object2008"
+        geometry={nodes.object2008.geometry}
+        material={materials.oldwood}
+        position={[0, 0.333, 0.332]}
+        rotation={[Math.PI / 2, 0, Math.PI]}
+        scale={0.5}
+      />
     </group>
   );
 };

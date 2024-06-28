@@ -18,6 +18,7 @@ export const gameController = create<gameState>()((set, get) => ({
   debug: true,
   screenLocked: false,
   setPlayerPosition: (playerPosition: CellLocation) => {
+    console.log("setting player position to ", playerPosition);
     set(() => ({
       playerPosition: playerPosition,
     }));

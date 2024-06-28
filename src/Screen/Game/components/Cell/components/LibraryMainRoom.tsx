@@ -20,14 +20,14 @@ import { Books } from "../props/Books";
 
 type GLTFResult = GLTF & {
   nodes: {
-    lowerwallCol: THREE.Mesh
-    floorCol: THREE.Mesh
-    railing1: THREE.Mesh
-    object1004: THREE.Mesh
-    lightGem004: THREE.Mesh
-    object1063: THREE.Mesh
-    object2008: THREE.Mesh
-  },
+    lowerwallCol: THREE.Mesh;
+    floorCol: THREE.Mesh;
+    railing1: THREE.Mesh;
+    object1004: THREE.Mesh;
+    lightGem004: THREE.Mesh;
+    object1063: THREE.Mesh;
+    object2008: THREE.Mesh;
+  };
   materials: {
     WallBake: THREE.MeshStandardMaterial;
     floor: THREE.MeshStandardMaterial;
@@ -47,7 +47,7 @@ type ContextType = Record<
 export const LibraryMainRoom: React.FC<{
   cellLocation: CellLocation;
   hasColliders?: boolean;
-}> = ({ cellLocation, hasColliders = true}) => {
+}> = ({ cellLocation, hasColliders = true }) => {
   const { nodes, materials } = useGLTF(
     "/models/libraryMainRoom-transformed.glb",
   ) as GLTFResult;
@@ -58,7 +58,7 @@ export const LibraryMainRoom: React.FC<{
   const { playerPosition, setPlayerPosition, debug } = gameController();
   const roomRef = useRef(undefined);
   const { adjustedPosition } = useCellLocation({ cellLocation });
-  
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (roomRef.current) {
@@ -84,22 +84,14 @@ export const LibraryMainRoom: React.FC<{
       )}
       {hasColliders && (
         <>
-          <RigidBody
-            key={`${cellLocation.x}-${cellLocation.y}-${cellLocation.z}-main-wall-colliders`}
-            type="fixed"
-            colliders="trimesh"
-          >
+          <RigidBody type="fixed" colliders="trimesh">
             <mesh
               geometry={colliders.lowerwallCol.geometry}
               material={"transparent"}
               rotation={[Math.PI / 2, 0, 0]}
             />
           </RigidBody>
-          <RigidBody
-            key={`${cellLocation.x}-${cellLocation.y}-${cellLocation.z}-main-railing-colliders`}
-            type="fixed"
-            colliders="hull"
-          >
+          <RigidBody type="fixed" colliders="hull">
             <mesh
               geometry={colliders.floorCol.geometry}
               material={"transparent"}
@@ -130,15 +122,57 @@ export const LibraryMainRoom: React.FC<{
               scale={[1, 1, 0.75]}
             />
           </RigidBody>
-        </>)
-        }
- <mesh name="lowerwallCol" geometry={nodes.lowerwallCol.geometry} material={materials.WallBake} rotation={[Math.PI / 2, 0, 0]} />
-      <mesh name="floorCol" geometry={nodes.floorCol.geometry} material={materials.floor} rotation={[Math.PI / 2, 0, Math.PI]} />
-      <mesh name="railing1" geometry={nodes.railing1.geometry} material={materials.oldwood} rotation={[Math.PI / 2, 0, 0]} scale={[1, 1, 0.75]} />
-      <mesh name="object1004" geometry={nodes.object1004.geometry} material={materials['SandstoneTrim.008']} rotation={[Math.PI / 2, 0, 0]} />
-      <mesh name="lightGem004" geometry={nodes.lightGem004.geometry} material={materials.fresnelGlow} position={[0, 1.589, -2.845]} rotation={[0.187, 0, 0]} scale={10} />
-      <mesh name="object1063" geometry={nodes.object1063.geometry} material={materials['floor.003']} position={[0, 1.257, -2.734]} rotation={[Math.PI / 2, 0, 0]} scale={0.5} />
-      <mesh name="object2008" geometry={nodes.object2008.geometry} material={materials['oldwood.004']} position={[0, 1.257, -2.734]} rotation={[Math.PI / 2, 0, 0]} scale={0.5} />
+        </>
+      )}
+      <mesh
+        name="lowerwallCol"
+        geometry={nodes.lowerwallCol.geometry}
+        material={materials.WallBake}
+        rotation={[Math.PI / 2, 0, 0]}
+      />
+      <mesh
+        name="floorCol"
+        geometry={nodes.floorCol.geometry}
+        material={materials.floor}
+        rotation={[Math.PI / 2, 0, Math.PI]}
+      />
+      <mesh
+        name="railing1"
+        geometry={nodes.railing1.geometry}
+        material={materials.oldwood}
+        rotation={[Math.PI / 2, 0, 0]}
+        scale={[1, 1, 0.75]}
+      />
+      <mesh
+        name="object1004"
+        geometry={nodes.object1004.geometry}
+        material={materials["SandstoneTrim.008"]}
+        rotation={[Math.PI / 2, 0, 0]}
+      />
+      <mesh
+        name="lightGem004"
+        geometry={nodes.lightGem004.geometry}
+        material={materials.fresnelGlow}
+        position={[0, 1.589, -2.845]}
+        rotation={[0.187, 0, 0]}
+        scale={10}
+      />
+      <mesh
+        name="object1063"
+        geometry={nodes.object1063.geometry}
+        material={materials["floor.003"]}
+        position={[0, 1.257, -2.734]}
+        rotation={[Math.PI / 2, 0, 0]}
+        scale={0.5}
+      />
+      <mesh
+        name="object2008"
+        geometry={nodes.object2008.geometry}
+        material={materials["oldwood.004"]}
+        position={[0, 1.257, -2.734]}
+        rotation={[Math.PI / 2, 0, 0]}
+        scale={0.5}
+      />
     </group>
   );
 };

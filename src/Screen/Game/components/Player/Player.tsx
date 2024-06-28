@@ -18,7 +18,7 @@ const getInitialPosition = (playerPosition: CellLocation) =>
   new Vector3(
     playerPosition.x * 11,
     playerPosition.y * 2,
-    playerPosition.z * 11
+    playerPosition.z * 11,
   ).add(new Vector3(3, 1, 5));
 
 export const Player = () => {
@@ -26,10 +26,9 @@ export const Player = () => {
   const [, get] = useKeyboardControls();
   const { playerPosition } = gameController();
 
-  // Memoize the initial position
   const initialPosition = useMemo(
     () => playerPosition && getInitialPosition(playerPosition),
-    [] // Empty dependency array ensures it runs only once
+    [],
   );
 
   useFrame((state) => {
@@ -40,12 +39,12 @@ export const Player = () => {
       playerPos.set(
         rigidBodyTranslation.x,
         rigidBodyTranslation.y + 0.2,
-        rigidBodyTranslation.z
+        rigidBodyTranslation.z,
       );
       state.camera.position.set(
         rigidBodyTranslation.x,
         rigidBodyTranslation.y + 0.2,
-        rigidBodyTranslation.z
+        rigidBodyTranslation.z,
       );
       frontVector.set(0, 0, backward - forward);
       sideVector.set(leftward - rightward, 0, 0);

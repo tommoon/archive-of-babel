@@ -17,7 +17,7 @@ export const useQueryString = ({
       Object.entries(cellLocation).map(([key, value]) => [
         key,
         value.toString(),
-      ])
+      ]),
     );
     console.log("url params updated to ", stringifiedParams);
     setSearchParams(stringifiedParams);
