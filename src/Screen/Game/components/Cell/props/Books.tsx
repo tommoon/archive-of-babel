@@ -35,13 +35,13 @@ const rotations = [0, 90, 180, 270].map(degrees_to_radians);
 const getPositions = ({ bookUnit, cabinet, row, unit }) => {
   switch (cabinet) {
     case 0:
-      return new THREE.Vector3(0.043 * bookUnit + unit * 0.5, 0, -0.24 * row);
+      return new THREE.Vector3(0.043 * bookUnit + unit * 0.5, 0, -0.25 * row);
     case 1:
-      return new THREE.Vector3(0, 0.043 * bookUnit - (unit - 3) * 0.5, -0.24 * row);
+      return new THREE.Vector3(0, 0.043 * bookUnit - (unit - 3) * 0.5, -0.25 * row);
     case 2:
-      return new THREE.Vector3(-0.043 * bookUnit + (unit - 3) * 0.5, 0, -0.24 * row);
+      return new THREE.Vector3(-0.043 * bookUnit + (unit - 3) * 0.5, 0, -0.25 * row);
     default:
-      return new THREE.Vector3(0, -0.043 * bookUnit + (unit - 3) * 0.5, -0.24 * row);
+      return new THREE.Vector3(0, -0.043 * bookUnit + (unit - 3) * 0.5, -0.25 * row);
   }
 };
 
@@ -59,10 +59,10 @@ const Book: React.FC<BookProps> = React.memo(
     const RNumber = useMemo(() => seededRandom(seed), [seed]);
     const startVector = useMemo(
       () => [
-        new THREE.Vector3(-0.94, -2.75, -0.15),
-        new THREE.Vector3(2.75, -0.94, -0.15),
-        new THREE.Vector3(0.94, 2.75, -0.15),
-        new THREE.Vector3(-2.75, 0.94, -0.15),
+        new THREE.Vector3(-0.94, -2.75, -0.135),
+        new THREE.Vector3(2.75, -0.94, -0.135),
+        new THREE.Vector3(0.94, 2.75, -0.135),
+        new THREE.Vector3(-2.75, 0.94, -0.135),
       ],
       []
     );
