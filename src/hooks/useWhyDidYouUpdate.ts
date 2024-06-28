@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 const deepCompareEquals = (
   a: { [x: string]: any },
-  b: { [x: string]: any }
+  b: { [x: string]: any },
 ) => {
   if (a === b) return true;
   if (typeof a !== "object" || typeof b !== "object") return false;

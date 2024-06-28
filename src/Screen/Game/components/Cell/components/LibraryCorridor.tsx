@@ -63,10 +63,7 @@ export const LibraryCorridor: React.FC<{
       dispose={null}
     >
       {hasColliders && (
-        <RigidBody
-          colliders={"trimesh"}
-          type="fixed"
-        >
+        <RigidBody colliders={"trimesh"} type="fixed">
           <mesh
             name="col"
             geometry={colliders.col.geometry}

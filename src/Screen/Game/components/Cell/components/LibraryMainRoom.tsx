@@ -15,7 +15,7 @@ import { _objectIsEqual } from "@/lib/comparisons";
 import { gameController } from "@/Controllers/gameController";
 import { useCellLocation } from "../../../../../hooks/useCellLocation";
 import { Text } from "@react-three/drei";
-import { Cabinet } from "../props/Cabinet";
+import { Cabinet } from "../props/Cabinets";
 import { Books } from "../props/Books";
 
 type GLTFResult = GLTF & {

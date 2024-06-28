@@ -42,7 +42,7 @@ export const Game = () => {
       }
     }
   }, [screenLocked]);
-  
+
   return (
     playerPosition && (
       <KeyboardControls map={keyboardMap}>

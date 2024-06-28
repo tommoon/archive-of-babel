@@ -6,13 +6,14 @@ import React, {
   useState,
   useCallback,
 } from "react";
-import { Instance, Instances, useGLTF, Text } from "@react-three/drei";
+import { Instance, Instances, useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useFrame } from "@react-three/fiber";
 import { CellLocation } from "@/types/CommonTypes";
 import { seededRandom } from "@/lib/randomFunctions";
 import { setScreenLocked, setSelectedSeed } from "@/Controllers/gameController";
 import { degrees_to_radians } from "@/lib/utils";
+import { useCellLocation } from "@/hooks/useCellLocation";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -37,89 +38,95 @@ interface BookProps {
   shelfIndex: number;
 }
 
-const Book: React.FC<BookProps> = ({
-  bookUnit,
-  row,
-  cabinet,
-  cellLocation,
-  shelfIndex,
-}) => {
-  const seed = `${Object.values(cellLocation).join("")}${shelfIndex}${cabinet}${row}${bookUnit}`;
-  const RNumber = seededRandom(seed);
-  const startVector = useMemo(
-    () => new THREE.Vector3(0.06, RNumber * 0.025 + 0.075, -0.131),
-    [RNumber],
-  );
-  const scale = RNumber * 0.1;
-  const ref = useRef<any>();
-  const [hovered, setHover] = useState(false);
-
-  useLayoutEffect(() => {
-    if (ref.current) {
-      ref.current.position.copy(
-        startVector.add(
-          new THREE.Vector3(
-            0.043 * bookUnit + (cabinet - 2) * 0.5,
-            -0.05,
-            -0.25 * row,
-          ),
+const Book: React.FC<BookProps> = React.memo(
+  ({ bookUnit, row, cabinet, cellLocation, shelfIndex }) => {
+    const seed = `${Object.values(cellLocation).join("")}${shelfIndex}${cabinet}${row}${bookUnit}`;
+    const RNumber = useMemo(() => seededRandom(seed), [seed]);
+    const startVector = useMemo(
+      () => new THREE.Vector3(0.06, RNumber * 0.025 + 0.075, -0.131),
+      [RNumber],
+    );
+    const scale = useMemo(() => RNumber * 0.1, [RNumber]);
+    const ref = useRef<THREE.Mesh>();
+    const [hovered, setHover] = useState(false);
+    const startColor = useMemo(
+      () =>
+        new THREE.Color(
+          seededRandom(seed + "red") / 2,
+          seededRandom(seed + "green") / 2,
+          seededRandom(seed + "blue") / 2,
         ),
-      );
-      ref.current.scale.set(0.6, 0.6, 0.5 + scale);
-    }
-  }, [startVector, bookUnit, cabinet, row, scale]);
+      [seed],
+    );
 
-  useFrame(() => {
-    if (ref.current) {
-      ref.current.position.y = THREE.MathUtils.lerp(
-        ref.current.position.y,
-        hovered ? startVector.y + 0.05 : startVector.y,
-        0.1,
-      );
-      ref.current.color.lerp(
-        COLOR.set(hovered ? "red" : "white"),
-        hovered ? 1 : 0.1,
-      );
-    }
-  });
+    useLayoutEffect(() => {
+      if (ref.current) {
+        ref.current.position.copy(
+          startVector.add(
+            new THREE.Vector3(
+              0.043 * bookUnit + (cabinet - 2) * 0.5,
+              -0.05,
+              -0.25 * row,
+            ),
+          ),
+        );
+        ref.current.scale.set(0.6, 0.6, 0.5 + scale);
+        ref.current.color.copy(startColor);
+      }
+    }, [ref, startVector, bookUnit, cabinet, row, scale, startColor]);
 
-  const handlePointerOver = useCallback((e: any) => {
-    e.stopPropagation();
-    setHover(true);
-  }, []);
+    useFrame(() => {
+      if (ref.current) {
+        ref.current.position.y = THREE.MathUtils.lerp(
+          ref.current.position.y,
+          hovered ? startVector.y + 0.05 : startVector.y,
+          0.1,
+        );
+        ref.current.color.lerp(
+          COLOR.set(hovered ? "white" : startColor),
+          hovered ? 1 : 0.1,
+        );
+      }
+    });
 
-  const handlePointerOut = useCallback(() => {
-    setHover(false);
-  }, []);
-
-  const handleClick = useCallback(
-    (e: any) => {
+    const handlePointerOver = useCallback((e: any) => {
       e.stopPropagation();
-      setSelectedSeed(seed);
-      setScreenLocked(true);
-    },
-    [seed],
-  );
+      setHover(true);
+    }, []);
 
-  return (
-    <group>
-      <Instance
-        ref={ref}
-        onPointerOver={handlePointerOver}
-        onPointerOut={handlePointerOut}
-        onClick={handleClick}
-      />
-    </group>
-  );
-};
+    const handlePointerOut = useCallback(() => {
+      setHover(false);
+    }, []);
+
+    const handleClick = useCallback(
+      (e: any) => {
+        e.stopPropagation();
+        setSelectedSeed(seed);
+        setScreenLocked(true);
+      },
+      [seed],
+    );
+
+    return (
+      <group>
+        <Instance
+          ref={ref}
+          onPointerOver={handlePointerOver}
+          onPointerOut={handlePointerOut}
+          onClick={handleClick}
+        />
+      </group>
+    );
+  },
+);
 
 interface BooksProps {
   cellLocation: CellLocation;
-  shelfIndex: number;
 }
 
-export const Books: React.FC<BooksProps> = ({ cellLocation, shelfIndex }) => {
+export const Books: React.FC<BooksProps> = ({ cellLocation }) => {
   const { nodes } = useGLTF("/models/book-transformed.glb") as GLTFResult;
+  const { adjustedPosition } = useCellLocation({ cellLocation });
 
   const bookArray = useMemo(() => {
     const holderArray = [];
@@ -133,8 +140,12 @@ export const Books: React.FC<BooksProps> = ({ cellLocation, shelfIndex }) => {
     return holderArray;
   }, []);
 
-  return [45, 135, 225, 315].map((deg) => (
-    <group key={deg} rotation={[0, degrees_to_radians(deg), 0]}>
+  return [45, 135, 225, 315].map((deg, index) => (
+    <group
+      key={deg}
+      position={adjustedPosition}
+      rotation={[0, degrees_to_radians(deg), 0]}
+    >
       <Instances
         frustumCulled={false}
         rotation={new THREE.Euler(Math.PI / 2, 0, 0)}
@@ -145,9 +156,9 @@ export const Books: React.FC<BooksProps> = ({ cellLocation, shelfIndex }) => {
       >
         {bookArray.map((props, i) => (
           <Book
-            cellLocation={cellLocation}
-            shelfIndex={shelfIndex}
             key={i}
+            shelfIndex={index}
+            cellLocation={cellLocation}
             {...props}
           />
         ))}
@@ -156,4 +167,4 @@ export const Books: React.FC<BooksProps> = ({ cellLocation, shelfIndex }) => {
   ));
 };
 
-useGLTF.preload("/book-transformed.glb");
+useGLTF.preload("/models/book-transformed.glb");
