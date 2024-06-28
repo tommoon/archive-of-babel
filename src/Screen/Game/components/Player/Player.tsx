@@ -14,18 +14,23 @@ const sideVector = new Vector3();
 
 export const playerPos = new Vector3();
 
-const getInitialPosition = (playerPosition:CellLocation) =>  new Vector3(
-        playerPosition.x * 11,
-        playerPosition.y * 2,
-        playerPosition.z * 11
-        ).add(new Vector3(3, 1, 5))
+const getInitialPosition = (playerPosition: CellLocation) =>
+  new Vector3(
+    playerPosition.x * 11,
+    playerPosition.y * 2,
+    playerPosition.z * 11
+  ).add(new Vector3(3, 1, 5));
 
 export const Player = () => {
   const ref = useRef();
-
   const [, get] = useKeyboardControls();
   const { playerPosition } = gameController();
 
+  // Memoize the initial position
+  const initialPosition = useMemo(
+    () => playerPosition && getInitialPosition(playerPosition),
+    [] // Empty dependency array ensures it runs only once
+  );
 
   useFrame((state) => {
     if (ref.current) {
@@ -35,12 +40,12 @@ export const Player = () => {
       playerPos.set(
         rigidBodyTranslation.x,
         rigidBodyTranslation.y + 0.2,
-        rigidBodyTranslation.z,
+        rigidBodyTranslation.z
       );
       state.camera.position.set(
         rigidBodyTranslation.x,
         rigidBodyTranslation.y + 0.2,
-        rigidBodyTranslation.z,
+        rigidBodyTranslation.z
       );
       frontVector.set(0, 0, backward - forward);
       sideVector.set(leftward - rightward, 0, 0);
@@ -49,21 +54,15 @@ export const Player = () => {
         .normalize()
         .multiplyScalar(SPEED)
         .applyEuler(state.camera.rotation);
-      ref.current.setLinvel({ x: direction.x, y: velocity.y, z: direction.z });
+      ref.current.setLinvel({
+        x: direction.x,
+        y: velocity.y,
+        z: direction.z,
+      });
     }
   });
 
-  /*   useEffect(() => {
-    const interval = setInterval(() => {
-      const z = Math.floor(playerPos.z / 11);
-      const x = Math.floor(playerPos.x / 11);
-      setPlayerPosition({ x, y: 0, z });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []); */
-
-  return playerPosition && (
+  return playerPosition ? (
     <group>
       <Camera />
       <RigidBody
@@ -72,10 +71,10 @@ export const Player = () => {
         colliders={false}
         type="dynamic"
         enabledRotations={[false, false, false]}
-        position={getInitialPosition(playerPosition)}
+        position={initialPosition} // Use the memoized initial position
       >
         <CapsuleCollider args={[0.2, 0.18]} />
       </RigidBody>
     </group>
-  );
+  ) : null;
 };
