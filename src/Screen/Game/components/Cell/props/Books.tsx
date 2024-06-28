@@ -116,7 +116,7 @@ const Book: React.FC<BookProps> = React.memo(
         if (cabinet === 1) {
           ref.current.position.x = THREE.MathUtils.lerp(
             ref.current.position.x,
-            hovered ? startVector[cabinet].x + 0.05 : startVector[cabinet].x,
+            hovered ? startVector[cabinet].x - 0.05 : startVector[cabinet].x,
             0.1,
           );
         }
