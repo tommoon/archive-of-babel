@@ -10,7 +10,7 @@ import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { Orientation, CellLocation } from "@/types/CommonTypes";
 import { RigidBody } from "@react-three/rapier";
-import { useCellLocation } from "../../../../../hooks/useCellLocation";
+import { useCellLocation } from "../hooks/useCellLocation";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -43,7 +43,13 @@ export const LibraryCorridor: React.FC<{
   cellLocation: CellLocation;
   orientation: Orientation;
   hasColliders?: boolean;
-}> = ({ cellLocation, orientation, hasColliders = true }) => {
+  hasLights?: boolean;
+}> = ({
+  cellLocation,
+  orientation,
+  hasColliders = true,
+  hasLights = false,
+}) => {
   const { isVertical, adjustedPosition } = useCellLocation({
     cellLocation,
     orientation,
@@ -72,6 +78,14 @@ export const LibraryCorridor: React.FC<{
             rotation={[Math.PI / 2, 0, 0]}
           />
         </RigidBody>
+      )}
+      {hasLights && (
+        <pointLight
+          color={"#ebf5fe"}
+          position={[0.5, 0.5, 0]}
+          distance={20}
+          intensity={2}
+        />
       )}
       <mesh
         name="col"

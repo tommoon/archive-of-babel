@@ -37,11 +37,23 @@ const getPositions = ({ bookUnit, cabinet, row, unit }) => {
     case 0:
       return new THREE.Vector3(0.043 * bookUnit + unit * 0.5, 0, -0.25 * row);
     case 1:
-      return new THREE.Vector3(0, 0.043 * bookUnit - (unit - 3) * 0.5, -0.25 * row);
+      return new THREE.Vector3(
+        0,
+        0.043 * bookUnit - (unit - 3) * 0.5,
+        -0.25 * row,
+      );
     case 2:
-      return new THREE.Vector3(-0.043 * bookUnit + (unit - 3) * 0.5, 0, -0.25 * row);
+      return new THREE.Vector3(
+        -0.043 * bookUnit + (unit - 3) * 0.5,
+        0,
+        -0.25 * row,
+      );
     default:
-      return new THREE.Vector3(0, -0.043 * bookUnit + (unit - 3) * 0.5, -0.25 * row);
+      return new THREE.Vector3(
+        0,
+        -0.043 * bookUnit + (unit - 3) * 0.5,
+        -0.25 * row,
+      );
   }
 };
 
@@ -64,7 +76,7 @@ const Book: React.FC<BookProps> = React.memo(
         new THREE.Vector3(0.94, 2.75, -0.135),
         new THREE.Vector3(-2.75, 0.94, -0.135),
       ],
-      []
+      [],
     );
     const scale = useMemo(() => RNumber * 0.1, [RNumber]);
     const ref = useRef<THREE.Mesh>();
@@ -76,13 +88,15 @@ const Book: React.FC<BookProps> = React.memo(
           seededRandom(seed + "green") / 2,
           seededRandom(seed + "blue") / 2,
         ),
-      [seed]
+      [seed],
     );
 
     useLayoutEffect(() => {
       if (ref.current) {
         ref.current.position.copy(
-          startVector[cabinet].clone().add(getPositions({ bookUnit, cabinet, row, unit }))
+          startVector[cabinet]
+            .clone()
+            .add(getPositions({ bookUnit, cabinet, row, unit })),
         );
         ref.current.color.copy(startColor);
         ref.current.scale.set(0.6, 0.4, 0.4 + scale);
@@ -123,7 +137,7 @@ const Book: React.FC<BookProps> = React.memo(
         ref.current.color.lerp(
           COLOR.set(hovered ? "white" : startColor),
           hovered ? 1 : 0.1,
-        ); 
+        );
       }
     });
 
@@ -142,7 +156,7 @@ const Book: React.FC<BookProps> = React.memo(
         setSelectedSeed(seed);
         setScreenLocked(true);
       },
-      [seed]
+      [seed],
     );
 
     return (
@@ -155,7 +169,7 @@ const Book: React.FC<BookProps> = React.memo(
         />
       </group>
     );
-  }
+  },
 );
 
 interface BooksProps {

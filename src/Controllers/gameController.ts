@@ -10,12 +10,10 @@ type gameState = {
   setPlayerPosition: (playerPosition: CellLocation) => void;
 };
 
-const getUrlPosition = () => {};
-
 export const gameController = create<gameState>()((set, get) => ({
   playerPosition: undefined,
   selectedSeed: null,
-  debug: true,
+  debug: false,
   screenLocked: false,
   setPlayerPosition: (playerPosition: CellLocation) => {
     console.log("setting player position to ", playerPosition);

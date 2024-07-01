@@ -5,8 +5,8 @@ import { GLTF } from "three-stdlib";
 import { RigidBody } from "@react-three/rapier";
 import { CellLocation, Orientation } from "@/types/CommonTypes";
 import { gameController } from "@/Controllers/gameController";
-import { playerPos } from "../../Player/Player";
-import { useCellLocation } from "../../../../../hooks/useCellLocation";
+import { playerPos } from "../Screen/Game/components/Player/Player";
+import { useCellLocation } from "../hooks/useCellLocation";
 
 type GLTFResult = GLTF & {
   nodes: {

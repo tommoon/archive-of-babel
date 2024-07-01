@@ -1,8 +1,8 @@
 import React from "react";
 import { Orientation, CellLocation } from "@/types/CommonTypes";
-import { LibraryMainRoom } from "./LibraryMainRoom";
-import { LibraryCorridor } from "./LibraryCorridor";
-import { Cabinets } from "../props/Cabinets";
+import { LibraryMainRoom } from "../../../../../props/LibraryMainRoom";
+import { LibraryCorridor } from "../../../../../props/LibraryCorridor";
+import { Cabinets } from "../../../../../props/Cabinets";
 
 export const SubCell: React.FC<{
   cellLocation: CellLocation;

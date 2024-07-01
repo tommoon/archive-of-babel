@@ -10,13 +10,14 @@ import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { RigidBody } from "@react-three/rapier";
 import { CellLocation } from "@/types/CommonTypes";
-import { playerPos } from "../../Player/Player";
+import { playerPos } from "../Screen/Game/components/Player/Player";
 import { _objectIsEqual } from "@/lib/comparisons";
 import { gameController } from "@/Controllers/gameController";
-import { useCellLocation } from "../../../../../hooks/useCellLocation";
+import { useCellLocation } from "../hooks/useCellLocation";
 import { Text } from "@react-three/drei";
-import { Cabinet } from "../props/Cabinets";
-import { Books } from "../props/Books";
+import { Cabinet } from "./Cabinets";
+import { Books } from "./Books";
+import { MainTorch } from "./MainTorch";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -47,7 +48,8 @@ type ContextType = Record<
 export const LibraryMainRoom: React.FC<{
   cellLocation: CellLocation;
   hasColliders?: boolean;
-}> = ({ cellLocation, hasColliders = true }) => {
+  hasLights?: boolean;
+}> = ({ cellLocation, hasColliders = true, hasLights = false }) => {
   const { nodes, materials } = useGLTF(
     "/models/libraryMainRoom-transformed.glb",
   ) as GLTFResult;
@@ -123,6 +125,14 @@ export const LibraryMainRoom: React.FC<{
             />
           </RigidBody>
         </>
+      )}
+      {hasLights && (
+        <pointLight
+          color={"#ebf5fe"}
+          position={[0, 1.5, -2.5]}
+          distance={20}
+          intensity={2}
+        />
       )}
       <mesh
         name="lowerwallCol"

@@ -35,7 +35,7 @@ export const MainTorch: React.FC<{
   active: boolean;
 }> = ({ active, ...props }) => {
   const { nodes, materials } = useGLTF(
-    "/mainTorch-transformed.glb",
+    "/models/mainTorch-transformed.glb",
   ) as GLTFResult;
   const { debug } = gameController();
 

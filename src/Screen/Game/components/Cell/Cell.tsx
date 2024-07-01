@@ -1,8 +1,8 @@
 import { gameController } from "@/Controllers/gameController";
 import { _objectIsEqual } from "@/lib/comparisons";
 import { SubCell } from "./components/SubCell";
-import { LibraryStairs } from "./components/LibraryStairs";
-import { Books } from "./props/Books";
+import { LibraryStairs } from "../../../../props/LibraryStairs";
+import { Books } from "../../../../props/Books";
 import { Suspense } from "react";
 
 export const Cell = () => {
@@ -43,7 +43,7 @@ export const Cell = () => {
         />
 
         <Suspense>
-          <Books cellLocation={playerPosition}/>
+          <Books cellLocation={playerPosition} />
         </Suspense>
         {/* Above*/}
         <SubCell
