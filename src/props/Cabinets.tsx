@@ -5,8 +5,8 @@ Files: cabinet.glb [20KB] > /home/tomoon/Documents/archiveOfBabel/public/models/
 */
 
 import * as THREE from "three";
-import React, { useRef } from "react";
-import { Box, useGLTF } from "@react-three/drei";
+import React from "react";
+import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useCellLocation } from "@/hooks/useCellLocation";
 import { CellLocation } from "@/types/CommonTypes";
@@ -21,13 +21,7 @@ type GLTFResult = GLTF & {
   materials: {
     oldwood: THREE.MeshStandardMaterial;
   };
-  animations: GLTFAction[];
 };
-
-type ContextType = Record<
-  string,
-  React.ForwardRefExoticComponent<JSX.IntrinsicElements["mesh"]>
->;
 
 type CabinetProps = {
   cellLocation: CellLocation;

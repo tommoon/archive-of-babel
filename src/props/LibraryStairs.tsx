@@ -7,6 +7,7 @@ import { CellLocation, Orientation } from "@/types/CommonTypes";
 import { gameController } from "@/Controllers/gameController";
 import { playerPos } from "../Screen/Game/components/Player/Player";
 import { useCellLocation } from "../hooks/useCellLocation";
+import { transparentMaterial } from "@/lib/utils";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -110,7 +111,7 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
             <mesh
               name="ramp"
               geometry={colliders.ramp.geometry}
-              material={"transparent"}
+              material={transparentMaterial}
               position={[-2, -1.9, -1]}
               rotation={[Math.PI / 2, 0, Math.PI / 2]}
             />

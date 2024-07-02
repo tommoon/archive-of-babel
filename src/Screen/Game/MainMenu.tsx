@@ -1,15 +1,15 @@
 import { cn } from "@/lib/utils"
 import { Settings } from "lucide-react"
-import { useState } from "react"
+import { useState, MouseEvent, TouchEvent } from "react";
 import { Link } from "react-router-dom"
 
 export const MainMenu = () => {
 
     const [mainMenu, setMainMenu] = useState(false)
-    const menuClick = (event) => {
+    const menuClick = (event: MouseEvent<SVGSVGElement> | TouchEvent<SVGSVGElement>) => {
         event.stopPropagation();
-        setMainMenu(true)
-    }
+        setMainMenu(true);
+    };
     return <>
                 <div
             className="fixed right-[10%] top-[5%] z-10">

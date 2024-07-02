@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 
 const deepCompareEquals = (
-  a: { [x: string]: any },
-  b: { [x: string]: any },
-) => {
+  a: { [key: string]: any },
+  b: { [key: string]: any }
+): boolean => {
   if (a === b) return true;
   if (typeof a !== "object" || typeof b !== "object") return false;
   const keysA = Object.keys(a);
@@ -16,13 +16,16 @@ const deepCompareEquals = (
   return true;
 };
 
-export const useWhyDidYouUpdate = (name: any, props: { [x: string]: any }) => {
+export const useWhyDidYouUpdate = (
+  name: string,
+  props: { [key: string]: any }
+) => {
   const previousProps = useRef(props);
 
   useEffect(() => {
     if (previousProps.current) {
       const allKeys = Object.keys({ ...previousProps.current, ...props });
-      const changesObj = {};
+      const changesObj: { [key: string]: { from: any; to: any } } = {};
       allKeys.forEach((key) => {
         if (!deepCompareEquals(previousProps.current[key], props[key])) {
           changesObj[key] = {

@@ -10,12 +10,12 @@ export function seededRandom(seed: string) {
 export function generateSeededText(
   seed: string,
   lineLength: number = 58,
-  linesCount: number = 20,
+  linesCount: number = 20
 ): string {
   const characters = "abcdefghijklmnopqrstuvwxyz, . ";
 
   // Initialize a random number generator based on the seed
-  function lcg(seed) {
+  function lcg(seed: number) {
     let state = seed;
     return function () {
       state = (state * 48271) % 2147483647;

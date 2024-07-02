@@ -1,9 +1,9 @@
 import { LibraryCorridor } from "@/props/LibraryCorridor";
 import { LibraryMainRoom } from "@/props/LibraryMainRoom";
-import { PerspectiveCamera } from "@react-three/drei";
+import { PerspectiveCamera as DreiPerspectiveCamera } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useEffect, useRef, useState } from "react";
-import { MathUtils } from "three";
+import { MathUtils, PerspectiveCamera } from "three";
 
 const BackgroundProps = () => (
   <>
@@ -38,12 +38,12 @@ const BackgroundProps = () => (
 );
 
 const MenuCamera = () => {
-  const cameraRef = useRef();
+  const cameraRef = useRef<PerspectiveCamera | null>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [targetZ, setTargetZ] = useState(8);
   const [atBottom, setAtBottom] = useState(false);
 
-  const handleScroll = (event) => {
+  const handleScroll = (event: WheelEvent) => {
     if (!atBottom) {
       setScrollPosition((prev) => Math.min(0, prev - event.deltaY * 0.005));
     }
@@ -76,11 +76,10 @@ const MenuCamera = () => {
   });
 
   return (
-    <PerspectiveCamera
+    <DreiPerspectiveCamera
       makeDefault
       ref={cameraRef}
       position={[0, 0.8, 8]}
-      lookAt={[0, 0.8, 0]}
     />
   );
 };

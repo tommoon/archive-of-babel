@@ -1,9 +1,9 @@
 import { gameController } from "@/Controllers/gameController";
-import { Plane, useKeyboardControls } from "@react-three/drei";
+import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { CapsuleCollider, RigidBody } from "@react-three/rapier";
+import { CapsuleCollider, RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { useMemo, useRef } from "react";
-import { PlaneGeometry, Vector3 } from "three";
+import { Vector3 } from "three";
 import { Camera } from "./Camera";
 import { CellLocation } from "@/types/CommonTypes";
 
@@ -22,18 +22,18 @@ const getInitialPosition = (playerPosition: CellLocation) =>
   ).add(new Vector3(3, 2, 5));
 
 export const Player = () => {
-  const ref = useRef();
+  const ref = useRef<RapierRigidBody>(null);
   const [, get] = useKeyboardControls();
   const { playerPosition } = gameController();
 
   const initialPosition = useMemo(
     () => playerPosition && getInitialPosition(playerPosition),
-    [],
+    [playerPosition], // Include playerPosition in the dependency array
   );
 
   useFrame((state) => {
     if (ref.current) {
-      const { forward, backward, leftward, rightward } = get();
+      const { forward = 0, backward = 0, leftward = 0, rightward = 0 } = get();
       const velocity = ref.current.linvel();
       const rigidBodyTranslation = ref.current.translation();
       playerPos.set(
@@ -46,7 +46,9 @@ export const Player = () => {
         rigidBodyTranslation.y + 0.2,
         rigidBodyTranslation.z,
       );
+            // @ts-ignore
       frontVector.set(0, 0, backward - forward);
+            // @ts-ignore
       sideVector.set(leftward - rightward, 0, 0);
       direction
         .subVectors(frontVector, sideVector)
@@ -57,7 +59,7 @@ export const Player = () => {
         x: direction.x,
         y: velocity.y,
         z: direction.z,
-      });
+      }, true);
     }
   });
 

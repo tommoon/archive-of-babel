@@ -45,6 +45,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.7",
     "@types/murmurhash3js": "^3.0.7",
     "@types/node": "^20.12.12",
     "@types/react": "^18.2.66",

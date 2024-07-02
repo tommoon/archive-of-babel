@@ -6,7 +6,7 @@ import { Books } from "../../../../props/Books";
 import { Suspense } from "react";
 
 export const Cell = () => {
-  const { playerPosition, debug } = gameController();
+  const { playerPosition } = gameController();
 
   return (
     playerPosition && (

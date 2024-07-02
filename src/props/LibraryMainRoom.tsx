@@ -15,12 +15,13 @@ import { _objectIsEqual } from "@/lib/comparisons";
 import { gameController } from "@/Controllers/gameController";
 import { useCellLocation } from "../hooks/useCellLocation";
 import { Text } from "@react-three/drei";
-import { Cabinet } from "./Cabinets";
-import { Books } from "./Books";
-import { MainTorch } from "./MainTorch";
+import { transparentMaterial } from "@/lib/utils";
 
 type GLTFResult = GLTF & {
   nodes: {
+    railing4: any;
+    railing2: any;
+    railing3: any;
     lowerwallCol: THREE.Mesh;
     floorCol: THREE.Mesh;
     railing1: THREE.Mesh;
@@ -37,13 +38,9 @@ type GLTFResult = GLTF & {
     fresnelGlow: THREE.MeshStandardMaterial;
     ["floor.003"]: THREE.MeshStandardMaterial;
     ["oldwood.004"]: THREE.MeshStandardMaterial;
+    ["SandstoneTrim.008"]: THREE.MeshStandardMaterial;
   };
 };
-
-type ContextType = Record<
-  string,
-  React.ForwardRefExoticComponent<JSX.IntrinsicElements["mesh"]>
->;
 
 export const LibraryMainRoom: React.FC<{
   cellLocation: CellLocation;
@@ -58,7 +55,7 @@ export const LibraryMainRoom: React.FC<{
   ) as GLTFResult;
 
   const { playerPosition, setPlayerPosition, debug } = gameController();
-  const roomRef = useRef(undefined);
+  const roomRef = useRef<THREE.Group<THREE.Object3DEventMap>>(null);
   const { adjustedPosition } = useCellLocation({ cellLocation });
 
   useEffect(() => {
@@ -89,37 +86,37 @@ export const LibraryMainRoom: React.FC<{
           <RigidBody type="fixed" colliders="trimesh">
             <mesh
               geometry={colliders.lowerwallCol.geometry}
-              material={"transparent"}
+              material={transparentMaterial}
               rotation={[Math.PI / 2, 0, 0]}
             />
           </RigidBody>
           <RigidBody type="fixed" colliders="hull">
             <mesh
               geometry={colliders.floorCol.geometry}
-              material={"transparent"}
+              material={transparentMaterial}
               rotation={[Math.PI / 2, 0, Math.PI]}
             />
             <mesh
               geometry={colliders.railing1.geometry}
-              material={"transparent"}
+              material={transparentMaterial}
               rotation={[Math.PI / 2, 0, 0]}
               scale={[1, 1, 0.75]}
             />
             <mesh
               geometry={colliders.railing3.geometry}
-              material={"transparent"}
+              material={transparentMaterial}
               rotation={[Math.PI / 2, 0, -Math.PI / 2]}
               scale={[1, 1, 0.75]}
             />
             <mesh
               geometry={colliders.railing2.geometry}
-              material={"transparent"}
+              material={transparentMaterial}
               rotation={[Math.PI / 2, 0, Math.PI / 2]}
               scale={[1, 1, 0.75]}
             />
             <mesh
               geometry={colliders.railing4.geometry}
-              material={"transparent"}
+              material={transparentMaterial}
               rotation={[Math.PI / 2, 0, -Math.PI]}
               scale={[1, 1, 0.75]}
             />

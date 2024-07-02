@@ -1,3 +1,4 @@
+import { transparentMaterial } from "@/lib/utils";
 import { PerspectiveCamera, Plane } from "@react-three/drei";
 
 const handleClick = (e: any) => {
@@ -5,6 +6,8 @@ const handleClick = (e: any) => {
 };
 
 export const Camera = () => {
+  // Create a transparent material
+
   return (
     <PerspectiveCamera makeDefault>
       <Plane
@@ -13,7 +16,7 @@ export const Camera = () => {
         onClick={handleClick}
         args={[0.5, 0.5]}
         position={[0, 0, -1]}
-        material={"transparent"}
+        material={transparentMaterial}
       />
     </PerspectiveCamera>
   );

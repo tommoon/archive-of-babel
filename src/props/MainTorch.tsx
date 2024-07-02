@@ -5,11 +5,10 @@ Files: mainTorch.glb [29.88KB] > /home/tomoon/Documents/archiveOfBabel/public/ma
 */
 
 import * as THREE from "three";
-import React, { useEffect, useRef } from "react";
-import { useGLTF, useHelper } from "@react-three/drei";
+import React, { useRef } from "react";
+import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useFrame } from "@react-three/fiber";
-import { gameController } from "@/Controllers/gameController";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -22,13 +21,7 @@ type GLTFResult = GLTF & {
     oldwood: THREE.MeshStandardMaterial;
     ["fresnelGlow.004"]: THREE.MeshStandardMaterial;
   };
-  animations: GLTFAction[];
 };
-
-type ContextType = Record<
-  string,
-  React.ForwardRefExoticComponent<JSX.IntrinsicElements["mesh"]>
->;
 
 export const MainTorch: React.FC<{
   props: JSX.IntrinsicElements["group"];
@@ -37,10 +30,8 @@ export const MainTorch: React.FC<{
   const { nodes, materials } = useGLTF(
     "/models/mainTorch-transformed.glb",
   ) as GLTFResult;
-  const { debug } = gameController();
 
-  const lightRef = useRef(undefined);
-  debug && useHelper(lightRef, THREE.PointLightHelper, 1, "cyan");
+  const lightRef = useRef<THREE.PointLight>(null);
 
   useFrame(() => {
     if (lightRef.current) {

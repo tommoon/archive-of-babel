@@ -1,5 +1,4 @@
 import { CellLocation } from "@/types/CommonTypes";
-import { Vector3 } from "three";
 import { create } from "zustand";
 
 type gameState = {
@@ -10,7 +9,7 @@ type gameState = {
   setPlayerPosition: (playerPosition: CellLocation) => void;
 };
 
-export const gameController = create<gameState>()((set, get) => ({
+export const gameController = create<gameState>()((set) => ({
   playerPosition: undefined,
   selectedSeed: null,
   debug: false,

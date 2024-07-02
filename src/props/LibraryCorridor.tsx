@@ -5,12 +5,13 @@ Files: LibraryCorridor.glb [422.94KB] > /home/tomoon/Documents/archiveOfBabel/pu
 */
 
 import * as THREE from "three";
-import React, { useMemo, useRef } from "react";
+import React from "react";
 import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { Orientation, CellLocation } from "@/types/CommonTypes";
 import { RigidBody } from "@react-three/rapier";
 import { useCellLocation } from "../hooks/useCellLocation";
+import { transparentMaterial } from "@/lib/utils";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -31,13 +32,7 @@ type GLTFResult = GLTF & {
     ["floor.001"]: THREE.MeshStandardMaterial;
     oldwood: THREE.MeshStandardMaterial;
   };
-  animations: GLTFAction[];
 };
-
-type ContextType = Record<
-  string,
-  React.ForwardRefExoticComponent<JSX.IntrinsicElements["mesh"]>
->;
 
 export const LibraryCorridor: React.FC<{
   cellLocation: CellLocation;
@@ -73,7 +68,7 @@ export const LibraryCorridor: React.FC<{
           <mesh
             name="col"
             geometry={colliders.col.geometry}
-            material={"transparent"}
+            material={transparentMaterial}
             position={[0, 0.1, 0]}
             rotation={[Math.PI / 2, 0, 0]}
           />

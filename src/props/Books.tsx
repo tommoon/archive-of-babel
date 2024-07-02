@@ -22,7 +22,6 @@ type GLTFResult = GLTF & {
   materials: {
     ["Material.001"]: THREE.MeshStandardMaterial;
   };
-  animations: GLTFAction[];
 };
 
 const BOOK_UNIT = 10;
@@ -32,7 +31,7 @@ const CABINETS = 4;
 const COLOR = new THREE.Color();
 const rotations = [0, 90, 180, 270].map(degrees_to_radians);
 
-const getPositions = ({ bookUnit, cabinet, row, unit }) => {
+const getPositions = ({ bookUnit, cabinet, row, unit }:{bookUnit:number,cabinet:number,row:number,unit:number}) => {
   switch (cabinet) {
     case 0:
       return new THREE.Vector3(0.043 * bookUnit + unit * 0.5, 0, -0.25 * row);
@@ -98,7 +97,8 @@ const Book: React.FC<BookProps> = React.memo(
             .clone()
             .add(getPositions({ bookUnit, cabinet, row, unit })),
         );
-        ref.current.color.copy(startColor);
+// @ts-ignore
+ref.current.color.copy(startColor);
         ref.current.scale.set(0.6, 0.4, 0.4 + scale);
         ref.current.rotation.set(0, 0, rotations[cabinet]);
       }
@@ -134,6 +134,7 @@ const Book: React.FC<BookProps> = React.memo(
             0.1,
           );
         }
+        // @ts-ignore
         ref.current.color.lerp(
           COLOR.set(hovered ? "white" : startColor),
           hovered ? 1 : 0.1,

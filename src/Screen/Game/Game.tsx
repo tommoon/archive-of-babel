@@ -3,6 +3,7 @@ import { Physics } from "@react-three/rapier";
 import { Suspense, useEffect, useRef } from "react";
 import { Player } from "./components/Player/Player";
 import { KeyboardControls, PointerLockControls } from "@react-three/drei";
+import { PointerLockControls as PointerLockControlsImpl } from 'three-stdlib'
 import { gameController } from "@/Controllers/gameController";
 import { Vector3 } from "three";
 import { BookInterior } from "./components/BookInterior/BookInterior";
@@ -22,8 +23,9 @@ const keyboardMap = [
   { name: "action4", keys: ["KeyF"] },
 ];
 
+
 export const Game = () => {
-  const pointerLockRef = useRef();
+  const pointerLockRef = useRef<PointerLockControlsImpl>(null);
   const { playerPosition, selectedSeed, debug, screenLocked } =
     gameController();
 
@@ -33,11 +35,11 @@ export const Game = () => {
     if (pointerLockRef.current) {
       if (screenLocked) {
         setTimeout(() => {
-          pointerLockRef.current.unlock();
+          pointerLockRef.current?.unlock();
         }, 110);
       } else if (!screenLocked && !pointerLockRef.current.isLocked) {
         setTimeout(() => {
-          pointerLockRef.current.lock();
+          pointerLockRef.current?.lock();
         }, 110);
       }
     }
