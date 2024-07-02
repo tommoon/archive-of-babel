@@ -64,7 +64,7 @@ export const LibraryMainRoom: React.FC<{
         const bb = new THREE.Box3().setFromObject(roomRef.current);
         const inside = bb.containsPoint(playerPos);
         if (inside && !_objectIsEqual(cellLocation, playerPosition)) {
-          console.log(cellLocation, playerPosition, inside);
+          debug && console.log(cellLocation, playerPosition, inside);
           setPlayerPosition(cellLocation);
         }
       }

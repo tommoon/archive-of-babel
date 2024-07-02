@@ -9,13 +9,15 @@ type gameState = {
   setPlayerPosition: (playerPosition: CellLocation) => void;
 };
 
-export const gameController = create<gameState>()((set) => ({
+export const gameController = create<gameState>()((set, get) => ({
   playerPosition: undefined,
   selectedSeed: null,
   debug: false,
   screenLocked: false,
   setPlayerPosition: (playerPosition: CellLocation) => {
-    console.log("setting player position to ", playerPosition);
+    const state = get();
+
+    state.debug && console.log("setting player position to ", playerPosition);
     set(() => ({
       playerPosition: playerPosition,
     }));
@@ -32,4 +34,8 @@ export const setSelectedSeed = (selectedSeed: string | null) => {
 };
 export const setScreenLocked = (screenLocked: boolean) => {
   gameController.setState({ screenLocked });
+};
+
+export const setDebug = () => {
+  gameController.setState({ debug: true });
 };

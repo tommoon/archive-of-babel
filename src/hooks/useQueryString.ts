@@ -1,4 +1,4 @@
-import { gameController } from "@/Controllers/gameController";
+import { gameController, setDebug } from "@/Controllers/gameController";
 import { CellLocation } from "@/types/CommonTypes";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -9,7 +9,7 @@ export const useQueryString = ({
   cellLocation?: CellLocation;
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { setPlayerPosition } = gameController();
+  const { setPlayerPosition, debug } = gameController();
 
   useEffect(() => {
     if (!cellLocation) return;
@@ -17,19 +17,22 @@ export const useQueryString = ({
       Object.entries(cellLocation).map(([key, value]) => [
         key,
         value.toString(),
-      ]),
+      ])
     );
-    console.log("url params updated to ", stringifiedParams);
+    debug && console.log("url params updated to ", stringifiedParams);
     setSearchParams(stringifiedParams);
   }, [cellLocation]);
 
   const updateQueryString = () => {};
 
   useEffect(() => {
-    console.log(searchParams);
     const x = searchParams.get("x");
     const y = searchParams.get("y");
     const z = searchParams.get("z");
+    const debug = searchParams.get("debug");
+    if (debug) {
+      setDebug();
+    }
     if (x && y && z) {
       setPlayerPosition({
         x: parseInt(x, 10),

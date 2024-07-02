@@ -24,11 +24,14 @@ const getInitialPosition = (playerPosition: CellLocation) =>
 export const Player = () => {
   const ref = useRef<RapierRigidBody>(null);
   const [, get] = useKeyboardControls();
-  const { playerPosition } = gameController();
+  const { playerPosition, debug } = gameController();
 
   const initialPosition = useMemo(
-    () => playerPosition && getInitialPosition(playerPosition),
-    [playerPosition], // Include playerPosition in the dependency array
+    () => {
+      debug && console.log('positioning player')
+      return playerPosition && getInitialPosition(playerPosition)
+    },
+    [],
   );
 
   useFrame((state) => {
