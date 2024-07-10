@@ -9,11 +9,11 @@ import React, {
 import { Instance, Instances, useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { useFrame } from "@react-three/fiber";
-import { CellLocation } from "@/types/CommonTypes";
+import { CellHex } from "@/types/CommonTypes";
 import { seededRandom } from "@/lib/randomFunctions";
-import { setScreenLocked, setSelectedSeed } from "@/Controllers/gameController";
+import { gameController, setScreenLocked } from "@/Controllers/gameController";
 import { degrees_to_radians } from "@/lib/utils";
-import { useCellLocation } from "@/hooks/useCellLocation";
+import { useCellHex } from "@/hooks/useCellHex";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -25,33 +25,43 @@ type GLTFResult = GLTF & {
 };
 
 const BOOK_UNIT = 10;
-const ROWS = 4;
-const UNITS = 4;
+const ROWS = 5;
+const UNITS = 5;
 const CABINETS = 4;
 const COLOR = new THREE.Color();
 const rotations = [0, 90, 180, 270].map(degrees_to_radians);
 
-const getPositions = ({ bookUnit, cabinet, row, unit }:{bookUnit:number,cabinet:number,row:number,unit:number}) => {
+const getPositions = ({
+  bookUnit,
+  cabinet,
+  row,
+  unit,
+}: {
+  bookUnit: number;
+  cabinet: number;
+  row: number;
+  unit: number;
+}) => {
   switch (cabinet) {
     case 0:
-      return new THREE.Vector3(0.043 * bookUnit + unit * 0.5, 0, -0.25 * row);
+      return new THREE.Vector3(0.043 * bookUnit + unit * 0.47, 0, -0.225 * row);
     case 1:
       return new THREE.Vector3(
         0,
-        0.043 * bookUnit - (unit - 3) * 0.5,
-        -0.25 * row,
+        0.043 * bookUnit - (unit - 4) * 0.47,
+        -0.225 * row,
       );
     case 2:
       return new THREE.Vector3(
-        -0.043 * bookUnit + (unit - 3) * 0.5,
+        -0.043 * bookUnit + (unit - 4) * 0.47,
         0,
-        -0.25 * row,
+        -0.225 * row,
       );
     default:
       return new THREE.Vector3(
         0,
-        -0.043 * bookUnit + (unit - 3) * 0.5,
-        -0.25 * row,
+        -0.043 * bookUnit + (unit - 4) * 0.47,
+        -0.225 * row,
       );
   }
 };
@@ -61,19 +71,20 @@ interface BookProps {
   row: number;
   unit: number;
   cabinet: number;
-  cellLocation: CellLocation;
+  cellHex: CellHex;
 }
 
 const Book: React.FC<BookProps> = React.memo(
-  ({ bookUnit, row, cabinet, cellLocation, unit }) => {
-    const seed = `${Object.values(cellLocation).join("")}${cabinet}${unit}${row}${bookUnit}`;
+  ({ bookUnit, row, cabinet, cellHex, unit }) => {
+    const { setBookState, setBookOpen } = gameController();
+    const seed = `${Object.values(cellHex).join("")}${cabinet}${unit}${row}${bookUnit}`;
     const RNumber = useMemo(() => seededRandom(seed), [seed]);
     const startVector = useMemo(
       () => [
-        new THREE.Vector3(-0.94, -2.75, -0.135),
-        new THREE.Vector3(2.75, -0.94, -0.135),
-        new THREE.Vector3(0.94, 2.75, -0.135),
-        new THREE.Vector3(-2.75, 0.94, -0.135),
+        new THREE.Vector3(-1.135, -2.85, -0.16),
+        new THREE.Vector3(2.85, -1.135, -0.16),
+        new THREE.Vector3(1.135, 2.85, -0.16),
+        new THREE.Vector3(-2.85, 1.135, -0.16),
       ],
       [],
     );
@@ -97,8 +108,8 @@ const Book: React.FC<BookProps> = React.memo(
             .clone()
             .add(getPositions({ bookUnit, cabinet, row, unit })),
         );
-// @ts-ignore
-ref.current.color.copy(startColor);
+        // @ts-ignore
+        ref.current.color.copy(startColor);
         ref.current.scale.set(0.6, 0.4, 0.4 + scale);
         ref.current.rotation.set(0, 0, rotations[cabinet]);
       }
@@ -154,7 +165,13 @@ ref.current.color.copy(startColor);
     const handleClick = useCallback(
       (e: any) => {
         e.stopPropagation();
-        setSelectedSeed(seed);
+        setBookState({
+          bookUnit: bookUnit,
+          cabinet: cabinet,
+          row: row,
+          unit: unit,
+        });
+        setBookOpen(true);
         setScreenLocked(true);
       },
       [seed],
@@ -174,12 +191,12 @@ ref.current.color.copy(startColor);
 );
 
 interface BooksProps {
-  cellLocation: CellLocation;
+  cellHex: CellHex;
 }
 
-export const Books: React.FC<BooksProps> = ({ cellLocation }) => {
+export const Books: React.FC<BooksProps> = ({ cellHex }) => {
   const { nodes } = useGLTF("/models/book-transformed.glb") as GLTFResult;
-  const { adjustedPosition } = useCellLocation({ cellLocation });
+  const { adjustedPosition } = useCellHex({ cellHex });
 
   const bookArray = useMemo(() => {
     const holderArray = [];
@@ -203,9 +220,10 @@ export const Books: React.FC<BooksProps> = ({ cellLocation }) => {
         range={BOOK_UNIT * ROWS * CABINETS * UNITS}
         material={nodes.Book.material}
         geometry={nodes.Book.geometry}
+        scale={[0.95,0.95,1]}
       >
         {bookArray.map((props, i) => (
-          <Book key={i} cellLocation={cellLocation} {...props} />
+          <Book key={i} cellHex={cellHex} {...props} />
         ))}
       </Instances>
     </group>

@@ -1,81 +1,79 @@
-import { setScreenLocked, setSelectedSeed } from "@/Controllers/gameController";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { gameController, setScreenLocked } from "@/Controllers/gameController";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useState } from "react";
-import { TextBlock } from "./components/TextBlock";
+import { useRef, useState } from "react";
+import { generateSeededText } from "@/lib/randomFunctions";
+import { Input } from "@/components/ui/input";
 
-const pageCount = 10;
+const pageCount = 410;
 
-export const BookInterior = ({ selectedSeed }: { selectedSeed: string }) => {
+export const BookInterior = () => {
   const [page, setPage] = useState(1);
-
+  const textBlockRef = useRef(null);
+  const { setBookOpen, cellHex: cellHex, bookState } = gameController();
   const exitBook = () => {
-    setSelectedSeed(null);
+    setBookOpen(false);
     setScreenLocked(false);
   };
+  console.log(bookState)
   return (
     <Dialog open onOpenChange={exitBook}>
       <DialogContent
-        className="min-w-[95%] p-8"
+        className="max-w-screen max-h-screen p-8 w-max"
         onEscapeKeyDown={exitBook}
         onPointerDownOutside={exitBook}
         onInteractOutside={exitBook}
         onClick={(e) => e.stopPropagation()}
       >
-        <AspectRatio ratio={16 / 9}>
-          <div className="flex flex-col h-full">
-            <div className="flex font-mono text-xs gap-8 m-8 grow">
-              <TextBlock
-                seed={`${selectedSeed.replace("-", "1")}${page.toString()}`}
-              />
-              <TextBlock
-                seed={`${selectedSeed.replace("-", "1")}${(page + 1).toString()}`}
-              />
-            </div>
-            <div className="flex mt-4 m-8">
-              <div>{page}</div>
-              <Pagination>
-                <PaginationContent>
-                  {page > 1 && (
-                    <PaginationItem>
-                      <PaginationPrevious onClick={() => setPage(page - 2)} />
-                    </PaginationItem>
-                  )}
-                  {[0, 2, 4].map((futurePages) => {
-                    return page + futurePages <= pageCount ? (
-                      <PaginationItem key={futurePages}>
-                        <PaginationLink
-                          onClick={() => setPage(page + futurePages)}
-                          isActive={futurePages === 0}
-                        >{`${page + futurePages} - ${page + futurePages + 1}`}</PaginationLink>
-                      </PaginationItem>
-                    ) : null;
-                  })}
-                  {page + 4 < pageCount - 1 && (
-                    <PaginationItem>
-                      <PaginationEllipsis />
-                    </PaginationItem>
-                  )}
-                  {page < pageCount - 1 && (
-                    <PaginationItem>
-                      <PaginationNext onClick={() => setPage(page + 2)} />
-                    </PaginationItem>
-                  )}
-                </PaginationContent>
-              </Pagination>
-              <div>{page + 1}</div>
-            </div>
+        <div className="flex flex-col h-full">
+          <div
+            ref={textBlockRef}
+            className="flex-grow font-mono text-xs gap-8 m-8 overflow-y-auto w-fit break-all"
+            style={{
+              height: "40rem",
+              maxHeight: "calc(100vh - 200px)",
+              maxWidth: "80vw",
+              width: "40rem",
+            }}
+          >
+            {cellHex &&
+               generateSeededText(page, cellHex, bookState)}
           </div>
-        </AspectRatio>
+          <div className="flex mt-4 m-8">
+            <Input type="number" value={page} onChange={(e) => setPage(parseInt(e.target.value))} />
+            <Pagination>
+              <PaginationContent>
+                {page > 0 && (
+                  <PaginationItem>
+                    <PaginationPrevious onClick={() => setPage(page - 1)} />
+                  </PaginationItem>
+                )}
+                {[0, 1, 2].map((futurePages) => {
+                  return page + futurePages <= pageCount ? (
+                    <PaginationItem key={futurePages}>
+                      <PaginationLink
+                        onClick={() => setPage(page + futurePages)}
+                        isActive={futurePages === 0}
+                      >{`${page + futurePages}`}</PaginationLink>
+                    </PaginationItem>
+                  ) : null;
+                })}
+                {page < pageCount && (
+                  <PaginationItem>
+                    <PaginationNext onClick={() => setPage(page + 1)} />
+                  </PaginationItem>
+                )}
+              </PaginationContent>
+            </Pagination>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );

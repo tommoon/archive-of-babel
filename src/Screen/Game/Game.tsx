@@ -3,7 +3,7 @@ import { Physics } from "@react-three/rapier";
 import { Suspense, useEffect, useRef } from "react";
 import { Player } from "./components/Player/Player";
 import { KeyboardControls, PointerLockControls } from "@react-three/drei";
-import { PointerLockControls as PointerLockControlsImpl } from 'three-stdlib'
+import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import { gameController } from "@/Controllers/gameController";
 import { Vector3 } from "three";
 import { BookInterior } from "./components/BookInterior/BookInterior";
@@ -23,13 +23,11 @@ const keyboardMap = [
   { name: "action4", keys: ["KeyF"] },
 ];
 
-
 export const Game = () => {
   const pointerLockRef = useRef<PointerLockControlsImpl>(null);
-  const { playerPosition, selectedSeed, debug, screenLocked } =
-    gameController();
+  const { cellHex, debug, screenLocked, bookOpen } = gameController();
 
-  useQueryString({ cellLocation: playerPosition });
+  useQueryString({ cellHex: cellHex });
 
   useEffect(() => {
     if (pointerLockRef.current) {
@@ -46,10 +44,10 @@ export const Game = () => {
   }, [screenLocked]);
 
   return (
-    playerPosition && (
+    cellHex && (
       <KeyboardControls map={keyboardMap}>
         {debug && (
-          <div className="fixed z-10 p-4 bg-white/100">{`x:${playerPosition.x}, y: ${playerPosition.y}, z: ${playerPosition.z}`}</div>
+          <div className="fixed z-10 p-4 bg-white/100">{`x:${cellHex.x}, y: ${cellHex.y}, z: ${cellHex.z}`}</div>
         )}
         <Canvas frameloop="demand">
           <color attach="background" args={["black"]} />
@@ -67,7 +65,7 @@ export const Game = () => {
           <PointerLockControls ref={pointerLockRef} />
         </Canvas>
         <div className="absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-2 border-white"></div>
-        {selectedSeed && <BookInterior selectedSeed={selectedSeed} />}
+        {bookOpen && <BookInterior />}
       </KeyboardControls>
     )
   );

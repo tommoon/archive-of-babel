@@ -11,27 +11,27 @@ const BackgroundProps = () => (
     <LibraryMainRoom
       hasLights={true}
       hasColliders={false}
-      cellLocation={{ x: 0, y: 0, z: 0 }}
+      cellHex={{ x: '0', y: '0', z: '0' }}
     />
     <LibraryCorridor
       hasLights={true}
       hasColliders={false}
-      cellLocation={{ x: 0, y: 0, z: 0 }}
+      cellHex={{ x: '0', y: '0', z: '0' }}
       orientation="N"
     />
     <LibraryCorridor
       hasLights={true}
       hasColliders={false}
-      cellLocation={{ x: 0, y: 0, z: 0 }}
+      cellHex={{ x: '0', y: '0', z: '0' }}
       orientation="S"
     />
     <LibraryMainRoom
       hasColliders={false}
-      cellLocation={{ x: 0, y: 0, z: -1 }}
+      cellHex={{ x: '0', y: '0', z: '-1' }}
     />
     <LibraryCorridor
       hasColliders={false}
-      cellLocation={{ x: 0, y: 0, z: -1 }}
+      cellHex={{ x: '0', y: '0', z: '-1' }}
       orientation="S"
     />
   </>
@@ -76,11 +76,7 @@ const MenuCamera = () => {
   });
 
   return (
-    <DreiPerspectiveCamera
-      makeDefault
-      ref={cameraRef}
-      position={[0, 0.8, 8]}
-    />
+    <DreiPerspectiveCamera makeDefault ref={cameraRef} position={[0, 0.8, 8]} />
   );
 };
 

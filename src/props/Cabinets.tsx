@@ -8,23 +8,23 @@ import * as THREE from "three";
 import React from "react";
 import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
-import { useCellLocation } from "@/hooks/useCellLocation";
-import { CellLocation } from "@/types/CommonTypes";
+import { useCellHex } from "@/hooks/useCellHex";
+import { CellHex } from "@/types/CommonTypes";
 import { RigidBody } from "@react-three/rapier";
 import { gameController } from "@/Controllers/gameController";
 import { _objectIsEqual } from "@/lib/comparisons";
 
 type GLTFResult = GLTF & {
   nodes: {
-    cabinet: THREE.Mesh;
-  };
+    CabinetNew: THREE.Mesh
+  }
   materials: {
-    oldwood: THREE.MeshStandardMaterial;
-  };
-};
+    oldwood: THREE.MeshStandardMaterial
+  }
+}
 
 type CabinetProps = {
-  cellLocation: CellLocation;
+  cellHex: CellHex;
   hasColliders?: boolean;
 };
 
@@ -35,54 +35,26 @@ const CabinetArray: React.FC<{ position: THREE.Vector3 }> = ({ position }) => {
   return (
     <group position={position} dispose={null}>
       <group rotation={[0, 0, 0]}>
-        <mesh
-          name="cabinet"
-          geometry={nodes.cabinet.geometry}
-          material={materials.oldwood}
-          position={[2.524, 0.09, -1.456]}
-          rotation={[Math.PI / 2, 0, Math.PI / 4]}
-          scale={[0.833, 0.5, 0.5]}
-        />
+      <mesh name="CabinetNew" geometry={nodes.CabinetNew.geometry} material={materials.oldwood} position={[1.95, 0.702, 1.95]} rotation={[0, Math.PI / 4, 0]} />
       </group>
       <group rotation={[0, Math.PI / 2, 0]}>
-        <mesh
-          name="cabinet"
-          geometry={nodes.cabinet.geometry}
-          material={materials.oldwood}
-          position={[2.524, 0.09, -1.456]}
-          rotation={[Math.PI / 2, 0, Math.PI / 4]}
-          scale={[0.833, 0.5, 0.5]}
-        />
+      <mesh name="CabinetNew" geometry={nodes.CabinetNew.geometry} material={materials.oldwood} position={[1.95, 0.702, 1.95]} rotation={[0, Math.PI / 4, 0]} />
       </group>
       <group rotation={[0, Math.PI, 0]}>
-        <mesh
-          name="cabinet"
-          geometry={nodes.cabinet.geometry}
-          material={materials.oldwood}
-          position={[2.524, 0.09, -1.456]}
-          rotation={[Math.PI / 2, 0, Math.PI / 4]}
-          scale={[0.833, 0.5, 0.5]}
-        />
+      <mesh name="CabinetNew" geometry={nodes.CabinetNew.geometry} material={materials.oldwood} position={[1.95, 0.702, 1.95]} rotation={[0, Math.PI / 4, 0]} />
       </group>
       <group rotation={[0, -Math.PI / 2, 0]}>
-        <mesh
-          name="cabinet"
-          geometry={nodes.cabinet.geometry}
-          material={materials.oldwood}
-          position={[2.524, 0.09, -1.456]}
-          rotation={[Math.PI / 2, 0, Math.PI / 4]}
-          scale={[0.833, 0.5, 0.5]}
-        />
+      <mesh name="CabinetNew" geometry={nodes.CabinetNew.geometry} material={materials.oldwood} position={[1.95, 0.702, 1.95]} rotation={[0, Math.PI / 4, 0]} />
       </group>
     </group>
   );
 };
 
-export const Cabinets: React.FC<CabinetProps> = ({ cellLocation }) => {
-  const { adjustedPosition } = useCellLocation({ cellLocation });
-  const { playerPosition } = gameController();
+export const Cabinets: React.FC<CabinetProps> = ({ cellHex }) => {
+  const { adjustedPosition } = useCellHex({ cellHex });
+  const { cellHex: playerCellHex } = gameController();
 
-  return _objectIsEqual(cellLocation, playerPosition) ? (
+  return _objectIsEqual(cellHex, playerCellHex) ? (
     <RigidBody type="fixed" colliders="hull">
       <CabinetArray position={adjustedPosition} />
     </RigidBody>

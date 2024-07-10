@@ -9,11 +9,11 @@ import React, { useEffect, useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { RigidBody } from "@react-three/rapier";
-import { CellLocation } from "@/types/CommonTypes";
+import { CellHex } from "@/types/CommonTypes";
 import { playerPos } from "../Screen/Game/components/Player/Player";
 import { _objectIsEqual } from "@/lib/comparisons";
 import { gameController } from "@/Controllers/gameController";
-import { useCellLocation } from "../hooks/useCellLocation";
+import { useCellHex } from "../hooks/useCellHex";
 import { Text } from "@react-three/drei";
 import { transparentMaterial } from "@/lib/utils";
 
@@ -43,10 +43,10 @@ type GLTFResult = GLTF & {
 };
 
 export const LibraryMainRoom: React.FC<{
-  cellLocation: CellLocation;
+  cellHex: CellHex;
   hasColliders?: boolean;
   hasLights?: boolean;
-}> = ({ cellLocation, hasColliders = true, hasLights = false }) => {
+}> = ({ cellHex, hasColliders = true, hasLights = false }) => {
   const { nodes, materials } = useGLTF(
     "/models/libraryMainRoom-transformed.glb",
   ) as GLTFResult;
@@ -54,30 +54,29 @@ export const LibraryMainRoom: React.FC<{
     "/models/libraryMainRoomColliders.glb",
   ) as GLTFResult;
 
-  const { playerPosition, setPlayerPosition, debug } = gameController();
+  const { cellHex: playerCellHex, setCellHex: setPlayerPosition, debug } = gameController();
   const roomRef = useRef<THREE.Group<THREE.Object3DEventMap>>(null);
-  const { adjustedPosition } = useCellLocation({ cellLocation });
+  const { adjustedPosition } = useCellHex({ cellHex });
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (roomRef.current) {
         const bb = new THREE.Box3().setFromObject(roomRef.current);
         const inside = bb.containsPoint(playerPos);
-        if (inside && !_objectIsEqual(cellLocation, playerPosition)) {
-          debug && console.log(cellLocation, playerPosition, inside);
-          setPlayerPosition(cellLocation);
+        if (inside && !_objectIsEqual(cellHex, playerCellHex)) {
+          setPlayerPosition(cellHex);
         }
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [roomRef, playerPosition, cellLocation]);
+  }, [roomRef, cellHex, cellHex]);
 
   return (
     <group ref={roomRef} position={adjustedPosition} dispose={null}>
       {debug && (
         <Text position={new THREE.Vector3(0, 1, 0)}>
-          {`${cellLocation.x}_${cellLocation.y}_${cellLocation.z}`}
+          {`${cellHex.x}_${cellHex.y}_${cellHex.z}`}
           <meshNormalMaterial />
         </Text>
       )}

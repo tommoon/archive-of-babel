@@ -14,10 +14,10 @@ export type StaticElementProps = {
   onPointerOut?: () => void;
 };
 
-export type CellLocation = {
-  x: number;
-  y: number;
-  z: number;
+export type CellHex = {
+  x: string;
+  y: string;
+  z: string;
 };
 
 export type Orientation = "W" | "N" | "E" | "S";

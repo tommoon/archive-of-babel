@@ -1,44 +1,126 @@
+import { BookState } from "@/Controllers/gameController";
+import { CellHex } from "@/types/CommonTypes";
 import { x86 as MurmurHash3 } from "murmurhash3js";
+import { hashCode, pad, roomsToSenary } from "./utils";
 
-export function seededRandom(seed: string) {
+export function seededRandom(seed: string): number {
   const hash = MurmurHash3.hash32(seed);
   // Use hash to generate a number between 0 and 1
   const randomNumber = (Math.abs(hash) % 1000000) / 1000000;
   return randomNumber;
 }
 
+// Define a type for the LCG function
+type LCGRandom = (min?: number, max?: number) => number;
+
+function createLCG(seedString: string): LCGRandom {
+  // Generate the initial seed using MurmurHash3
+  const initialHash = MurmurHash3.hash32(seedString);
+  let seed = Math.abs(initialHash);
+
+  // Define the LCG constants (these are commonly used values)
+  const a = 1664525;
+  const c = 1013904223;
+  const m = 2 ** 32;
+
+  // Return the LCG function
+  return (min: number = 0, max: number = 1): number => {
+    // Update the seed using the LCG formula
+    seed = (a * seed + c) % m;
+    // Normalize the seed to a value between 0 and 1
+    const normalized = seed / m;
+    // Scale and return the value to the specified range
+    return min + normalized * (max - min);
+  };
+}
+
+const characters = "abcdefghijklmnopqrstuvwxyz, .!?'";
+
+const modulus = (t: number, n: number): number => {
+  return ((t % n) + n) % n;
+};
+
+const makeTextBlock = (cell: string, startingValue: string): string => {
+  let result = "";
+  const lcg = createLCG(startingValue);
+  for (let i = 0; i < cell.split("").length; i++) {
+    const index = parseInt(cell[i], 32);
+    const rand = lcg(0, characters.length);
+    const newIndex = modulus(index - Math.floor(rand), characters.length);
+    const newChar = characters[newIndex];
+    result += newChar;
+  }
+
+  const newHash = hashCode(result);
+  const newLcg = createLCG(newHash.toString());
+  while (result.length <= 1000) {
+    const index = newLcg(0, characters.length);
+    result += characters[Math.floor(index)];
+  }
+  return result;
+};
+
+const makeHex = (blockString: string, seed: string): string => {
+  const lcg = createLCG(seed);
+  return blockString
+    .split("")
+    .map((subString: string) => {
+      const index = characters.indexOf(subString);
+      const rand = lcg(0, characters.length);
+      const newIndex = modulus(index + Math.floor(rand), characters.length);
+      return newIndex.toString(32);
+    })
+    .join("");
+};
 export function generateSeededText(
-  seed: string,
-  lineLength: number = 58,
-  linesCount: number = 20
+  page: number,
+  bookCell: CellHex,
+  bookLocation: BookState
 ): string {
-  const characters = "abcdefghijklmnopqrstuvwxyz, . ";
+  const negativeStates = roomsToSenary(bookCell);
+  const locHash = hashCode(
+    `${bookLocation.cabinet}${bookLocation.unit}${bookLocation.row}${
+      bookLocation.bookUnit
+    }${pad(page.toString(), 3, "0")}${negativeStates}`
+  );
 
-  // Initialize a random number generator based on the seed
-  function lcg(seed: number) {
-    let state = seed;
-    return function () {
-      state = (state * 48271) % 2147483647;
-      return state;
-    };
-  }
-
-  // Convert the seed to an integer
-  const seedInt = parseInt(seed, 10);
-
-  // Create the random number generator
-  const random = lcg(seedInt);
-
-  // Generate 40 lines of 80 characters each
-  let text = "";
-  for (let i = 0; i < linesCount; i++) {
-    let line = "";
-    for (let j = 0; j < lineLength; j++) {
-      const charIndex = random() % characters.length;
-      line += characters[charIndex];
-    }
-    text += line + "\n";
-  }
-
+  const text = Object.values(bookCell)
+    .map((cellNumber, index) =>
+      makeTextBlock(cellNumber.toString(), locHash.toString() + index)
+    )
+    .join("");
   return text;
 }
+
+export const findText = (searchString: string) => {
+  const cabinet = Math.floor(Math.random() * 4).toString();
+  const unit = Math.floor(Math.random() * 4).toString();
+  const row = Math.floor(Math.random() * 4).toString();
+  const bookUnit = Math.floor(Math.random() * 10).toString();
+  const page = pad(Math.floor(Math.random() * 410).toString(), 3, "0");
+  const negativeState = Math.floor(Math.random() * 7).toString();
+  const locHash = hashCode(
+    cabinet + unit + row + bookUnit + page + negativeState
+  );
+
+  const fullString = pad(searchString, 3000, " ");
+
+  const newCellHex = { x: "0", y: "0", z: "0" };
+  (Object.keys(newCellHex) as (keyof CellHex)[]).forEach((cell, i) => {
+    const pos = i * 1000;
+    const blockString = fullString.slice(pos, pos + 1000);
+    const fullHex = makeHex(blockString, locHash.toString() + i);
+    console.log("hex", fullHex);
+
+    newCellHex[cell] = fullHex;
+  });
+
+  console.log("cabinet", cabinet);
+  console.log("unit", unit);
+  console.log("row", row);
+  console.log("bookUnit", bookUnit);
+  console.log("page", page);
+  console.log("negativeState", negativeState);
+  console.log(newCellHex);
+  return newCellHex;
+};

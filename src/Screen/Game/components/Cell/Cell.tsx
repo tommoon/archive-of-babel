@@ -4,63 +4,64 @@ import { SubCell } from "./components/SubCell";
 import { LibraryStairs } from "../../../../props/LibraryStairs";
 import { Books } from "../../../../props/Books";
 import { Suspense } from "react";
+import { base32Add, base32Subtract } from "@/lib/base32Utils";
 
 export const Cell = () => {
-  const { playerPosition } = gameController();
+  const { cellHex } = gameController();
 
   return (
-    playerPosition && (
+    cellHex && (
       <group>
         <SubCell
-          key={`${playerPosition.x}-${playerPosition.y}-${playerPosition.z}`}
-          cellLocation={playerPosition}
+          key={`${cellHex.x}-${cellHex.y}-${cellHex.z}`}
+          cellHex={cellHex}
         />
 
-        <LibraryStairs cellLocation={playerPosition} orientation="N" />
-        <LibraryStairs cellLocation={playerPosition} orientation="S" />
-        <LibraryStairs cellLocation={playerPosition} orientation="W" />
-        <LibraryStairs cellLocation={playerPosition} orientation="E" />
+        <LibraryStairs cellHex={cellHex} orientation="N" />
+        <LibraryStairs cellHex={cellHex} orientation="S" />
+        <LibraryStairs cellHex={cellHex} orientation="W" />
+        <LibraryStairs cellHex={cellHex} orientation="E" />
 
         <SubCell
-          key={`${playerPosition.x}-${playerPosition.y}-${playerPosition.z + 1}`}
-          cellLocation={{ ...playerPosition, z: playerPosition.z + 1 }}
+          key={`${cellHex.x}-${cellHex.y}-${base32Add(cellHex.z, '1')}`}
+          cellHex={{ ...cellHex, z: base32Add(cellHex.z, '1') }}
           omit={["E", "S", "W"]}
         />
         <SubCell
-          key={`${playerPosition.x}-${playerPosition.y}-${playerPosition.z - 1}`}
-          cellLocation={{ ...playerPosition, z: playerPosition.z - 1 }}
+          key={`${cellHex.x}-${cellHex.y}-${base32Subtract(cellHex.z, '1')}`}
+          cellHex={{ ...cellHex, z: base32Subtract(cellHex.z, '1') }}
           omit={["E", "N", "W"]}
         />
         <SubCell
-          key={`${playerPosition.x + 1}-${playerPosition.y}-${playerPosition.z}`}
-          cellLocation={{ ...playerPosition, x: playerPosition.x + 1 }}
+          key={`${base32Add(cellHex.x, '1')}-${cellHex.y}-${cellHex.z}`}
+          cellHex={{ ...cellHex, x: base32Add(cellHex.x, '1') }}
           omit={["N", "E", "S"]}
         />
         <SubCell
-          key={`${playerPosition.x - 1}-${playerPosition.y}-${playerPosition.z}`}
-          cellLocation={{ ...playerPosition, x: playerPosition.x - 1 }}
+          key={`${base32Subtract(cellHex.x, '1')}-${cellHex.y}-${cellHex.z}`}
+          cellHex={{ ...cellHex, x: base32Subtract(cellHex.x, '1')}}
           omit={["N", "W", "S"]}
         />
 
         <Suspense>
-          <Books cellLocation={playerPosition} />
+          <Books cellHex={cellHex} />
         </Suspense>
         {/* Above*/}
         <SubCell
           omit={["W", "E", "S", "N"]}
           hasColliders={false}
-          cellLocation={{ ...playerPosition, y: playerPosition.y + 1 }}
+          cellHex={{ ...cellHex, y: base32Add(cellHex.y, '1') }}
         />
         <SubCell
           omit={["W", "E", "S", "N"]}
           hasColliders={false}
-          cellLocation={{ ...playerPosition, y: playerPosition.y + 2 }}
+          cellHex={{ ...cellHex, y: base32Add(cellHex.y, '2') }}
         />
 
         {/* Below */}
         <SubCell
           hasColliders={false}
-          cellLocation={{ ...playerPosition, y: playerPosition.y - 1 }}
+          cellHex={{ ...cellHex, y: base32Subtract(cellHex.y, '1') }}
         />
       </group>
     )

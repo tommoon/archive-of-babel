@@ -3,11 +3,13 @@ import React, { useEffect, useRef } from "react";
 import { Box, useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { RigidBody } from "@react-three/rapier";
-import { CellLocation, Orientation } from "@/types/CommonTypes";
+import { CellHex, Orientation } from "@/types/CommonTypes";
 import { gameController } from "@/Controllers/gameController";
 import { playerPos } from "../Screen/Game/components/Player/Player";
-import { useCellLocation } from "../hooks/useCellLocation";
+import { useCellHex } from "../hooks/useCellHex";
 import { transparentMaterial } from "@/lib/utils";
+import { base32Add, base32Subtract } from "@/lib/base32Utils";
+import { adjustments } from "@/lib/positions";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -32,12 +34,12 @@ type GLTFResult = GLTF & {
 };
 
 type LibraryStairsProps = {
-  cellLocation: CellLocation;
+  cellHex: CellHex;
   orientation: Orientation;
 };
 
 export const LibraryStairs: React.FC<LibraryStairsProps> = ({
-  cellLocation,
+  cellHex,
   orientation,
 }) => {
   const { nodes, materials } = useGLTF(
@@ -47,12 +49,12 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
     "/models/LibraryStairsNewColliders-transformed.glb",
   ) as GLTFResult;
 
-  const { playerPosition, setPlayerPosition } = gameController();
+  const { cellHex: playerCellHex, setCellHex: setPlayerPosition } = gameController();
   const staircaseRef = useRef<THREE.Group>(null);
 
-  const { isVertical, adjustedPosition } = useCellLocation({
-    cellLocation,
-    orientation,
+  const { adjustedPosition } = useCellHex({
+    cellHex,
+    addition: adjustments[orientation]
   });
 
   useEffect(() => {
@@ -74,29 +76,27 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
         const upstairs = upstairsBBox.containsPoint(playerPos);
         const downstairs = downstairsBBox.containsPoint(playerPos);
         if (upstairs) {
-          setPlayerPosition({ ...cellLocation, y: cellLocation.y + 1 });
-          console.log("upstairs");
+          setPlayerPosition({ ...playerCellHex, y: base32Add(playerCellHex.x, '1') });
         }
         if (downstairs) {
-          setPlayerPosition({ ...cellLocation, y: cellLocation.y - 1 });
-          console.log("downstairs");
+          setPlayerPosition({ ...playerCellHex, y: base32Subtract(playerCellHex.y, '1') });
         }
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [playerPosition, setPlayerPosition, cellLocation]);
+  }, [cellHex, setPlayerPosition, cellHex]);
 
   return (
     <group
-      rotation={new THREE.Euler(0, !isVertical ? -Math.PI / 2 : 0, 0)}
+      rotation={new THREE.Euler(0, !["N", "S"].includes(orientation) ? -Math.PI / 2 : 0, 0)}
       position={adjustedPosition}
       ref={staircaseRef}
     >
       {[0, 2, 4].map((floor) => (
         <group key={`stair-${floor}`} position={[0, floor, 0]} dispose={null}>
           <RigidBody
-            key={`stair-${cellLocation.x}-${cellLocation.y + floor}-${cellLocation.z}-rigidbody`}
+            key={`stair-${cellHex.x}-${base32Add(playerCellHex.y, '1')}-${cellHex.z}-rigidbody`}
             type="fixed"
             colliders="trimesh"
           >

@@ -8,10 +8,11 @@ import * as THREE from "three";
 import React from "react";
 import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
-import { Orientation, CellLocation } from "@/types/CommonTypes";
+import { Orientation, CellHex } from "@/types/CommonTypes";
 import { RigidBody } from "@react-three/rapier";
-import { useCellLocation } from "../hooks/useCellLocation";
+import { useCellHex } from "../hooks/useCellHex";
 import { transparentMaterial } from "@/lib/utils";
+import { adjustments } from "@/lib/positions";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -35,19 +36,19 @@ type GLTFResult = GLTF & {
 };
 
 export const LibraryCorridor: React.FC<{
-  cellLocation: CellLocation;
+  cellHex: CellHex;
   orientation: Orientation;
   hasColliders?: boolean;
   hasLights?: boolean;
 }> = ({
-  cellLocation,
+  cellHex,
   orientation,
   hasColliders = true,
   hasLights = false,
 }) => {
-  const { isVertical, adjustedPosition } = useCellLocation({
-    cellLocation,
-    orientation,
+  const { adjustedPosition } = useCellHex({
+    cellHex,
+    addition: adjustments[orientation]
   });
 
   const { nodes, materials } = useGLTF(
@@ -59,7 +60,7 @@ export const LibraryCorridor: React.FC<{
 
   return (
     <group
-      rotation={new THREE.Euler(0, isVertical ? Math.PI / 2 : 0, 0)}
+      rotation={new THREE.Euler(0, ["N", "S"].includes(orientation) ? Math.PI / 2 : 0, 0)}
       position={adjustedPosition}
       dispose={null}
     >

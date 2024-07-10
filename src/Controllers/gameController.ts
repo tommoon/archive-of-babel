@@ -1,37 +1,54 @@
-import { CellLocation } from "@/types/CommonTypes";
+import { CellHex } from "@/types/CommonTypes";
 import { create } from "zustand";
 
+export type BookState = {
+  cabinet: number | undefined;
+  unit: number | undefined;
+  row: number | undefined;
+  bookUnit: number | undefined;
+};
+
 type gameState = {
-  playerPosition: CellLocation | undefined;
-  selectedSeed: string | null;
+  cellHex: CellHex;
+  bookState: BookState;
+  bookOpen: boolean;
   debug: boolean;
   screenLocked: boolean;
-  setPlayerPosition: (playerPosition: CellLocation) => void;
+  setCellHex: (cellHex: CellHex) => void;
+  setBookState: (bookState: BookState) => void;
+  setBookOpen: (bookOpen: boolean) => void;
 };
 
 export const gameController = create<gameState>()((set, get) => ({
-  playerPosition: undefined,
-  selectedSeed: null,
+  cellHex: { x: "0", y: "0", z: "0" },
+  bookState: {
+    cabinet: undefined,
+    unit: undefined,
+    row: undefined,
+    bookUnit: undefined,
+  },
+  bookOpen: false,
   debug: false,
   screenLocked: false,
-  setPlayerPosition: (playerPosition: CellLocation) => {
+  setCellHex: (cellHex: CellHex) => {
     const state = get();
-
-    state.debug && console.log("setting player position to ", playerPosition);
+    state.debug && console.log("setting cellHex to ", cellHex);
     set(() => ({
-      playerPosition: playerPosition,
+      cellHex: cellHex,
     }));
   },
-  setDisableLock: (lock: boolean) => {
+  setBookState: (bookState: BookState) => {
     set(() => ({
-      screenLocked: lock,
+      bookState: bookState,
+    }));
+  },
+  setBookOpen: (bookOpen: boolean) => {
+    set(() => ({
+      bookOpen: bookOpen,
     }));
   },
 }));
 
-export const setSelectedSeed = (selectedSeed: string | null) => {
-  gameController.setState({ selectedSeed });
-};
 export const setScreenLocked = (screenLocked: boolean) => {
   gameController.setState({ screenLocked });
 };

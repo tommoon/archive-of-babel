@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 const deepCompareEquals = (
   a: { [key: string]: any },
-  b: { [key: string]: any }
+  b: { [key: string]: any },
 ): boolean => {
   if (a === b) return true;
   if (typeof a !== "object" || typeof b !== "object") return false;
@@ -18,7 +18,7 @@ const deepCompareEquals = (
 
 export const useWhyDidYouUpdate = (
   name: string,
-  props: { [key: string]: any }
+  props: { [key: string]: any },
 ) => {
   const previousProps = useRef(props);
 

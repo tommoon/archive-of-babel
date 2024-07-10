@@ -1,27 +1,20 @@
 import { gameController, setDebug } from "@/Controllers/gameController";
-import { CellLocation } from "@/types/CommonTypes";
+import { CellHex } from "@/types/CommonTypes";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
-export const useQueryString = ({
-  cellLocation,
-}: {
-  cellLocation?: CellLocation;
-}) => {
+export const useQueryString = ({ cellHex }: { cellHex?: CellHex }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { setPlayerPosition, debug } = gameController();
+  const { setCellHex, debug } = gameController();
 
   useEffect(() => {
-    if (!cellLocation) return;
+    if (!cellHex) return;
     const stringifiedParams = Object.fromEntries(
-      Object.entries(cellLocation).map(([key, value]) => [
-        key,
-        value.toString(),
-      ])
+      Object.entries(cellHex).map(([key, value]) => [key, value.toString()])
     );
     debug && console.log("url params updated to ", stringifiedParams);
     setSearchParams(stringifiedParams);
-  }, [cellLocation]);
+  }, [cellHex]);
 
   const updateQueryString = () => {};
 
@@ -34,13 +27,13 @@ export const useQueryString = ({
       setDebug();
     }
     if (x && y && z) {
-      setPlayerPosition({
-        x: parseInt(x, 10),
-        y: parseInt(y, 10),
-        z: parseInt(z, 10),
+      setCellHex({
+        x: x,
+        y: y,
+        z: z,
       });
     } else {
-      setPlayerPosition({ x: 0, y: 0, z: 0 });
+      setCellHex({ x: "0", y: "0", z: "0" });
     }
   }, []);
 

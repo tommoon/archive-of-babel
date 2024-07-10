@@ -18,7 +18,7 @@ export const HomeLayout = () => {
     <div className="relative text-base-content">
       <div
         className={cn(
-          "navbar fixed top-0 left-0 right-0 z-10 transition-colors",
+          "navbar fixed top-0 left-0 right-0 z-30 transition-colors",
           yPos > 0 && "bg-base-200",
           "justify-center",
         )}
