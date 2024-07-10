@@ -1,7 +1,7 @@
 import { BookState } from "@/Controllers/gameController";
 import { CellHex } from "@/types/CommonTypes";
 import { x86 as MurmurHash3 } from "murmurhash3js";
-import { hashCode, pad, roomsToSenary } from "./utils";
+import { hashCode, pad, roomsToSenary, senaryToRooms } from "./utils";
 
 export function seededRandom(seed: string): number {
   const hash = MurmurHash3.hash32(seed);
@@ -122,5 +122,5 @@ export const findText = (searchString: string) => {
   console.log("page", page);
   console.log("negativeState", negativeState);
   console.log(newCellHex);
-  return newCellHex;
+  return senaryToRooms(negativeState, newCellHex);
 };

@@ -23,16 +23,33 @@ export const transparentMaterial = new MeshBasicMaterial({
 const cellHexToBinary = (cellHex: CellHex) =>
   Object.values(cellHex)
     .map((cell) => {
-      if (cell > 0) {
-        return 1;
+      if (cell.startsWith("-")) {
+        return 0;
       }
-      return 0;
+      return 1;
     })
     .join("");
 
 export const roomsToSenary = (cellHex: CellHex) => {
   const binary = cellHexToBinary(cellHex);
   return parseInt(binary, 6);
+};
+
+export const senaryToRooms = (
+  senaryNumber: string,
+  cellHex: CellHex
+): CellHex => {
+  const binary = senaryNumber.padStart(3, "0"); // Ensure it has at least 3 digits
+  const cellKeys = Object.keys(cellHex) as (keyof CellHex)[];
+
+  const updatedCellHex: CellHex = { ...cellHex };
+  binary.split("").forEach((bit, index) => {
+    if (bit === "0") {
+      updatedCellHex[cellKeys[index]] = "-" + updatedCellHex[cellKeys[index]];
+    }
+  });
+
+  return updatedCellHex;
 };
 
 export const getBase10FromString = ({
@@ -44,7 +61,7 @@ export const getBase10FromString = ({
 }) => parseInt(string, base);
 
 export const pad = (input: string, length: number, char: string) => {
-  return input.padEnd(length, char);
+  return input.padStart(length, char);
 };
 
 export const hashCode = (s: string) => {

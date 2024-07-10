@@ -47,7 +47,7 @@ export const BookInterior = () => {
                generateSeededText(page, cellHex, bookState)}
           </div>
           <div className="flex mt-4 m-8">
-            <Input type="number" value={page} onChange={(e) => setPage(parseInt(e.target.value))} />
+            <Input className="w-20" type="number" value={page} onChange={(e) => setPage(parseInt(e.target.value))} />
             <Pagination>
               <PaginationContent>
                 {page > 0 && (
