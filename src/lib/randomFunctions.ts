@@ -40,6 +40,16 @@ const modulus = (t: number, n: number): number => {
   return ((t % n) + n) % n;
 };
 
+const normalizeCell = (cell: CellHex): CellHex => {
+  const normalizedCell: CellHex = { ...cell };
+
+  (Object.keys(normalizedCell) as (keyof CellHex)[]).forEach((key) => {
+    normalizedCell[key] = normalizedCell[key].replace("-", "");
+  });
+
+  return normalizedCell;
+};
+
 const makeTextBlock = (cell: string, startingValue: string): string => {
   let result = "";
   const lcg = createLCG(startingValue);
@@ -78,13 +88,14 @@ export function generateSeededText(
   bookLocation: BookState
 ): string {
   const negativeStates = roomsToSenary(bookCell);
+  console.log("neg", negativeStates);
   const locHash = hashCode(
     `${bookLocation.cabinet}${bookLocation.unit}${bookLocation.row}${
       bookLocation.bookUnit
     }${pad(page.toString(), 3, "0")}${negativeStates}`
   );
-
-  const text = Object.values(bookCell)
+  const normalizedCell = normalizeCell(bookCell);
+  const text = Object.values(normalizedCell)
     .map((cellNumber, index) =>
       makeTextBlock(cellNumber.toString(), locHash.toString() + index)
     )
@@ -98,7 +109,7 @@ export const findText = (searchString: string) => {
   const row = Math.floor(Math.random() * 4).toString();
   const bookUnit = Math.floor(Math.random() * 10).toString();
   const page = pad(Math.floor(Math.random() * 410).toString(), 3, "0");
-  const negativeState = Math.floor(Math.random() * 7).toString();
+  const negativeState = Math.floor(Math.random() * 7);
   const locHash = hashCode(
     cabinet + unit + row + bookUnit + page + negativeState
   );

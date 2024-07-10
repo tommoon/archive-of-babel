@@ -9,7 +9,6 @@ import {
 import { useMemo, useRef } from "react";
 import { Vector3 } from "three";
 import { Camera } from "./Camera";
-import { CellHex } from "@/types/CommonTypes";
 import { useCellHex } from "@/hooks/useCellHex";
 
 const SPEED = 2;

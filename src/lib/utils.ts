@@ -32,14 +32,14 @@ const cellHexToBinary = (cellHex: CellHex) =>
 
 export const roomsToSenary = (cellHex: CellHex) => {
   const binary = cellHexToBinary(cellHex);
-  return parseInt(binary, 6);
+  return parseInt(binary, 2);
 };
 
 export const senaryToRooms = (
-  senaryNumber: string,
+  senaryNumber: number,
   cellHex: CellHex
 ): CellHex => {
-  const binary = senaryNumber.padStart(3, "0"); // Ensure it has at least 3 digits
+  const binary = senaryNumber.toString(2); // Ensure it has at least 3 digits
   const cellKeys = Object.keys(cellHex) as (keyof CellHex)[];
 
   const updatedCellHex: CellHex = { ...cellHex };
