@@ -2,7 +2,7 @@ import { BookState, gameController } from "@/Controllers/gameController";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { CapsuleCollider, RapierRigidBody, RigidBody } from "@react-three/rapier";
-import { useLayoutEffect, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import { Euler, Quaternion, Vector3 } from "three";
 import { Camera } from "./Camera";
 import { useCellHex } from "@/hooks/useCellHex";
@@ -91,7 +91,7 @@ const useInitialRotation = (bookState: BookState | undefined) => {
 export const Player = () => {
   const ref = useRef<RapierRigidBody>(null);
   const [, get] = useKeyboardControls();
-  const { cellHex, bookState, debug } = gameController();
+  const { cellHex, bookState } = gameController();
   const { adjustedPosition } = useCellHex({ cellHex, addition: getStartingPos(bookState) });
   const initialPosition = useInitialPosition(bookState, adjustedPosition);
   const initialRotation = useInitialRotation(bookState);

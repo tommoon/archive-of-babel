@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { gameController } from "@/Controllers/gameController";
 
 export const Home = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
   const { setCellHex, setBookState, setPage } = gameController();
   useEffect(() => {
     setSearchParams({});
