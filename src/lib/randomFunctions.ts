@@ -61,12 +61,6 @@ const makeTextBlock = (cell: string, startingValue: string): string => {
     result += newChar;
   }
 
-  const newHash = hashCode(result);
-  const newLcg = createLCG(newHash.toString());
-  while (result.length <= 1000) {
-    const index = newLcg(0, characters.length);
-    result += characters[Math.floor(index)];
-  }
   return result;
 };
 
@@ -93,11 +87,17 @@ export function generateSeededText(
       bookLocation.book
     }${pad(page.toString(), 3, "0")}${negativeStates}`
   );
+  console.log("negsne", negativeStates);
   const normalizedCell = normalizeCell(bookCell);
+  console.log("normalized", normalizedCell);
   const text = Object.values(normalizedCell)
-    .map((cellNumber, index) =>
-      makeTextBlock(cellNumber.toString(), locHash.toString() + index)
-    )
+    .map((cellNumber, index) => {
+      const text = makeTextBlock(
+        cellNumber.toString(),
+        locHash.toString() + index
+      );
+      return text;
+    })
     .join("");
   return text;
 }
@@ -107,10 +107,10 @@ export const findText = (searchString: string) => {
   const unit = Math.floor(Math.random() * 4).toString();
   const row = Math.floor(Math.random() * 4).toString();
   const book = Math.floor(Math.random() * 10).toString();
-  const page = pad(Math.floor(Math.random() * 410).toString(), 3, "0");
+  const page = pad(Math.floor(Math.random() * 410 + 1).toString(), 3, "0");
   const negativeState = Math.floor(Math.random() * 7);
   const locHash = hashCode(cabinet + unit + row + book + page + negativeState);
-
+  console.log("negState", negativeState);
   const fullString = pad(searchString, 3000, " ");
   const newCellHex = { x: "0", y: "0", z: "0" };
   (Object.keys(newCellHex) as (keyof CellHex)[]).forEach((cell, i) => {
@@ -119,5 +119,12 @@ export const findText = (searchString: string) => {
     const fullHex = makeHex(blockString, locHash.toString() + i);
     newCellHex[cell] = fullHex;
   });
-  return senaryToRooms(negativeState, newCellHex);
+  return {
+    ...senaryToRooms(negativeState, newCellHex),
+    book: book,
+    cabinet: cabinet,
+    row: row,
+    unit: unit,
+    page: page,
+  };
 };

@@ -11,8 +11,14 @@ const navigate = useNavigate()
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const loc = findText(text); // Call the findText function with the textarea value
-    navigate(`/game?x=${loc.x}&y=${loc.y}&z=${loc.z}`)
+    const bookLoc = findText(text); // Call the findText function with the textarea value
+    const searchParams = new URLSearchParams();
+    Object.entries(bookLoc).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        searchParams.append(key, value.toString());
+      }
+    });
+    navigate(`/game?${searchParams.toString()}`);
   };
 
   return (

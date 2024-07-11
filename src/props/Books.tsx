@@ -76,7 +76,7 @@ interface BookProps {
 
 const Book: React.FC<BookProps> = React.memo(
   ({ book, row, cabinet, cellHex, unit }) => {
-    const { setBookState, setBookOpen } = gameController();
+    const { setBookState, setBookOpen, setPage } = gameController();
     const seed = `${Object.values(cellHex).join("")}${cabinet}${unit}${row}${book}`;
     const RNumber = useMemo(() => seededRandom(seed), [seed]);
     const startVector = useMemo(
@@ -173,6 +173,7 @@ const Book: React.FC<BookProps> = React.memo(
         });
         setBookOpen(true);
         setScreenLocked(true);
+        setPage(1)
       },
       [seed],
     );

@@ -8,16 +8,15 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { generateSeededText } from "@/lib/randomFunctions";
 import { Input } from "@/components/ui/input";
 
 const pageCount = 410;
 
 export const BookInterior = () => {
-  const [page, setPage] = useState(1);
   const textBlockRef = useRef(null);
-  const { setBookOpen, cellHex: cellHex, bookState } = gameController();
+  const { setBookOpen, cellHex: cellHex, bookState, page, setPage } = gameController();
   const exitBook = () => {
     setBookOpen(false);
     setScreenLocked(false);

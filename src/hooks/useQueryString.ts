@@ -4,13 +4,22 @@ import {
   BookState,
   gameController,
   setDebug,
+  setScreenLocked,
 } from "@/Controllers/gameController";
 import { CellHex } from "@/types/CommonTypes";
 
 export const useQueryString = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { bookState, cellHex, setCellHex, setBookState, debug } =
-    gameController();
+  const {
+    bookState,
+    cellHex,
+    page,
+    setCellHex,
+    setBookState,
+    setBookOpen,
+    setPage,
+    debug,
+  } = gameController();
 
   useEffect(() => {
     const convertToParams = (obj: CellHex | BookState) => {
@@ -22,10 +31,11 @@ export const useQueryString = () => {
     const stringifiedParams = {
       ...Object.fromEntries(convertToParams(cellHex)),
       ...Object.fromEntries(convertToParams(bookState)),
+      ...(page && { page: page }),
     };
 
     setSearchParams(stringifiedParams);
-  }, [cellHex, bookState, debug, setSearchParams]);
+  }, [cellHex, bookState, page, debug, setSearchParams]);
 
   useEffect(() => {
     const x = searchParams.get("x");
@@ -35,6 +45,7 @@ export const useQueryString = () => {
     const unit = searchParams.get("unit");
     const row = searchParams.get("row");
     const book = searchParams.get("book");
+    const page = searchParams.get("page");
 
     const debug = searchParams.get("debug");
     if (debug) {
@@ -57,6 +68,12 @@ export const useQueryString = () => {
         book: book ? parseInt(book) : undefined,
         unit: unit ? parseInt(unit) : undefined,
       });
+    }
+
+    if (page) {
+      setBookOpen(true);
+      setScreenLocked(true);
+      setPage(parseInt(page));
     }
   }, [setCellHex, setBookState, setDebug]);
 };

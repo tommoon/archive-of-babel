@@ -24,9 +24,9 @@ const cellHexToBinary = (cellHex: CellHex) =>
   Object.values(cellHex)
     .map((cell) => {
       if (cell.startsWith("-")) {
-        return 0;
+        return "0";
       }
-      return 1;
+      return "1";
     })
     .join("");
 
@@ -39,13 +39,16 @@ export const senaryToRooms = (
   senaryNumber: number,
   cellHex: CellHex
 ): CellHex => {
-  const binary = senaryNumber.toString(2); // Ensure it has at least 3 digits
   const cellKeys = Object.keys(cellHex) as (keyof CellHex)[];
+  const numCells = cellKeys.length;
+  const binary = senaryNumber.toString(2).padStart(numCells, "0");
 
   const updatedCellHex: CellHex = { ...cellHex };
   binary.split("").forEach((bit, index) => {
     if (bit === "0") {
-      updatedCellHex[cellKeys[index]] = "-" + updatedCellHex[cellKeys[index]];
+      updatedCellHex[cellKeys[index]] = "-" + cellKeys[index];
+    } else {
+      updatedCellHex[cellKeys[index]] = cellKeys[index];
     }
   });
 
