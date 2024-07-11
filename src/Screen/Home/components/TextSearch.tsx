@@ -18,6 +18,7 @@ const navigate = useNavigate()
         searchParams.append(key, value.toString());
       }
     });
+    
     navigate(`/game?${searchParams.toString()}`);
   };
 

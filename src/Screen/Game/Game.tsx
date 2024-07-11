@@ -34,11 +34,11 @@ export const Game = () => {
       if (screenLocked) {
         setTimeout(() => {
           pointerLockRef.current?.unlock();
-        }, 110);
+        }, 10);
       } else if (!screenLocked && !pointerLockRef.current.isLocked) {
         setTimeout(() => {
           pointerLockRef.current?.lock();
-        }, 110);
+        }, 10);
       }
     }
   }, [screenLocked]);

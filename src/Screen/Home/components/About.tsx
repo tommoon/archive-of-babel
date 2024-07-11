@@ -19,7 +19,7 @@ export const About = () => {
     // Adjust the value for specific fields
     let adjustedValue = value;
     if (['unit', 'cabinet', 'row', 'book'].includes(name) && value !== '') {
-      adjustedValue = (parseInt(value) - 1).toString();
+      adjustedValue = (parseInt(value)).toString();
     }
 
     setFormValues((prevValues) => ({
@@ -30,15 +30,12 @@ export const About = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    console.log(formValues);
-    const queryParams = Object.entries(formValues)
+     const queryParams = Object.entries(formValues)
       .filter(([_, value]) => value !== '')
-      .map(([key, value]) => `${key}=${value}`)
-      .join("&");
+      .map(([key, value]) => `${key}=${['unit', 'cabinet', 'row', 'book'].includes(key) ? parseInt(value) - 1 : value}`)
+       .join("&");
     navigate(`/game?${queryParams}`);
   };
-
   return (
     <div className="grid grid-cols-1 grid-rows-1 place-items-center lg:grid-cols-3 gap-y-16">
       <div className="card h-full bg-base-100 w-80 shadow-xl">
@@ -101,7 +98,7 @@ export const About = () => {
                     onChange={handleInputChange}
                     className="input input-xs w-full max-w-s px-0 focus:border-transparent max-w-8 ml-auto"
                     min={1}
-                    max={4}
+                    max={5}
                   />
                 </label>
                 <label className="input input-bordered input-sm flex items-center gap-2">
@@ -127,7 +124,7 @@ export const About = () => {
                     onChange={handleInputChange}
                     className="input input-xs w-full max-w-s px-0 focus:border-transparent max-w-8 ml-auto"
                     min={1}
-                    max={4}
+                    max={5}
                   />
                 </label>
                 <label className="input input-bordered input-sm flex items-center gap-2">

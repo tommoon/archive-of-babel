@@ -9,10 +9,11 @@ import { gameController } from "@/Controllers/gameController";
 
 export const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { setCellHex, setBookState } = gameController();
+  const { setCellHex, setBookState, setPage } = gameController();
   useEffect(() => {
     setSearchParams({});
     setCellHex({ x: "0", y: "0", z: "0" });
+    setPage(0)
     setBookState({
       cabinet: undefined,
       unit: undefined,

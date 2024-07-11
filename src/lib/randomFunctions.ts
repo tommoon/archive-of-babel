@@ -60,6 +60,12 @@ const makeTextBlock = (cell: string, startingValue: string): string => {
     const newChar = characters[newIndex];
     result += newChar;
   }
+  const newHash = hashCode(result);
+  const newLcg = createLCG(newHash.toString());
+  while (result.length <= 1000) {
+    const index = newLcg(0, characters.length);
+    result += characters[Math.floor(index)];
+  }
 
   return result;
 };
@@ -87,9 +93,7 @@ export function generateSeededText(
       bookLocation.book
     }${pad(page.toString(), 3, "0")}${negativeStates}`
   );
-  console.log("negsne", negativeStates);
   const normalizedCell = normalizeCell(bookCell);
-  console.log("normalized", normalizedCell);
   const text = Object.values(normalizedCell)
     .map((cellNumber, index) => {
       const text = makeTextBlock(

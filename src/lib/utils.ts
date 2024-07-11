@@ -46,12 +46,11 @@ export const senaryToRooms = (
   const updatedCellHex: CellHex = { ...cellHex };
   binary.split("").forEach((bit, index) => {
     if (bit === "0") {
-      updatedCellHex[cellKeys[index]] = "-" + cellKeys[index];
+      updatedCellHex[cellKeys[index]] = "-" + updatedCellHex[cellKeys[index]];
     } else {
-      updatedCellHex[cellKeys[index]] = cellKeys[index];
+      updatedCellHex[cellKeys[index]] = updatedCellHex[cellKeys[index]];
     }
   });
-
   return updatedCellHex;
 };
 
