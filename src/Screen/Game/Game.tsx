@@ -2,13 +2,16 @@ import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import { Suspense, useEffect, useRef } from "react";
 import { Player } from "./components/Player/Player";
-import { KeyboardControls, PointerLockControls } from "@react-three/drei";
-import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
+import { KeyboardControls } from "@react-three/drei";
 import { gameController } from "@/Controllers/gameController";
 import { Vector3 } from "three";
 import { BookInterior } from "./components/BookInterior/BookInterior";
 import { Cell } from "./components/Cell/Cell";
 import { useQueryString } from "@/hooks/useQueryString";
+import { isTouchDevice } from "@/lib/detectTouchDevice";
+import { MobileController } from "./components/MobileController";
+import { DesktopController } from "./components/controls/DesktopController";
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
@@ -24,32 +27,29 @@ const keyboardMap = [
 ];
 
 export const Game = () => {
-  const pointerLockRef = useRef<PointerLockControlsImpl>(null);
-  const { cellHex, debug, screenLocked, bookOpen } = gameController();
-
+  const { cellHex, debug, bookOpen } = gameController();
+  const canvasRef = useRef(null)
   useQueryString();
 
   useEffect(() => {
-    if (pointerLockRef.current) {
-      if (screenLocked) {
-        setTimeout(() => {
-          pointerLockRef.current?.unlock();
-        }, 10);
-      } else if (!screenLocked && !pointerLockRef.current.isLocked) {
-        setTimeout(() => {
-          pointerLockRef.current?.lock();
-        }, 10);
-      }
+    const canvasElement = canvasRef.current;
+    if (canvasElement) {
+      disableBodyScroll(canvasElement);
     }
-  }, [screenLocked]);
-
+    return () => {
+      if (canvasElement) {
+        enableBodyScroll(canvasElement);
+      }
+    };
+  }, [canvasRef]);
+  
   return (
     cellHex && (
       <KeyboardControls map={keyboardMap}>
         {debug && (
           <div className="fixed z-10 p-4 bg-white/100">{`x:${cellHex.x}, y: ${cellHex.y}, z: ${cellHex.z}`}</div>
         )}
-        <Canvas frameloop="demand">
+        <Canvas ref={canvasRef} frameloop="demand">
           <color attach="background" args={["black"]} />
           <Suspense>
             <ambientLight />
@@ -62,7 +62,10 @@ export const Game = () => {
               <Player />
             </Physics>
           </Suspense>
-          <PointerLockControls ref={pointerLockRef} />
+          {isTouchDevice() ? 
+            <MobileController /> :
+            <DesktopController />
+          }
         </Canvas>
         <div className="absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-2 border-white"></div>
         {bookOpen && <BookInterior />}
