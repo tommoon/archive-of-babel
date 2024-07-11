@@ -88,10 +88,9 @@ export function generateSeededText(
   bookLocation: BookState
 ): string {
   const negativeStates = roomsToSenary(bookCell);
-  console.log("neg", negativeStates);
   const locHash = hashCode(
     `${bookLocation.cabinet}${bookLocation.unit}${bookLocation.row}${
-      bookLocation.bookUnit
+      bookLocation.book
     }${pad(page.toString(), 3, "0")}${negativeStates}`
   );
   const normalizedCell = normalizeCell(bookCell);
@@ -107,31 +106,18 @@ export const findText = (searchString: string) => {
   const cabinet = Math.floor(Math.random() * 4).toString();
   const unit = Math.floor(Math.random() * 4).toString();
   const row = Math.floor(Math.random() * 4).toString();
-  const bookUnit = Math.floor(Math.random() * 10).toString();
+  const book = Math.floor(Math.random() * 10).toString();
   const page = pad(Math.floor(Math.random() * 410).toString(), 3, "0");
   const negativeState = Math.floor(Math.random() * 7);
-  const locHash = hashCode(
-    cabinet + unit + row + bookUnit + page + negativeState
-  );
+  const locHash = hashCode(cabinet + unit + row + book + page + negativeState);
 
   const fullString = pad(searchString, 3000, " ");
-
   const newCellHex = { x: "0", y: "0", z: "0" };
   (Object.keys(newCellHex) as (keyof CellHex)[]).forEach((cell, i) => {
     const pos = i * 1000;
     const blockString = fullString.slice(pos, pos + 1000);
     const fullHex = makeHex(blockString, locHash.toString() + i);
-    console.log("hex", fullHex);
-
     newCellHex[cell] = fullHex;
   });
-
-  console.log("cabinet", cabinet);
-  console.log("unit", unit);
-  console.log("row", row);
-  console.log("bookUnit", bookUnit);
-  console.log("page", page);
-  console.log("negativeState", negativeState);
-  console.log(newCellHex);
   return senaryToRooms(negativeState, newCellHex);
 };

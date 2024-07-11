@@ -1,10 +1,26 @@
+import { useSearchParams } from "react-router-dom";
 import { About } from "./components/About";
 import { Background } from "./components/Background";
 import { Container } from "./components/Container";
 import { Hero } from "./components/Hero";
 import { TextSearch } from "./components/TextSearch";
+import { useEffect } from "react";
+import { gameController } from "@/Controllers/gameController";
 
 export const Home = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { setCellHex, setBookState } = gameController();
+  useEffect(() => {
+    setSearchParams({});
+    setCellHex({ x: "0", y: "0", z: "0" });
+    setBookState({
+      cabinet: undefined,
+      unit: undefined,
+      row: undefined,
+      book: undefined
+    })
+  },[])
+
   return (
     <>
       <Background />

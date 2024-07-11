@@ -5,7 +5,7 @@ export type BookState = {
   cabinet: number | undefined;
   unit: number | undefined;
   row: number | undefined;
-  bookUnit: number | undefined;
+  book: number | undefined;
 };
 
 type gameState = {
@@ -25,7 +25,7 @@ export const gameController = create<gameState>()((set, get) => ({
     cabinet: undefined,
     unit: undefined,
     row: undefined,
-    bookUnit: undefined,
+    book: undefined,
   },
   bookOpen: false,
   debug: false,

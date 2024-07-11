@@ -32,42 +32,42 @@ const COLOR = new THREE.Color();
 const rotations = [0, 90, 180, 270].map(degrees_to_radians);
 
 const getPositions = ({
-  bookUnit,
+  book,
   cabinet,
   row,
   unit,
 }: {
-  bookUnit: number;
+  book: number;
   cabinet: number;
   row: number;
   unit: number;
 }) => {
   switch (cabinet) {
     case 0:
-      return new THREE.Vector3(0.043 * bookUnit + unit * 0.47, 0, -0.225 * row);
+      return new THREE.Vector3(0.043 * book + unit * 0.47, 0, -0.225 * row);
     case 1:
       return new THREE.Vector3(
         0,
-        0.043 * bookUnit - (unit - 4) * 0.47,
+        0.043 * book - (unit - 4) * 0.47,
         -0.225 * row,
       );
     case 2:
       return new THREE.Vector3(
-        -0.043 * bookUnit + (unit - 4) * 0.47,
+        -0.043 * book + (unit - 4) * 0.47,
         0,
         -0.225 * row,
       );
     default:
       return new THREE.Vector3(
         0,
-        -0.043 * bookUnit + (unit - 4) * 0.47,
+        -0.043 * book + (unit - 4) * 0.47,
         -0.225 * row,
       );
   }
 };
 
 interface BookProps {
-  bookUnit: number;
+  book: number;
   row: number;
   unit: number;
   cabinet: number;
@@ -75,9 +75,9 @@ interface BookProps {
 }
 
 const Book: React.FC<BookProps> = React.memo(
-  ({ bookUnit, row, cabinet, cellHex, unit }) => {
+  ({ book, row, cabinet, cellHex, unit }) => {
     const { setBookState, setBookOpen } = gameController();
-    const seed = `${Object.values(cellHex).join("")}${cabinet}${unit}${row}${bookUnit}`;
+    const seed = `${Object.values(cellHex).join("")}${cabinet}${unit}${row}${book}`;
     const RNumber = useMemo(() => seededRandom(seed), [seed]);
     const startVector = useMemo(
       () => [
@@ -106,14 +106,14 @@ const Book: React.FC<BookProps> = React.memo(
         ref.current.position.copy(
           startVector[cabinet]
             .clone()
-            .add(getPositions({ bookUnit, cabinet, row, unit })),
+            .add(getPositions({ book, cabinet, row, unit })),
         );
         // @ts-ignore
         ref.current.color.copy(startColor);
         ref.current.scale.set(0.6, 0.4, 0.4 + scale);
         ref.current.rotation.set(0, 0, rotations[cabinet]);
       }
-    }, [ref, startVector, bookUnit, cabinet, row, scale, startColor, unit]);
+    }, [ref, startVector, book, cabinet, row, scale, startColor, unit]);
 
     useFrame(() => {
       if (ref.current) {
@@ -166,7 +166,7 @@ const Book: React.FC<BookProps> = React.memo(
       (e: any) => {
         e.stopPropagation();
         setBookState({
-          bookUnit: bookUnit,
+          book: book,
           cabinet: cabinet,
           row: row,
           unit: unit,
@@ -204,7 +204,7 @@ export const Books: React.FC<BooksProps> = ({ cellHex }) => {
       for (let k = 0; k < UNITS; k++) {
         for (let j = 0; j < ROWS; j++) {
           for (let i = 0; i < BOOK_UNIT; i++) {
-            holderArray.push({ bookUnit: i, row: j, cabinet: l, unit: k });
+            holderArray.push({ book: i, row: j, cabinet: l, unit: k });
           }
         }
       }

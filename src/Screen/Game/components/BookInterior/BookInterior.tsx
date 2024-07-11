@@ -22,7 +22,6 @@ export const BookInterior = () => {
     setBookOpen(false);
     setScreenLocked(false);
   };
-  console.log(bookState)
   return (
     <Dialog open onOpenChange={exitBook}>
       <DialogContent

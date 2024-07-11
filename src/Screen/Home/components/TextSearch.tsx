@@ -12,7 +12,6 @@ const navigate = useNavigate()
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const loc = findText(text); // Call the findText function with the textarea value
-    debugger
     navigate(`/game?x=${loc.x}&y=${loc.y}&z=${loc.z}`)
   };
 

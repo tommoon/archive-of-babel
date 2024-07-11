@@ -1,15 +1,16 @@
-import { transparentMaterial } from "@/lib/utils";
+import {transparentMaterial } from "@/lib/utils";
 import { PerspectiveCamera, Plane } from "@react-three/drei";
+import { Euler, Vector3 } from "three";
 
 const handleClick = (e: any) => {
   e.stopPropagation();
 };
 
-export const Camera = () => {
-  // Create a transparent material
+export const cameraForard = new Vector3()
 
-  return (
-    <PerspectiveCamera makeDefault>
+export const Camera:React.FC<{initialRotation: Euler}> = ({initialRotation}) => <PerspectiveCamera
+      rotation={initialRotation}
+      makeDefault>
       <Plane
         onPointerOver={handleClick}
         onPointerOut={handleClick}
@@ -19,5 +20,3 @@ export const Camera = () => {
         material={transparentMaterial}
       />
     </PerspectiveCamera>
-  );
-};

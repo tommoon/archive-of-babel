@@ -27,7 +27,7 @@ export const Game = () => {
   const pointerLockRef = useRef<PointerLockControlsImpl>(null);
   const { cellHex, debug, screenLocked, bookOpen } = gameController();
 
-  useQueryString({ cellHex: cellHex });
+  useQueryString();
 
   useEffect(() => {
     if (pointerLockRef.current) {

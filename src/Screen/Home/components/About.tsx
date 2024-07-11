@@ -1,5 +1,43 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 export const About = () => {
-  // origins discover learn
+  const [formValues, setFormValues] = useState({
+    x: "0",
+    y: "0",
+    z: "0",
+    unit: '',
+    cabinet: '',
+    row: '',
+    book: '',
+  });
+  const navigate = useNavigate();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    // Adjust the value for specific fields
+    let adjustedValue = value;
+    if (['unit', 'cabinet', 'row', 'book'].includes(name) && value !== '') {
+      adjustedValue = (parseInt(value) - 1).toString();
+    }
+
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [name]: adjustedValue,
+    }));
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    console.log(formValues);
+    const queryParams = Object.entries(formValues)
+      .filter(([_, value]) => value !== '')
+      .map(([key, value]) => `${key}=${value}`)
+      .join("&");
+    navigate(`/game?${queryParams}`);
+  };
 
   return (
     <div className="grid grid-cols-1 grid-rows-1 place-items-center lg:grid-cols-3 gap-y-16">
@@ -25,25 +63,31 @@ export const About = () => {
             here
           </p>
           <div className="card-actions">
-            <form className="form-control w-full space-y-2">
+            <form className="form-control w-full space-y-2" onSubmit={handleSubmit}>
               <div className="label-text">Location (required)</div>
               <div className="grid grid-cols-3 gap-4">
                 <input
                   required
-                  type="number"
                   placeholder="X"
+                  name="x"
+                  value={formValues.x}
+                  onChange={handleInputChange}
                   className="input input-bordered input-accent input-sm w-full max-w-xs"
                 />
                 <input
                   required
-                  type="number"
                   placeholder="Y"
+                  name="y"
+                  value={formValues.y}
+                  onChange={handleInputChange}
                   className="input input-bordered input-accent input-sm w-full max-w-xs"
                 />
                 <input
                   required
-                  type="number"
                   placeholder="Z"
+                  name="z"
+                  value={formValues.z}
+                  onChange={handleInputChange}
                   className="input input-bordered input-accent input-sm w-full max-w-xs"
                 />
               </div>
@@ -52,8 +96,10 @@ export const About = () => {
                   Unit
                   <input
                     type="number"
+                    name="unit"
+                    value={formValues.unit}
+                    onChange={handleInputChange}
                     className="input input-xs w-full max-w-s px-0 focus:border-transparent max-w-8 ml-auto"
-                    placeholder="1"
                     min={1}
                     max={4}
                   />
@@ -62,8 +108,10 @@ export const About = () => {
                   Cabinet
                   <input
                     type="number"
+                    name="cabinet"
+                    value={formValues.cabinet}
+                    onChange={handleInputChange}
                     className="input input-xs w-full max-w-s px-0 focus:border-transparent max-w-8 ml-auto"
-                    placeholder="1"
                     min={1}
                     max={4}
                   />
@@ -74,8 +122,10 @@ export const About = () => {
                   Row
                   <input
                     type="number"
+                    name="row"
+                    value={formValues.row}
+                    onChange={handleInputChange}
                     className="input input-xs w-full max-w-s px-0 focus:border-transparent max-w-8 ml-auto"
-                    placeholder="1"
                     min={1}
                     max={4}
                   />
@@ -84,15 +134,17 @@ export const About = () => {
                   Book
                   <input
                     type="number"
+                    name="book"
+                    value={formValues.book}
+                    onChange={handleInputChange}
                     className="input input-xs w-full max-w-s px-0 focus:border-transparent max-w-8 ml-auto"
-                    placeholder="1"
                     max={10}
                     min={1}
                   />
                 </label>
               </div>
+              <button type="submit" className="btn btn-accent btn-sm">Go</button>
             </form>
-            <button className="btn btn-accent btn-sm">Go</button>
           </div>
         </div>
       </div>
