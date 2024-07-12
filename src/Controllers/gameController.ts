@@ -13,7 +13,7 @@ type gameState = {
   bookState: BookState;
   bookOpen: boolean;
   debug: boolean;
-  page: number;
+  page: number | undefined;
   screenLocked: boolean;
   setCellHex: (cellHex: CellHex) => void;
   setBookState: (bookState: BookState) => void;
@@ -30,7 +30,7 @@ export const gameController = create<gameState>()((set, get) => ({
     book: undefined,
   },
   bookOpen: false,
-  page: 1,
+  page: undefined,
   debug: false,
   screenLocked: false,
   setCellHex: (cellHex: CellHex) => {

@@ -11,27 +11,24 @@ const BackgroundProps = () => (
     <LibraryMainRoom
       hasLights={true}
       hasColliders={false}
-      cellHex={{ x: '0', y: '0', z: '0' }}
+      cellHex={{ x: "0", y: "0", z: "0" }}
     />
     <LibraryCorridor
       hasLights={true}
       hasColliders={false}
-      cellHex={{ x: '0', y: '0', z: '0' }}
+      cellHex={{ x: "0", y: "0", z: "0" }}
       orientation="N"
     />
     <LibraryCorridor
       hasLights={true}
       hasColliders={false}
-      cellHex={{ x: '0', y: '0', z: '0' }}
+      cellHex={{ x: "0", y: "0", z: "0" }}
       orientation="S"
     />
-    <LibraryMainRoom
-      hasColliders={false}
-      cellHex={{ x: '0', y: '0', z: '-1' }}
-    />
+    <LibraryMainRoom hasColliders={false} cellHex={{ x: "0", y: "0", z: "-1" }} />
     <LibraryCorridor
       hasColliders={false}
-      cellHex={{ x: '0', y: '0', z: '-1' }}
+      cellHex={{ x: "0", y: "0", z: "-1" }}
       orientation="S"
     />
   </>
@@ -39,39 +36,29 @@ const BackgroundProps = () => (
 
 const MenuCamera = () => {
   const cameraRef = useRef<PerspectiveCamera | null>(null);
-  const [scrollPosition, setScrollPosition] = useState(0);
   const [targetZ, setTargetZ] = useState(8);
-  const [atBottom, setAtBottom] = useState(false);
-
-  const handleScroll = (event: WheelEvent) => {
-    if (!atBottom) {
-      setScrollPosition((prev) => Math.min(0, prev - event.deltaY * 0.005));
-    }
-  };
 
   const checkScrollBottom = () => {
-    const isAtBottom =
-      window.innerHeight + window.scrollY >= document.body.offsetHeight;
-    setAtBottom(isAtBottom);
+    const bottomY = document.body.offsetHeight - window.innerHeight;
+    const percentDownPage = (window.scrollY / bottomY);
+    setTargetZ(-10*percentDownPage)
   };
 
   useEffect(() => {
-    window.addEventListener("wheel", handleScroll);
     window.addEventListener("scroll", checkScrollBottom);
+
     return () => {
-      window.removeEventListener("wheel", handleScroll);
       window.removeEventListener("scroll", checkScrollBottom);
     };
-  }, [atBottom]);
+  }, []);
 
   useFrame(() => {
     if (cameraRef.current) {
-      setTargetZ(8 + scrollPosition);
-      cameraRef.current.position.z = MathUtils.lerp(
+       cameraRef.current.position.z = MathUtils.lerp(
         cameraRef.current.position.z,
-        targetZ,
-        0.1,
-      );
+        targetZ + 8,
+        0.1
+      ); 
     }
   });
 

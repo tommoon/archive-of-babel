@@ -33,7 +33,7 @@ export const BookInterior = () => {
         <div className="flex flex-col h-full">
           <div
             ref={textBlockRef}
-            className="flex-grow font-mono text-xs gap-8 m-8 overflow-y-auto w-fit break-all"
+            className="flex-grow font-mono text-xs gap-8 mx-auto my-8 overflow-y-auto w-fit break-all"
             style={{
               height: "40rem",
               maxHeight: "calc(100vh - 200px)",

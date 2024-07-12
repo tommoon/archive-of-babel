@@ -76,7 +76,7 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
         const upstairs = upstairsBBox.containsPoint(playerPos);
         const downstairs = downstairsBBox.containsPoint(playerPos);
         if (upstairs) {
-          setPlayerPosition({ ...playerCellHex, y: base32Add(playerCellHex.x, '1') });
+          setPlayerPosition({ ...playerCellHex, y: base32Add(playerCellHex.y, '1') });
         }
         if (downstairs) {
           setPlayerPosition({ ...playerCellHex, y: base32Subtract(playerCellHex.y, '1') });

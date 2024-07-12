@@ -7,6 +7,7 @@ import { Euler, Quaternion, Vector3 } from "three";
 import { Camera } from "./Camera";
 import { useCellHex } from "@/hooks/useCellHex";
 import { degrees_to_radians } from "@/lib/utils";
+import { touchController } from "@/Controllers/touchController";
 
 const SPEED = 2;
 const direction = new Vector3();
@@ -92,6 +93,7 @@ export const Player = () => {
   const ref = useRef<RapierRigidBody>(null);
   const [, get] = useKeyboardControls();
   const { cellHex, bookState } = gameController();
+  const { move, pan } = touchController();
   const { adjustedPosition } = useCellHex({ cellHex, addition: getStartingPos(bookState) });
   const initialPosition = useInitialPosition(bookState, adjustedPosition);
   const initialRotation = useInitialRotation(bookState);
@@ -112,9 +114,9 @@ export const Player = () => {
         rigidBodyTranslation.z,
       );
       // @ts-ignore
-      frontVector.set(0, 0, backward - forward);
+      frontVector.set(0, 0, backward - forward + move.dy * 0.01);
       // @ts-ignore
-      sideVector.set(leftward - rightward, 0, 0);
+      sideVector.set(leftward - rightward - move.dx * 0.01, 0, 0);
       direction
         .subVectors(frontVector, sideVector)
         .normalize()
@@ -128,6 +130,9 @@ export const Player = () => {
         },
         true,
       );
+      const tiltQuat = new Quaternion().setFromEuler(new Euler(pan.dy * -0.01, 0, 0));
+      state.camera.rotateOnWorldAxis(new Vector3(0,1,0),pan.dx * -0.01)
+      state.camera.quaternion.multiply(tiltQuat)
     }
   });
 
