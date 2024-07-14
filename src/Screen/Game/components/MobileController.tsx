@@ -1,30 +1,40 @@
 import { touchController } from "@/Controllers/touchController";
-import { useRef, useState } from "react";
+import { TouchEventHandler, useRef, useState } from "react";
 
-const ControlPad:React.FC<{pan:boolean}> = ({ pan }) => {
-  const [touchStart, setTouchStart] = useState(null);
-  const padRef = useRef<{x:number, y:number} | null>(null);
-    const {updateMovement} = touchController()
-  const handleTouchStart = (e) => {
+interface ControlPadProps {
+  pan: boolean;
+}
+
+interface TouchStart {
+  x: number;
+  y: number;
+}
+
+const ControlPad: React.FC<ControlPadProps> = ({ pan }) => {
+  const [touchStart, setTouchStart] = useState<TouchStart | null>(null);
+  const padRef = useRef<HTMLDivElement | null>(null);
+  const { updateMovement } = touchController();
+
+  const handleTouchStart: TouchEventHandler<HTMLDivElement> = (e) => {
     const touch = e.touches[0];
     setTouchStart({ x: touch.clientX, y: touch.clientY });
   };
 
-  const handleTouchMove = (e) => {
+  const handleTouchMove: TouchEventHandler<HTMLDivElement> = (e) => {
     if (!touchStart) return;
 
     const touch = e.touches[0];
     const dx = touch.clientX - touchStart.x;
     const dy = touch.clientY - touchStart.y;
 
-    updateMovement(pan ? 'pan' : 'move', {dx, dy});
+    updateMovement(pan ? 'pan' : 'move', { dx, dy });
 
     setTouchStart({ x: touch.clientX, y: touch.clientY });
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd: TouchEventHandler<HTMLDivElement> = () => {
     setTouchStart(null);
-    updateMovement(pan ? 'pan' : 'move', {dx: 0, dy: 0});
+    updateMovement(pan ? 'pan' : 'move', { dx: 0, dy: 0 });
   };
 
   return (
@@ -36,7 +46,7 @@ const ControlPad:React.FC<{pan:boolean}> = ({ pan }) => {
       style={{
         position: "absolute",
         bottom: 20,
-        ...pan ? { right: 20 } : { left: 20 },
+        ...(pan ? { right: 20 } : { left: 20 }),
         width: 100,
         height: 100,
         backgroundColor: "rgba(255, 255, 255, 0.3)",
@@ -46,7 +56,7 @@ const ControlPad:React.FC<{pan:boolean}> = ({ pan }) => {
   );
 };
 
-export const MobileController = () => {
+export const MobileController: React.FC = () => {
   return (
     <div className="flex w-full fixed inset-x-0 bottom-0 p-10">
       <ControlPad pan={false} />

@@ -36,7 +36,7 @@ const BackgroundProps = () => (
 
 const MenuCamera = () => {
   const cameraRef = useRef<PerspectiveCamera | null>(null);
-  const [targetZ, setTargetZ] = useState(8);
+  const [targetZ, setTargetZ] = useState(0);
 
   const checkScrollBottom = () => {
     const bottomY = document.body.offsetHeight - window.innerHeight;

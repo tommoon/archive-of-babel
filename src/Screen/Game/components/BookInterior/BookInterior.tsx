@@ -11,6 +11,8 @@ import {
 import { useRef } from "react";
 import { generateSeededText } from "@/lib/randomFunctions";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Share1Icon } from "@radix-ui/react-icons";
 
 const pageCount = 410;
 
@@ -18,25 +20,27 @@ export const BookInterior = () => {
   const textBlockRef = useRef(null);
   const { setBookOpen, cellHex: cellHex, bookState, page, setPage } = gameController();
   const exitBook = () => {
+    setPage(undefined)
     setBookOpen(false);
     setScreenLocked(false);
   };
-  return (
+
+  return page && (
     <Dialog open onOpenChange={exitBook}>
       <DialogContent
-        className="max-w-screen max-h-screen p-8 w-max"
+        className="max-w-full max-h-screen p-8 w-max flex flex-col bg-no-repeat bg-cover"
         onEscapeKeyDown={exitBook}
         onPointerDownOutside={exitBook}
         onInteractOutside={exitBook}
         onClick={(e) => e.stopPropagation()}
+        style={{
+          backgroundImage:"url('textures/paperBackground.jpg')"
+        }}
       >
-        <div className="flex flex-col h-full">
           <div
             ref={textBlockRef}
             className="flex-grow font-mono text-xs gap-8 mx-auto my-8 overflow-y-auto w-fit break-all"
-            style={{
-              height: "40rem",
-              maxHeight: "calc(100vh - 200px)",
+            style={{ 
               maxWidth: "80vw",
               width: "40rem",
             }}
@@ -44,13 +48,16 @@ export const BookInterior = () => {
             {cellHex &&
                generateSeededText(page, cellHex, bookState)}
           </div>
-          <div className="flex mt-4 m-8">
-            <Input min={1} max={410} className="w-20" type="number" value={page} onChange={(e) => setPage(parseInt(e.target.value))} />
-            <Pagination>
+          <div className="flex mt-4 m-8 flex-wrap sm:flex-nowrap justify-evenly gap-y-2">
+            <Input  min={1} max={410} className="w-20" type="number" value={page} onChange={(e) => {
+              e.preventDefault()
+              setPage(parseInt(e.target.value))
+              }} />
+            <Pagination className="order-first sm:order-none">
               <PaginationContent>
                 {page > 0 && (
                   <PaginationItem>
-                    <PaginationPrevious onClick={() => setPage(page - 1)} />
+                    {page !== 1 && <PaginationPrevious onClick={() => setPage(page - 1)} />}
                   </PaginationItem>
                 )}
                 {[0, 1, 2].map((futurePages) => {
@@ -65,13 +72,14 @@ export const BookInterior = () => {
                 })}
                 {page < pageCount && (
                   <PaginationItem>
-                    <PaginationNext onClick={() => setPage(page + 1)} />
+                    {page !== 410 && <PaginationNext onClick={() => setPage(page + 1)} />}
                   </PaginationItem>
                 )}
               </PaginationContent>
-            </Pagination>
+          </Pagination>
+          <Button variant={'outline'}>
+            <Share1Icon className="mr-2 h-4 w-4"/>Share</Button>
           </div>
-        </div>
       </DialogContent>
     </Dialog>
   );

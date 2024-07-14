@@ -18,7 +18,7 @@ type gameState = {
   setCellHex: (cellHex: CellHex) => void;
   setBookState: (bookState: BookState) => void;
   setBookOpen: (bookOpen: boolean) => void;
-  setPage: (page: number) => void;
+  setPage: (page: number | undefined) => void;
 };
 
 export const gameController = create<gameState>()((set, get) => ({
