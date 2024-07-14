@@ -50,7 +50,7 @@ export const gameController = create<gameState>()((set, get) => ({
       bookOpen: bookOpen,
     }));
   },
-  setPage: (page: number) => {
+  setPage: (page: number | undefined) => {
     set(() => ({
       page: page,
     }));
