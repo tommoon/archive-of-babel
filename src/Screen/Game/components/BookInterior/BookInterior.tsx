@@ -28,7 +28,7 @@ export const BookInterior = () => {
   return page && (
     <Dialog open onOpenChange={exitBook}>
       <DialogContent
-        className="max-w-full max-h-screen p-8 w-max flex flex-col bg-no-repeat bg-cover"
+        className="max-w-full max-h-screen p-8 mt-10 sm:mt-auto w-max flex flex-col bg-no-repeat bg-cover"
         onEscapeKeyDown={exitBook}
         onPointerDownOutside={exitBook}
         onInteractOutside={exitBook}

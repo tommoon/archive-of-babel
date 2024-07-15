@@ -7,11 +7,13 @@ import { Game } from "./Screen/Game/Game.tsx";
 import { Home } from "./Screen/Home/Home.tsx";
 import { HomeLayout } from "./layouts/HomeLayout";
 import { GameLayout } from "./layouts/GameLayout.tsx";
+import ErrorPage from "./Screen/ErrorPage.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <HomeLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
@@ -22,6 +24,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <GameLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "game",

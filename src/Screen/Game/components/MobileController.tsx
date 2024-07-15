@@ -5,35 +5,28 @@ interface ControlPadProps {
   pan: boolean;
 }
 
-interface TouchStart {
-  x: number;
-  y: number;
-}
-
 const ControlPad: React.FC<ControlPadProps> = ({ pan }) => {
-  const [touchStart, setTouchStart] = useState<TouchStart | null>(null);
+  const [isTouching, setIsTouching] = useState<boolean>(false);
   const padRef = useRef<HTMLDivElement | null>(null);
   const { updateMovement } = touchController();
 
-  const handleTouchStart: TouchEventHandler<HTMLDivElement> = (e) => {
-    const touch = e.touches[0];
-    setTouchStart({ x: touch.clientX, y: touch.clientY });
+  const handleTouchStart: TouchEventHandler<HTMLDivElement> = () => {
+    setIsTouching(true);
   };
 
   const handleTouchMove: TouchEventHandler<HTMLDivElement> = (e) => {
-    if (!touchStart) return;
-
+    if (!isTouching) return;
+    const boundings = padRef.current?.getBoundingClientRect();
     const touch = e.touches[0];
-    const dx = touch.clientX - touchStart.x;
-    const dy = touch.clientY - touchStart.y;
+    if (!boundings) return;
+    const dx = (touch.clientX - (boundings.left + boundings.width / 2)) / 30;
+    const dy = (touch.clientY - (boundings.top + boundings.height / 2)) / 30;
 
     updateMovement(pan ? 'pan' : 'move', { dx, dy });
-
-    setTouchStart({ x: touch.clientX, y: touch.clientY });
   };
 
   const handleTouchEnd: TouchEventHandler<HTMLDivElement> = () => {
-    setTouchStart(null);
+    setIsTouching(false);
     updateMovement(pan ? 'pan' : 'move', { dx: 0, dy: 0 });
   };
 
