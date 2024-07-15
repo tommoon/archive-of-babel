@@ -8,6 +8,8 @@ import { Home } from "./Screen/Home/Home.tsx";
 import { HomeLayout } from "./layouts/HomeLayout";
 import { GameLayout } from "./layouts/GameLayout.tsx";
 import ErrorPage from "./Screen/ErrorPage.tsx";
+import { TextPage } from "./Screen/Home/TextPage.tsx";
+import { PRIVACYPOLICY, TERMSOFUSE } from "./lib/texts.ts";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +21,14 @@ const router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
+      {
+        path: "termsofuse",
+        element: <TextPage markdownContent={TERMSOFUSE} />
+      },
+      {
+        path: "privacy",
+        element: <TextPage markdownContent={PRIVACYPOLICY}/>
+      }
     ],
   },
   {

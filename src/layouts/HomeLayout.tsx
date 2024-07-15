@@ -1,9 +1,10 @@
 import { Footer } from "@/Screen/Home/components/Footer";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { Spin as Hamburger } from 'hamburger-react';
 import { BookText, GraduationCap, TextSearch } from "lucide-react";
+import { Background } from "@/Screen/Home/components/Background";
 
 export const HomeLayout = () => {
   const [yPos, setYPos] = useState(0);
@@ -20,6 +21,8 @@ export const HomeLayout = () => {
 
 
   return (
+    <>
+      <Background />
     <div className="relative text-base-content">
       <div
         className={cn(
@@ -29,13 +32,13 @@ export const HomeLayout = () => {
           "justify-center"
         )}
       >
-        <a className=" sm:text-2xl font-bold mx-auto">Archive of Babel</a>
+        <Link to={'/'} className=" sm:text-2xl font-bold mx-auto">Archive of Babel</Link>
         <div className="flex-none absolute right-0 mr-4">
             <Hamburger toggled={isOpen} toggle={setIsOpen} />
         </div>
         {isOpen && (
           <div className="menu absolute top-14 right-0 z-20 w-full sm:w-auto bg-base-200">
-            <ul className="menu rounded-box w-full sm:w-56 bg-base-200">
+            <ul className="menu rounded-box w-full sm:w-72 bg-base-200 text-xl">
             <li>
               <a>
                 <TextSearch/>
@@ -58,9 +61,11 @@ export const HomeLayout = () => {
         </div>
       )}
       </div>
-
-      <Outlet />
+        <div className="min-h-screen">
+          <Outlet />
+        </div>
       <Footer />
-    </div>
+      </div>
+      </>
   );
 };
