@@ -33,6 +33,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "ecctrl": "^1.0.78",
+    "hamburger-react": "^2.5.1",
     "lucide-react": "^0.379.0",
     "murmurhash3js": "^3.0.1",
     "react": "^18.2.0",
