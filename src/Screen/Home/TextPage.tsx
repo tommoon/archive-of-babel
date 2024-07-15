@@ -30,7 +30,7 @@ const styles = {
     },
 };
   
-export const TextPage = ({ markdownContent }) => (
+export const TextPage:React.FC<{markdownContent:string}> = ({ markdownContent }) => (
     <div className="pt-16 m-auto max-w-prose text-base"
         style={{
         fontSize:'unset'
