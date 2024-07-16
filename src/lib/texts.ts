@@ -100,3 +100,27 @@ We may update this Privacy Policy from time to time to reflect changes in our pr
 If you have any questions or concerns about this Privacy Policy, please contact us here:
 <contact@archiveofbabel.com>
 `;
+
+export const CREDITS = `
+# Credits
+
+The Archive of babel is inspired by the short story "The Library of Babel" by Jorges Luis Borges. [You can read it here for free](https://sites.evergreen.edu/politicalshakespeares/wp-content/uploads/sites/226/2015/12/Borges-The-Library-of-Babel.pdf)
+
+## codebase
+the inspiration to make a digital version has been done before, and I took inspiration from [the original digital implimentation](https://libraryofbabel.info/) by Johnathan Bastille.
+
+to build the random text generation code I was heavily inspired by [this github repo](https://github.com/cakenggt/Library-Of-Pybel/tree/gh-pages?tab=readme-ov-file) which contains a javascript implementation of the library of babel text generation script.
+
+## Models
+for the models, I used [the Modular Temple Pack](https://fertile-soil-productions.itch.io/temple-modular-collection) from Keith at Fertile Soil Productions
+
+## Engine
+The game is built in three.js, using [react three fiber, Drei and Zustand](https://docs.pmnd.rs/).
+The physics engine used is [a react optimised version of the rapier engine](https://github.com/pmndrs/react-three-rapier)
+`;
+
+export const ABOUT = `
+
+"Archive of Babel" is a captivating digital 3D game inspired by Jorge Luis Borges' iconic short story, "The Library of Babel." Set within an infinite library filled with hexagonal rooms, the game invites you to explore a seemingly endless array of bookshelves. Each book contains unique and randomly generated text, echoing Borges' concept of a universe composed entirely of books.
+![maze](https://upload.wikimedia.org/wikipedia/commons/7/78/Labyrinth_1_%28from_Nordisk_familjebok%29.svg)
+Navigate through the labyrinthine corridors, interact with books to discover their contents, and uncover the mysteries hidden within the library's vast expanse. Ponder the nature of infinity, knowledge, and the search for meaning in a chaotic universe. With its immersive environment and philosophical undertones, "Archive of Babel" offers a unique blend of literary inspiration and interactive gameplay.`;

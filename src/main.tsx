@@ -9,7 +9,8 @@ import { HomeLayout } from "./layouts/HomeLayout";
 import { GameLayout } from "./layouts/GameLayout.tsx";
 import ErrorPage from "./Screen/ErrorPage.tsx";
 import { TextPage } from "./Screen/Home/TextPage.tsx";
-import { PRIVACYPOLICY, TERMSOFUSE } from "./lib/texts.ts";
+import { ABOUT, CREDITS, PRIVACYPOLICY, TERMSOFUSE } from "./lib/texts.ts";
+import Contact from "./Screen/Home/Contact.tsx";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,18 @@ const router = createBrowserRouter([
       {
         path: "privacy",
         element: <TextPage markdownContent={PRIVACYPOLICY}/>
+      },
+      {
+        path: "credits",
+        element: <TextPage markdownContent={CREDITS}/>
+      },
+      {
+        path: "about",
+        element: <TextPage markdownContent={ABOUT}/>
+      },
+      {
+        path: "contact",
+        element: <Contact/>
       }
     ],
   },

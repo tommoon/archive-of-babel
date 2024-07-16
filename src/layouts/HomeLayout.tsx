@@ -18,8 +18,6 @@ export const HomeLayout = () => {
     };
   }, []);
 
-
-
   return (
     <>
       <Background />

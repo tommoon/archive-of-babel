@@ -5,10 +5,12 @@ import { Hero } from "./components/Hero";
 import { TextSearch } from "./components/TextSearch";
 import { useEffect } from "react";
 import { gameController } from "@/Controllers/gameController";
+import { useResetPosition } from "@/hooks/useResetPosition";
 
 export const Home = () => {
   const [, setSearchParams] = useSearchParams();
   const { setCellHex, setBookState, setPage } = gameController();
+  useResetPosition()
   useEffect(() => {
     setSearchParams({});
     setCellHex({ x: "0", y: "0", z: "0" });

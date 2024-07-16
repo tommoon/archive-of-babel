@@ -1,9 +1,11 @@
+import { useResetPosition } from "@/hooks/useResetPosition";
 import { Container } from "./components/Container";
 import ReactMarkdown from 'react-markdown';
 
 const styles = {
     h1: {
-        marginTop:'2em',
+    marginTop: '2em',
+      marginBottom:'1em',
       fontSize: '2.5em',
     },
     h2: {
@@ -30,11 +32,14 @@ const styles = {
     },
 };
   
-export const TextPage:React.FC<{markdownContent:string}> = ({ markdownContent }) => (
-    <div className="pt-16 m-auto max-w-prose text-base"
+export const TextPage: React.FC<{ markdownContent: string }> = ({ markdownContent }) => {
+  
+  useResetPosition()
+
+  return <div className="pt-16 m-auto max-w-prose text-base"
         style={{
         fontSize:'unset'
-    }}>
+        }}>
         <Container>
             <ReactMarkdown
             children={markdownContent}
@@ -48,5 +53,4 @@ export const TextPage:React.FC<{markdownContent:string}> = ({ markdownContent })
             }}
             />
         </Container>
-    </div>
-)
+    </div>}

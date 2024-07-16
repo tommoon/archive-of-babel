@@ -32,9 +32,9 @@ export const Footer = () => (
     </nav>
     <nav>
       <h6 className="footer-title">The Archive</h6>
-      <a className="link link-hover">About us</a>
-      <a className="link link-hover">Contact</a>
-      <a className="link link-hover">Credits and acknowledgement</a>
+      <Link to={'about'} className="link link-hover">About</Link>
+      <Link to={'contact'} className="link link-hover">Contact</Link>
+      <Link to={'credits'} className="link link-hover">Credits and acknowledgements</Link>
     </nav>
     <nav>
       <h6 className="footer-title">Legal</h6>
