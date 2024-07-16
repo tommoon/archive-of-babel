@@ -36,12 +36,12 @@ export const HomeLayout = () => {
         </div>
         {isOpen && (
           <div className="menu absolute top-14 right-0 z-20 w-full sm:w-auto bg-base-200">
-            <ul className="menu rounded-box w-full sm:w-72 bg-base-200 text-xl">
+            <ul className="menu rounded-box w-full sm:w-72 bg-base-200 text-2xl space-y-4">
             <li>
-              <a>
+              <Link to={'search'}>
                 <TextSearch/>
                 Advanced Search
-              </a>
+              </Link>
             </li>
             <li>
               <a>
@@ -57,12 +57,15 @@ export const HomeLayout = () => {
             </li>
           </ul>
         </div>
-      )}
+          )}
       </div>
+      
         <div className="min-h-screen">
           <Outlet />
         </div>
-      <Footer />
+        {isOpen && <div onClick={() => setIsOpen(false)} className="absolute inset-0  backdrop-blur-md bg-black/10 z-10" />}
+
+        <Footer />
       </div>
       </>
   );

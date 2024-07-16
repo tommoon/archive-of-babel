@@ -1,0 +1,77 @@
+import { FormEvent, useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Container } from "./components/Container";
+import { findText } from "@/lib/randomFunctions";
+
+export const Search = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchString, setSearchString] = useState<string | undefined>('')
+    const [textString, setTextString] = useState<string | undefined>('')
+    
+    useEffect(() => { 
+        const searchstring = searchParams.get("searchstring");
+        setSearchString(searchstring || '')
+        setTextString(searchstring || '')
+    }, [])
+    
+    const updateSearchString = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        if (e.target.value.length > 3000) return
+        setTextString(e.target.value)
+    }
+
+    const handleSubmit = () => {
+        if(!textString) return
+        setSearchParams({searchstring: textString});
+        setSearchString(textString);
+    }
+
+    const exactMatch = useMemo(() => {
+        if (!searchString) return null;
+        const bookLoc = findText(searchString);
+        const searchParams = new URLSearchParams();
+        Object.entries(bookLoc).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) {
+                searchParams.append(key, value.toString());
+            }
+        });
+        return searchParams;
+    }, [searchString]);
+    return (
+        <div className="pt-16 m-auto max-w-prose text-base flex flex-col gap-y-8">
+            <Container>
+                <div className="flex flex-col gap-y-8">
+                    <h1 className="mx-auto text-center text-3xl mt-8 mb-4 font-bold">Search</h1>
+                    <textarea
+                        rows={20}
+                        className="w-full p-8"
+                        value={textString}
+                        onChange={updateSearchString}
+                        maxLength={3000}
+                    />
+                    <div className="flex justify-between">
+                        <button disabled={textString !== undefined && textString.length <= 0} onClick={handleSubmit} className="btn btn-accent text-lg p-2 btn-lg">Search</button>
+                        {textString && textString.length && <span>{`${textString.length}/3000 characters`}</span>}
+                    </div>
+                </div>
+            </Container>
+            {searchString && (
+                <Container>
+                    <h2>Exact Match</h2>
+                    {exactMatch && (
+                        <Link className="btn btn-accent truncate max-w-full text-left justify-start text-xs h-fit p-4" to={`/game?${exactMatch.toString()}`}>
+                            <div className="flex flex-col">
+                                {Array.from(exactMatch.entries()).map(([key, value]) => {
+                                    console.log(key)
+                                    return (
+                                <div className="" key={key}>
+                                    {`${key}: ${value}`}
+                                </div>
+                            )})}
+                                </div>
+                        </Link>
+                    )}
+                </Container>
+            )}
+        </div>
+    );
+}

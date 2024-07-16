@@ -1,25 +1,10 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
-import { findText } from "@/lib/randomFunctions";
-import { useNavigate } from "react-router-dom";
+import React, { useState, ChangeEvent } from "react";
+import { Link } from "react-router-dom";
 
 export const TextSearch: React.FC = () => {
   const [text, setText] = useState<string>("");
-const navigate = useNavigate()
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value);
-  };
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const bookLoc = findText(text); // Call the findText function with the textarea value
-    const searchParams = new URLSearchParams();
-    Object.entries(bookLoc).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        searchParams.append(key, value.toString());
-      }
-    });
-    
-    navigate(`/game?${searchParams.toString()}`);
   };
 
   return (
@@ -29,7 +14,7 @@ const navigate = useNavigate()
         Every text that can ever be written is in the Archive. Search for it
         here:
       </p>
-      <form onSubmit={handleSubmit}>
+      <form>
         <textarea
           className="textarea textarea-accent w-full max-w-md"
           placeholder="Search"
@@ -40,7 +25,9 @@ const navigate = useNavigate()
           value={text} 
           onChange={handleChange} 
         ></textarea>
-        <button type="submit" className="btn btn-accent">Go</button>
+        {text && text.length > 0 && <Link to={`search?searchstring=${text}`} className='btn btn-accent'>
+          Go
+        </Link>}
       </form>
     </div>
   );

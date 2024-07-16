@@ -11,6 +11,9 @@ import ErrorPage from "./Screen/ErrorPage.tsx";
 import { TextPage } from "./Screen/Home/TextPage.tsx";
 import { ABOUT, CREDITS, PRIVACYPOLICY, TERMSOFUSE } from "./lib/texts.ts";
 import Contact from "./Screen/Home/Contact.tsx";
+import { Search } from "./Screen/Home/Search.tsx";
+import { Contents } from "./Screen/Home/Contents.tsx";
+import * as tutorials from './lib/tutorials'
 
 const router = createBrowserRouter([
   {
@@ -41,6 +44,14 @@ const router = createBrowserRouter([
       {
         path: "contact",
         element: <Contact/>
+      },
+      {
+        path: "search",
+        element: <Search/>
+      },
+      {
+        path: "tutorials",
+        element: <Contents contents={tutorials} title={'Tutorials'}/>
       }
     ],
   },
