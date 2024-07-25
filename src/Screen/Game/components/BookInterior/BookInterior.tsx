@@ -8,22 +8,34 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { generateSeededText } from "@/lib/randomFunctions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Share1Icon } from "@radix-ui/react-icons";
 import paper from "@/assets/images/paperBackground.jpg";
+import { cn } from "@/lib/utils";
 
 const pageCount = 410;
 
 export const BookInterior = () => {
   const textBlockRef = useRef(null);
+  const [shareClicked,setShareClicked] = useState(false)
   const { setBookOpen, cellHex: cellHex, bookState, page, setPage } = gameController();
   const exitBook = () => {
     setPage(undefined)
     setBookOpen(false);
     setScreenLocked(false);
+  };
+
+  const copyUrlToClipboard = () => {
+    setShareClicked(true)
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      setTimeout(() => setShareClicked(false),2500)
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+    });
   };
 
   return page && (
@@ -78,8 +90,12 @@ export const BookInterior = () => {
                 )}
               </PaginationContent>
           </Pagination>
-          <Button variant={'outline'}>
-            <Share1Icon className="mr-2 h-4 w-4"/>Share</Button>
+          <div className={cn(shareClicked && 'tooltip tooltip-open')} data-tip="Copied to Clipboard">
+          <Button onClick={copyUrlToClipboard} disabled={shareClicked} variant={'outline'}>
+              <Share1Icon className="mr-2 h-4 w-4" />
+              <span>Share</span>
+            </Button>
+            </div>
           </div>
       </DialogContent>
     </Dialog>

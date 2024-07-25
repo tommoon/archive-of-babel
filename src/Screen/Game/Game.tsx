@@ -2,13 +2,12 @@ import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import { Suspense, useEffect, useRef } from "react";
 import { Player } from "./components/Player/Player";
-import { KeyboardControls, PointerLockControls } from "@react-three/drei";
+import { KeyboardControls, Loader, PointerLockControls, useDetectGPU } from "@react-three/drei";
 import { gameController } from "@/Controllers/gameController";
 import { Vector3 } from "three";
 import { BookInterior } from "./components/BookInterior/BookInterior";
 import { Cell } from "./components/Cell/Cell";
 import { useQueryString } from "@/hooks/useQueryString";
-import { isTouchDevice } from "@/lib/detectTouchDevice";
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import { MobileController } from "./components/MobileController";
@@ -33,7 +32,7 @@ export const Game = () => {
 
   const pointerLockRef = useRef<PointerLockControlsImpl>(null);
   const { screenLocked } = gameController();
-
+  const GPUTier = useDetectGPU();
   useEffect(() => {
       if (pointerLockRef.current) {
         if (screenLocked) {
@@ -80,10 +79,11 @@ export const Game = () => {
             </Physics>
           </Suspense>
           <PointerLockControls ref={pointerLockRef} />
-        </Canvas>
+          </Canvas>
+          <Loader/>
         <div className="absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-2 border-white"></div>
         {bookOpen && <BookInterior />}
-        {isTouchDevice() && <MobileController />}
+        {GPUTier.isMobile && <MobileController />}
       </KeyboardControls>
     )
   );
