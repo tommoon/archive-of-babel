@@ -13,6 +13,8 @@ import { RigidBody } from "@react-three/rapier";
 import { useCellHex } from "../hooks/useCellHex";
 import { transparentMaterial } from "@/lib/utils";
 import { adjustments } from "@/lib/positions";
+import LibraryCorridorModel from '@/assets/models/LibraryCorridor-transformed.glb'
+import LibraryCorridorColliders from '@/assets/models/LibraryCorridorColliders-transformed.glb'
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -51,12 +53,8 @@ export const LibraryCorridor: React.FC<{
     addition: adjustments[orientation]
   });
 
-  const { nodes, materials } = useGLTF(
-    "/models/LibraryCorridor-transformed.glb",
-  ) as GLTFResult;
-  const { nodes: colliders } = useGLTF(
-    "/models/LibraryCorridorColliders-transformed.glb",
-  ) as GLTFResult;
+  const { nodes, materials } = useGLTF(LibraryCorridorModel) as GLTFResult;
+  const { nodes: colliders } = useGLTF(LibraryCorridorColliders) as GLTFResult;
 
   return (
     <group
@@ -139,4 +137,5 @@ export const LibraryCorridor: React.FC<{
   );
 };
 
-useGLTF.preload("/LibraryCorridor-transformed.glb");
+useGLTF.preload(LibraryCorridorModel);
+useGLTF.preload(LibraryCorridorColliders);

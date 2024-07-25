@@ -18,6 +18,7 @@ export const HomeLayout = () => {
     };
   }, []);
 
+  const close = () => setIsOpen(false)
   return (
     <>
       <Background />
@@ -30,7 +31,7 @@ export const HomeLayout = () => {
           "justify-center"
         )}
       >
-        <Link to={'/'} className=" sm:text-2xl font-bold mx-auto">Archive of Babel</Link>
+        <Link onClick={close} to={'/'} className=" sm:text-2xl font-bold mx-auto">Archive of Babel</Link>
         <div className="flex-none absolute right-0 mr-4">
             <Hamburger toggled={isOpen} toggle={setIsOpen} />
         </div>
@@ -38,19 +39,19 @@ export const HomeLayout = () => {
           <div className="menu absolute top-14 right-0 z-20 w-full sm:w-auto bg-base-200">
             <ul className="menu rounded-box w-full sm:w-72 bg-base-200 text-2xl space-y-4">
             <li>
-              <Link to={'search'}>
+              <Link onClick={close} to={'search'}>
                 <TextSearch/>
                 Advanced Search
               </Link>
             </li>
             <li>
-              <a>
+              <Link onClick={close} to={'theory'}>
                 <BookText/>
                 Theory
-              </a>
+              </Link>
             </li>
             <li>
-              <Link to={'tutorials'}>
+              <Link onClick={close} to={'tutorials'}>
                 <GraduationCap/>
                 Tutorials
               </Link>

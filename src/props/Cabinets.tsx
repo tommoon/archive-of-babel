@@ -13,6 +13,7 @@ import { CellHex } from "@/types/CommonTypes";
 import { RigidBody } from "@react-three/rapier";
 import { gameController } from "@/Controllers/gameController";
 import { _objectIsEqual } from "@/lib/comparisons";
+import cabinetModel from '@/assets/models/cabinet-transformed.glb'
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -29,9 +30,7 @@ type CabinetProps = {
 };
 
 const CabinetArray: React.FC<{ position: THREE.Vector3 }> = ({ position }) => {
-  const { nodes, materials } = useGLTF(
-    "/models/cabinet-transformed.glb",
-  ) as GLTFResult;
+  const { nodes, materials } = useGLTF(cabinetModel) as GLTFResult;
   return (
     <group position={position} dispose={null}>
       <group rotation={[0, 0, 0]}>
@@ -63,4 +62,4 @@ export const Cabinets: React.FC<CabinetProps> = ({ cellHex }) => {
   );
 };
 
-useGLTF.preload("/cabinet-transformed.glb");
+useGLTF.preload(cabinetModel);

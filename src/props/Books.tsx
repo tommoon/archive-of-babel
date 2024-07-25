@@ -14,6 +14,7 @@ import { seededRandom } from "@/lib/randomFunctions";
 import { gameController, setScreenLocked } from "@/Controllers/gameController";
 import { degrees_to_radians } from "@/lib/utils";
 import { useCellHex } from "@/hooks/useCellHex";
+import bookModel from '@/assets/models/book-transformed.glb'
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -196,7 +197,7 @@ interface BooksProps {
 }
 
 export const Books: React.FC<BooksProps> = ({ cellHex }) => {
-  const { nodes } = useGLTF("/models/book-transformed.glb") as GLTFResult;
+  const { nodes } = useGLTF(bookModel) as GLTFResult;
   const { adjustedPosition } = useCellHex({ cellHex });
 
   const bookArray = useMemo(() => {
@@ -231,4 +232,4 @@ export const Books: React.FC<BooksProps> = ({ cellHex }) => {
   );
 };
 
-useGLTF.preload("/models/book-transformed.glb");
+useGLTF.preload(bookModel);

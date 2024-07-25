@@ -10,6 +10,8 @@ import { useCellHex } from "../hooks/useCellHex";
 import { transparentMaterial } from "@/lib/utils";
 import { base32Add, base32Subtract } from "@/lib/base32Utils";
 import { adjustments } from "@/lib/positions";
+import LibraryStairsModel from '@/assets/models/LibraryStairsNew-transformed.glb'
+import LibraryStairsColliders from '@/assets/models/LibraryStairsNewColliders-transformed.glb'
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -43,10 +45,10 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
   orientation,
 }) => {
   const { nodes, materials } = useGLTF(
-    "/models/LibraryStairsNew-transformed.glb",
+    LibraryStairsModel,
   ) as GLTFResult;
   const { nodes: colliders, materials: colliderMat } = useGLTF(
-    "/models/LibraryStairsNewColliders-transformed.glb",
+    LibraryStairsColliders,
   ) as GLTFResult;
 
   const { cellHex: playerCellHex, setCellHex: setPlayerPosition } = gameController();
@@ -169,4 +171,5 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
   );
 };
 
-useGLTF.preload("/models/LibraryStairsNew-transformed.glb");
+useGLTF.preload(LibraryStairsModel);
+useGLTF.preload(LibraryStairsColliders);

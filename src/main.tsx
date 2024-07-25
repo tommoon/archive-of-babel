@@ -13,6 +13,7 @@ import Contact from "./Screen/Home/Contact.tsx";
 import { Search } from "./Screen/Home/Search.tsx";
 import { Contents } from "./Screen/Home/Contents.tsx";
 import * as tutorials from './lib/tutorials';
+import * as thoery from './lib/theory';
 
 // Dynamically create routes for tutorials
 const tutorialRoutes = [
@@ -24,6 +25,16 @@ const tutorialRoutes = [
   path: key,
   element: <TextPage markdownContent={value} />,
 }))];
+
+const theoryRoutes = [
+  {
+    index:true,
+    element: < Contents contents={thoery} title={'Tutorials'} />
+  },
+  ...Object.entries(thoery).map(([key, value]) => ({
+  path: key,
+  element: <TextPage markdownContent={value} />,
+  }))];
 
 const router = createBrowserRouter([
   {
@@ -62,6 +73,10 @@ const router = createBrowserRouter([
       {
         path: "tutorials",
         children: tutorialRoutes,
+      },
+      {
+        path: "theory",
+        children: theoryRoutes,
       }
     ],
   },

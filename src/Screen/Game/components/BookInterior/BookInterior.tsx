@@ -13,6 +13,7 @@ import { generateSeededText } from "@/lib/randomFunctions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Share1Icon } from "@radix-ui/react-icons";
+import paper from "@/assets/images/paperBackground.jpg";
 
 const pageCount = 410;
 
@@ -34,7 +35,7 @@ export const BookInterior = () => {
         onInteractOutside={exitBook}
         onClick={(e) => e.stopPropagation()}
         style={{
-          backgroundImage:"url('textures/paperBackground.jpg')"
+          backgroundImage:`url(${paper})`
         }}
       >
           <div

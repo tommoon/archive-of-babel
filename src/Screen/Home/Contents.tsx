@@ -1,6 +1,7 @@
 import React from "react";
 import { Container } from "./components/Container";
 import { Link } from "react-router-dom";
+import { useResetPosition } from "@/hooks/useResetPosition";
 
 type ContentsProps = {
   contents: { [key: string]: string }; // Assuming `contents` is an object with string keys and values
@@ -20,8 +21,10 @@ const extractIntroText = (markdown: string): string | null => {
 };
 
 export const Contents: React.FC<ContentsProps> = ({ contents, title }) => {
+  useResetPosition();
+
   return (
-    <div className="pt-16 m-auto max-w-prose text-base flex flex-col gap-y-16">
+    <div className="pt-32 m-auto max-w-prose text-base flex flex-col gap-y-16">
       <Container>
         <h1 className="text-4xl font-bold py-8">{title}</h1>
         <div className="flex flex-col gap-y-8">

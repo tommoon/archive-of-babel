@@ -16,6 +16,9 @@ import { gameController } from "@/Controllers/gameController";
 import { useCellHex } from "../hooks/useCellHex";
 import { Text } from "@react-three/drei";
 import { transparentMaterial } from "@/lib/utils";
+import LibraryMainRoomModel from '@/assets/models/libraryMainRoom-transformed.glb'
+import LibraryMainRoomColliders from '@/assets/models/libraryMainRoomColliders.glb'
+
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -47,12 +50,8 @@ export const LibraryMainRoom: React.FC<{
   hasColliders?: boolean;
   hasLights?: boolean;
 }> = ({ cellHex, hasColliders = true, hasLights = false }) => {
-  const { nodes, materials } = useGLTF(
-    "/models/libraryMainRoom-transformed.glb",
-  ) as GLTFResult;
-  const { nodes: colliders } = useGLTF(
-    "/models/libraryMainRoomColliders.glb",
-  ) as GLTFResult;
+  const { nodes, materials } = useGLTF(LibraryMainRoomModel) as GLTFResult;
+  const { nodes: colliders } = useGLTF(LibraryMainRoomColliders) as GLTFResult;
 
   const { cellHex: playerCellHex, setCellHex: setPlayerPosition, debug } = gameController();
   const roomRef = useRef<THREE.Group<THREE.Object3DEventMap>>(null);
@@ -183,4 +182,5 @@ export const LibraryMainRoom: React.FC<{
   );
 };
 
-useGLTF.preload("/libraryMainRoom-transformed.glb");
+useGLTF.preload(LibraryMainRoomColliders);
+useGLTF.preload(LibraryMainRoomModel);
