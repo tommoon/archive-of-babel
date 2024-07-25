@@ -1,4 +1,3 @@
-// src/main.tsx
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
@@ -13,7 +12,18 @@ import { ABOUT, CREDITS, PRIVACYPOLICY, TERMSOFUSE } from "./lib/texts.ts";
 import Contact from "./Screen/Home/Contact.tsx";
 import { Search } from "./Screen/Home/Search.tsx";
 import { Contents } from "./Screen/Home/Contents.tsx";
-import * as tutorials from './lib/tutorials'
+import * as tutorials from './lib/tutorials';
+
+// Dynamically create routes for tutorials
+const tutorialRoutes = [
+  {
+    index:true,
+    element: < Contents contents={tutorials} title={'Tutorials'} />
+  },
+  ...Object.entries(tutorials).map(([key, value]) => ({
+  path: key,
+  element: <TextPage markdownContent={value} />,
+}))];
 
 const router = createBrowserRouter([
   {
@@ -51,7 +61,7 @@ const router = createBrowserRouter([
       },
       {
         path: "tutorials",
-        element: <Contents contents={tutorials} title={'Tutorials'}/>
+        children: tutorialRoutes,
       }
     ],
   },

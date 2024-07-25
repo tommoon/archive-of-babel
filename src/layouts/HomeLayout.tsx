@@ -50,10 +50,10 @@ export const HomeLayout = () => {
               </a>
             </li>
             <li>
-              <a>
+              <Link to={'tutorials'}>
                 <GraduationCap/>
                 Tutorials
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

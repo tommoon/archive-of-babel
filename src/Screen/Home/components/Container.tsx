@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 export const Container: React.FC<{ children: ReactNode }> = ({ children }) => (
   <div
     className="
-      w-full 
+      min-w-full 
       mx-auto
       relative 
       z-10

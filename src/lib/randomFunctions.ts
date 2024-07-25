@@ -114,7 +114,7 @@ export const findText = (searchString: string) => {
   const page = pad(Math.floor(Math.random() * 410 + 1).toString(), 3, "0");
   const negativeState = Math.floor(Math.random() * 7);
   const locHash = hashCode(cabinet + unit + row + book + page + negativeState);
-  console.log("negState", negativeState);
+
   const fullString = pad(searchString, 3000, " ");
   const newCellHex = { x: "0", y: "0", z: "0" };
   (Object.keys(newCellHex) as (keyof CellHex)[]).forEach((cell, i) => {
