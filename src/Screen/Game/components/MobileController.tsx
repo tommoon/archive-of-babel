@@ -20,14 +20,14 @@ const ControlPad: React.FC<ControlPadProps> = ({ pan }) => {
     if (!isTouching) return;
     const boundings = padRef.current?.getBoundingClientRect();
     if (!boundings) return;
-    let dx = (e.clientX - (boundings.left + boundings.width / 2)) / 30;
-    let dy = (e.clientY - (boundings.top + boundings.height / 2)) / 30;
+    const dx = (e.clientX - (boundings.left + boundings.width / 2)) / 20;
+    const dy = (e.clientY - (boundings.top + boundings.height / 2)) / 20;
 
     // Clamping the values to ensure the circle stays within the control pad
-    dx = Math.max(Math.min(dx, 35 / 30), -35 / 30);
-    dy = Math.max(Math.min(dy, 35 / 30), -35 / 30);
+    const dxm = Math.max(Math.min(dx, 35 / 30), -35 / 30);
+    const dym = Math.max(Math.min(dy, 35 / 30), -35 / 30);
 
-    setTouchPosition({ dx, dy });
+    setTouchPosition({ dx: dxm, dy: dym });
     updateMovement(pan ? 'pan' : 'move', { dx, dy });
   };
 

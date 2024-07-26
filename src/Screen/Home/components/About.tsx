@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const About = () => {
   const [formValues, setFormValues] = useState({
@@ -48,7 +48,7 @@ export const About = () => {
             punctuation marks.
           </p>
           <div className="card-actions">
-            <button className="btn btn-accent btn-sm">Read More...</button>
+            <Link to={'/theory'} className="btn btn-accent btn-sm">Read More...</Link>
           </div>
         </div>
       </div>
@@ -155,7 +155,7 @@ export const About = () => {
             allow the Archive to run smoothly in a modern web browser.
           </p>
           <div className="card-actions">
-            <button className="btn btn-accent btn-sm">Read More...</button>
+            <Link to={'/tutorials'} className="btn btn-accent btn-sm">Read More...</Link>
           </div>
         </div>
       </div>
