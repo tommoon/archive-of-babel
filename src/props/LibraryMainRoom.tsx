@@ -237,7 +237,27 @@ export const LibraryMainRoom: React.FC<{
         rotation={[Math.PI / 2, 0, 0]}
         scale={0.5}
       />
-      {!_objectIsEqual(cellHex, playerCellHex) || hasLights && (
+      {!_objectIsEqual(cellHex, playerCellHex) && (
+        <group>
+          <BookStandin
+            position={[-1.9, 0.702, -1.9]}
+            rotation={[0, Math.PI / 4, 0]}
+          />
+          <BookStandin
+            position={[1.9, 0.702, -1.9]}
+            rotation={[0, -Math.PI / 4, 0]}
+          />
+          <BookStandin
+            position={[-1.9, 0.702, 1.9]}
+            rotation={[0, degrees_to_radians(135), 0]}
+          />
+          <BookStandin
+            position={[1.9, 0.702, 1.9]}
+            rotation={[0, degrees_to_radians(225), 0]}
+          />
+        </group>
+      )}
+      {hasLights && (
         <group>
           <BookStandin
             position={[-1.9, 0.702, -1.9]}

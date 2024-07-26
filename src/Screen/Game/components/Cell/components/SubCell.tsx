@@ -46,7 +46,9 @@ export const SubCell: React.FC<{
             orientation={orientation}
           />
       )}
+      <Cabinets cellHex={{ ...cellHex, y: base32Add(cellHex.y, '1') }} />
       <Cabinets cellHex={cellHex} />
-    </>
+      <Cabinets cellHex={{ ...cellHex, y: base32Subtract(cellHex.y, '1') }} />
+      </>
   );
 };
