@@ -12,6 +12,7 @@ import { base32Add, base32Subtract } from "@/lib/base32Utils";
 import { adjustments } from "@/lib/positions";
 import LibraryStairsModel from '@/assets/models/LibraryStairsNew-transformed.glb'
 import LibraryStairsColliders from '@/assets/models/LibraryStairsNewColliders-transformed.glb'
+import { optionsController } from "@/Controllers/optionsController";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -53,6 +54,7 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
 
   const { cellHex: playerCellHex, setCellHex: setPlayerPosition } = gameController();
   const staircaseRef = useRef<THREE.Group>(null);
+  const { dynamicLights } = optionsController();
 
   const { adjustedPosition } = useCellHex({
     cellHex,
@@ -95,6 +97,22 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
       position={adjustedPosition}
       ref={staircaseRef}
     >
+                {dynamicLights && (
+        <>
+                  <pointLight
+          color={"#ebf5fe"}
+          position={[-1, 1.7, 0]}
+          distance={20}
+          intensity={2}
+          /> 
+                         <pointLight
+          color={"#ebf5fe"}
+          position={[-4, 1.7, 0]}
+          distance={20}
+          intensity={2}
+          /> 
+        </>
+      )}
       {[0, 2, 4].map((floor) => (
         <group key={`stair-${floor}`} position={[0, floor, 0]} dispose={null}>
           <RigidBody

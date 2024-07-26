@@ -43,26 +43,7 @@ export const Cell = () => {
           omit={["N", "W", "S"]}
         />
 
-        <Suspense>
           <Books cellHex={cellHex} />
-        </Suspense>
-        {/* Above*/}
-        <SubCell
-          omit={["W", "E", "S", "N"]}
-          hasColliders={false}
-          cellHex={{ ...cellHex, y: base32Add(cellHex.y, '1') }}
-        />
-        <SubCell
-          omit={["W", "E", "S", "N"]}
-          hasColliders={false}
-          cellHex={{ ...cellHex, y: base32Add(cellHex.y, '2') }}
-        />
-
-        {/* Below */}
-        <SubCell
-          hasColliders={false}
-          cellHex={{ ...cellHex, y: base32Subtract(cellHex.y, '1') }}
-        />
       </group>
     )
   );

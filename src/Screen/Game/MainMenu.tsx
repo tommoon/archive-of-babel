@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+import { optionsController } from "@/Controllers/optionsController";
 import { cn } from "@/lib/utils";
 import { Settings } from "lucide-react";
 import { useState, MouseEvent, TouchEvent } from "react";
@@ -5,11 +7,17 @@ import { Link } from "react-router-dom";
 
 export const MainMenu = () => {
   const [mainMenu, setMainMenu] = useState(false);
+  const { setDynamicLights, dynamicLights } = optionsController();
   const menuClick = (
     event: MouseEvent<SVGSVGElement> | TouchEvent<SVGSVGElement>,
   ) => {
     event.stopPropagation();
     setMainMenu(true);
+  };
+
+  const closeMenu = (event: { stopPropagation: () => void }) => {
+    event.stopPropagation();
+    setMainMenu(false);
   };
   return (
     <>
@@ -26,23 +34,40 @@ export const MainMenu = () => {
       </div>
       <dialog
         className={cn(
-          "modal modal-bottom sm:modal-middle ",
+          "modal modal-bottom sm:modal-middle",
           mainMenu && "modal-open",
         )}
-        onClick={(event) => {
-          event.stopPropagation();
-          setMainMenu(false);
-        }}
+        onClick={closeMenu}
       >
-        <div className="modal-box backdrop-blur-md bg-black">
-          <h3 className="font-bold text-lg">Hello!</h3>
-          <p className="py-4">
-            Press ESC key or click the button below to close
-          </p>
-          <div className="modal-action">
-            <Link className="btn btn-accent text-xl" type="button" to={"/"}>
-              Back to Main Menu
-            </Link>
+        <div
+          className="modal-box backdrop-blur-md bg-black text-white"
+          onClick={(event) => event.stopPropagation()}
+        >
+          <button onClick={closeMenu} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+          <div className="modal-action flex flex-col gap-4">
+            <label className="label cursor-pointer">
+              <span className="label-text">
+                Dynamic Lights{" "}
+                <span className="text-muted text-xs">(can affect performance)</span>
+              </span>
+              <input
+                checked={dynamicLights}
+                type="checkbox"
+                className="toggle toggle-accent"
+                onChange={(e) => {
+                  setDynamicLights(!dynamicLights);
+                }}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </label>
+            <div className="flex justify-between">
+              <button onClick={closeMenu} className="btn btn-accent">close</button>
+              <Link className="btn btn-neutral" type="button" to={"/"}>
+                Back to Main Menu
+              </Link>
+            </div>
           </div>
         </div>
       </dialog>

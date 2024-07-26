@@ -15,6 +15,7 @@ import { transparentMaterial } from "@/lib/utils";
 import { adjustments } from "@/lib/positions";
 import LibraryCorridorModel from '@/assets/models/LibraryCorridor-transformed.glb'
 import LibraryCorridorColliders from '@/assets/models/LibraryCorridorColliders-transformed.glb'
+import { optionsController } from "@/Controllers/optionsController";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -41,17 +42,16 @@ export const LibraryCorridor: React.FC<{
   cellHex: CellHex;
   orientation: Orientation;
   hasColliders?: boolean;
-  hasLights?: boolean;
 }> = ({
   cellHex,
   orientation,
   hasColliders = true,
-  hasLights = false,
 }) => {
   const { adjustedPosition } = useCellHex({
     cellHex,
     addition: adjustments[orientation]
   });
+  const { dynamicLights } = optionsController();
 
   const { nodes, materials } = useGLTF(LibraryCorridorModel) as GLTFResult;
   const { nodes: colliders } = useGLTF(LibraryCorridorColliders) as GLTFResult;
@@ -73,10 +73,10 @@ export const LibraryCorridor: React.FC<{
           />
         </RigidBody>
       )}
-      {hasLights && (
+      {dynamicLights && hasColliders &&(
         <pointLight
           color={"#ebf5fe"}
-          position={[0.5, 0.5, 0]}
+          position={[0, 0.5, 0]}
           distance={20}
           intensity={2}
         />

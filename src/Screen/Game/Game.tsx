@@ -11,6 +11,8 @@ import { useQueryString } from "@/hooks/useQueryString";
 import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import { MobileController } from "./components/MobileController";
+import { optionsController } from "@/Controllers/optionsController";
+import { loadFromLocalStorage } from "@/lib/localStorage";
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
@@ -32,7 +34,21 @@ export const Game = () => {
 
   const pointerLockRef = useRef<PointerLockControlsImpl>(null);
   const { screenLocked } = gameController();
+  const { dynamicLights, setDynamicLights, setIsMobile, isMobile } = optionsController();
   const GPUTier = useDetectGPU();
+
+  useEffect(() => {
+    if (!loadFromLocalStorage('dynamicLights')) {
+      console.log('dynamic load')
+
+      setDynamicLights(GPUTier.tier === 3)
+    }
+    if (!loadFromLocalStorage('isMobile')) {
+      console.log('dynamic load')
+      setIsMobile(GPUTier.isMobile !== undefined && GPUTier.isMobile)
+    }
+  }, [GPUTier])
+  
   useEffect(() => {
       if (pointerLockRef.current) {
         if (screenLocked) {
@@ -67,9 +83,11 @@ export const Game = () => {
         )}
         <Canvas ref={canvasRef} frameloop="demand">
           <color attach="background" args={["black"]} />
-          <Suspense>
-            <ambientLight />
-            <directionalLight />
+          <Suspense  fallback={null}>
+            {!dynamicLights && <>
+              <ambientLight />
+              <directionalLight />
+            </>}
             {!debug && <fogExp2 attach={"fog"} args={["black", 0.1]} />}
             <Physics debug={debug}>
               <group position={new Vector3(3, 0, 3)}>
@@ -83,7 +101,7 @@ export const Game = () => {
           <Loader/>
         <div className="absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-2 border-white"></div>
         {bookOpen && <BookInterior />}
-        {GPUTier.isMobile && <MobileController />}
+        {isMobile && <MobileController />}
       </KeyboardControls>
     )
   );
