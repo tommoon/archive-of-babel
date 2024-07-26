@@ -41,7 +41,7 @@ export const Game = () => {
     if (!loadFromLocalStorage('dynamicLights')) {
       console.log('dynamic load')
 
-      setDynamicLights(GPUTier.tier === 3)
+      setDynamicLights(false)
     }
     if (!loadFromLocalStorage('isMobile')) {
       console.log('dynamic load')
@@ -81,7 +81,6 @@ export const Game = () => {
         {debug && (
           <div className="fixed z-10 p-4 bg-white/100">{`x:${cellHex.x}, y: ${cellHex.y}, z: ${cellHex.z}`}</div>
         )}
-                  <Suspense fallback={null}>
         <Canvas ref={canvasRef} frameloop="demand">
           <color attach="background" args={["black"]} />
             {!dynamicLights && <>
@@ -97,7 +96,6 @@ export const Game = () => {
             </Physics>
           <PointerLockControls ref={pointerLockRef} />
         </Canvas>
-        </Suspense>
         <div className="absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-2 border-white"></div>
         {bookOpen && <BookInterior />}
         {isMobile && <MobileController />}
