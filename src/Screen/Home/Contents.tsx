@@ -11,7 +11,7 @@ type ContentsProps = {
 const extractImage = (markdownText: string): string | null => {
   const imageRegex = /!\[.*?\]\((.*?)\)/;
   const match = markdownText.match(imageRegex);
-  return match ? match[1].replace('.jpg','-mini.jpg') : null;
+  return match ? match[1] : null;
 };
 
 const extractIntroText = (markdown: string): string | null => {
