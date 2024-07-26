@@ -2,12 +2,15 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Container } from "./components/Container";
 import { findText } from "@/lib/randomFunctions";
+import { useResetPosition } from "@/hooks/useResetPosition";
 
 export const Search = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [searchString, setSearchString] = useState<string | undefined>('')
     const [textString, setTextString] = useState<string | undefined>('')
     
+    useResetPosition();
+
     useEffect(() => { 
         const searchstring = searchParams.get("searchstring");
         setSearchString(searchstring || '')
@@ -54,10 +57,9 @@ export const Search = () => {
                     </div>
                 </div>
             </Container>
-            {searchString && (
-                <Container>
-                    <h2>Exact Match</h2>
-                    {exactMatch && (
+            {searchString && exactMatch && (
+                <>
+                    <h2 className="m-auto text-xl">Exact Match</h2>
                         <Link className="btn btn-accent truncate max-w-full text-left justify-start text-xs h-fit p-4" to={`/game?${exactMatch.toString()}`}>
                             <div className="flex flex-col">
                                 {Array.from(exactMatch.entries()).map(([key, value]) => {
@@ -66,11 +68,10 @@ export const Search = () => {
                                 <div className="" key={key}>
                                     {`${key}: ${value}`}
                                 </div>
-                            )})}
-                                </div>
-                        </Link>
-                    )}
-                </Container>
+                                )})}
+                            </div>
+                    </Link>
+                </>
             )}
         </div>
     );

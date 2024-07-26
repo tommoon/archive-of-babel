@@ -9,11 +9,12 @@ const styles = {
     marginTop: '2em',
     marginBottom: '1em',
     fontSize: '2.5em',
-    lineHeight: '3', // Added line height
+    lineHeight: '3rem', 
   },
   h2: {
     marginTop: '1.5em',
     fontSize: '2em',
+    lineHeight: '2.5rem',
   },
   p: {
     fontSize: '1em',
