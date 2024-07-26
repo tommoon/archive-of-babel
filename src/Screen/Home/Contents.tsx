@@ -11,7 +11,7 @@ type ContentsProps = {
 const extractImage = (markdownText: string): string | null => {
   const imageRegex = /!\[.*?\]\((.*?)\)/;
   const match = markdownText.match(imageRegex);
-  return match ? match[1] : null;
+  return match ? match[1].replace('.jpg','-mini.jpg') : null;
 };
 
 const extractIntroText = (markdown: string): string | null => {
@@ -29,26 +29,32 @@ export const Contents: React.FC<ContentsProps> = ({ contents, title }) => {
         <h1 className="text-4xl font-bold py-8">{title}</h1>
         <div className="flex flex-col gap-y-8">
           {Object.entries(contents).map(([key, value]) => (
-            <li key={key} className="flex gap-8 items-start p-4 bg-black/20 rounded-sm hover:bg-black/40 cursor-pointer transition-colors">
-              <div className="flex-shrink-0">
+            <li
+              key={key}
+              className="flex flex-col md:flex-row gap-8 items-start p-4 bg-black/20 rounded-sm hover:bg-black/40 cursor-pointer transition-colors"
+            >
+              <div className="flex-shrink-0 m-auto">
                 <img
-                  className="w-48 h-32 rounded-md object-cover"
+                  className="w-full md:w-48 h-32 rounded-md object-cover"
                   src={extractImage(value) || ""}
                   alt={`${key} image`}
                 />
                 <figcaption className="text-xs text-muted">
-                  Designed by <a className="text-accent underline" href="https://www.freepik.com/">freepik</a>
+                  Designed by{" "}
+                  <a
+                    className="text-accent underline"
+                    href="https://www.freepik.com/"
+                  >
+                    freepik
+                  </a>
                 </figcaption>
-                  </div>
-                  <Link to={key} >
-                  <div className="flex flex-col grow">
-                          <h2 className="text-xl font-bold">{key}</h2>
+              </div>
+              <Link to={key} className="flex flex-col grow">
+                <h2 className="text-xl font-bold">{key}</h2>
                 <p className="overflow-hidden text-ellipsis max-h-28">
                   {extractIntroText(value)}
-                          </p>
-                      </div>
-                      </Link>
-
+                </p>
+              </Link>
             </li>
           ))}
         </div>
