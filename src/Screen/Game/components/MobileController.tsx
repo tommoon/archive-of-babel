@@ -7,6 +7,7 @@ interface ControlPadProps {
 
 const ControlPad: React.FC<ControlPadProps> = ({ pan }) => {
   const [isTouching, setIsTouching] = useState<boolean>(false);
+  const [touchPosition, setTouchPosition] = useState<{ dx: number; dy: number }>({ dx: 0, dy: 0 });
   const padRef = useRef<HTMLDivElement | null>(null);
   const { updateMovement } = touchController();
 
@@ -19,9 +20,14 @@ const ControlPad: React.FC<ControlPadProps> = ({ pan }) => {
     if (!isTouching) return;
     const boundings = padRef.current?.getBoundingClientRect();
     if (!boundings) return;
-    const dx = (e.clientX - (boundings.left + boundings.width / 2)) / 30;
-    const dy = (e.clientY - (boundings.top + boundings.height / 2)) / 30;
+    let dx = (e.clientX - (boundings.left + boundings.width / 2)) / 30;
+    let dy = (e.clientY - (boundings.top + boundings.height / 2)) / 30;
 
+    // Clamping the values to ensure the circle stays within the control pad
+    dx = Math.max(Math.min(dx, 35 / 30), -35 / 30);
+    dy = Math.max(Math.min(dy, 35 / 30), -35 / 30);
+
+    setTouchPosition({ dx, dy });
     updateMovement(pan ? 'pan' : 'move', { dx, dy });
   };
 
@@ -29,6 +35,7 @@ const ControlPad: React.FC<ControlPadProps> = ({ pan }) => {
     setIsTouching(false);
     padRef.current?.releasePointerCapture(e.pointerId);
     updateMovement(pan ? 'pan' : 'move', { dx: 0, dy: 0 });
+    setTouchPosition({ dx: 0, dy: 0 });
   };
 
   return (
@@ -46,8 +53,23 @@ const ControlPad: React.FC<ControlPadProps> = ({ pan }) => {
         height: 100,
         backgroundColor: "rgba(255, 255, 255, 0.3)",
         borderRadius: "50%",
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        overflow: 'hidden',
       }}
-    />
+    >
+      <div
+        style={{
+          width: 30,
+          height: 30,
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          borderRadius: "50%",
+          transform: `translate(${touchPosition.dx * 30}px, ${touchPosition.dy * 30}px)`,
+          transition: 'transform 0.1s',
+        }}
+      />
+    </div>
   );
 };
 
