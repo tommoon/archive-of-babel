@@ -62,8 +62,13 @@ export const getBase10FromString = ({
   base?: number;
 }) => parseInt(string, base);
 
-export const pad = (input: string, length: number, char: string) => {
-  return input.padStart(length, char);
+export const pad = (
+  input: string,
+  length: number,
+  char: string,
+  reverse: boolean = false
+) => {
+  return reverse ? input.padEnd(length, char) : input.padStart(length, char);
 };
 
 export const hashCode = (s: string) => {

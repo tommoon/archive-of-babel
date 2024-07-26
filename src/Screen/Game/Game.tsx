@@ -83,7 +83,6 @@ export const Game = () => {
         )}
         <Canvas ref={canvasRef} frameloop="demand">
           <color attach="background" args={["black"]} />
-          <Suspense  fallback={null}>
             {!dynamicLights && <>
               <ambientLight />
               <directionalLight />
@@ -95,7 +94,6 @@ export const Game = () => {
               </group>
               <Player />
             </Physics>
-          </Suspense>
           <PointerLockControls ref={pointerLockRef} />
           </Canvas>
           <Loader/>

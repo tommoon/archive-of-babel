@@ -41,7 +41,7 @@ export const SubCell: React.FC<{
       {!omit && orientations.map((orientation) =>
           <LibraryCorridor
             key={orientation}
-            hasColliders={true}
+            hasColliders={false}
             cellHex={{ ...cellHex, y: base32Subtract(cellHex.y, '1') }}
             orientation={orientation}
           />

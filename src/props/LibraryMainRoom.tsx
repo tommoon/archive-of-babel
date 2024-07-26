@@ -44,7 +44,8 @@ type GLTFResult = GLTF & {
 export const LibraryMainRoom: React.FC<{
   cellHex: CellHex;
   hasColliders?: boolean;
-}> = ({ cellHex, hasColliders = true }) => {
+  hasLights?: boolean;
+}> = ({ cellHex, hasColliders = true, hasLights = false }) => {
   const { nodes, materials } = useGLTF(LibraryMainRoomModel) as GLTFResult;
   const { nodes: colliders } = useGLTF(LibraryMainRoomColliders) as GLTFResult;
 
@@ -159,6 +160,34 @@ export const LibraryMainRoom: React.FC<{
           )}
         </>
       )}
+      {hasLights && (
+            <>
+              <pointLight
+                color={"#ebf5fe"}
+                position={[0, 1.5, -2.5]}
+                distance={20}
+                intensity={2}
+              />
+              <pointLight
+                color={"#ebf5fe"}
+                position={[0, 1.5, 2.5]}
+                distance={20}
+                intensity={2}
+              />
+              <pointLight
+                color={"#ebf5fe"}
+                position={[-2.5, 1.5, 0]}
+                distance={20}
+                intensity={2}
+              />
+              <pointLight
+                color={"#ebf5fe"}
+                position={[2.5, 1.5, 0]}
+                distance={20}
+                intensity={2}
+              />
+            </>
+          )}
       <mesh
         name="lowerwallCol"
         geometry={nodes.lowerwallCol.geometry}
@@ -170,6 +199,14 @@ export const LibraryMainRoom: React.FC<{
         geometry={nodes.floorCol.geometry}
         material={materials.floor}
         rotation={[Math.PI / 2, 0, Math.PI]}
+      />
+            <mesh
+        name="lightGem004"
+        geometry={nodes.lightGem004.geometry}
+        material={materials.fresnelGlow}
+        position={[0, 1.589, -2.845]}
+        rotation={[0.187, 0, 0]}
+        scale={10}
       />
       <mesh
         name="railing1"
@@ -200,7 +237,7 @@ export const LibraryMainRoom: React.FC<{
         rotation={[Math.PI / 2, 0, 0]}
         scale={0.5}
       />
-      {!_objectIsEqual(cellHex, playerCellHex) && (
+      {!_objectIsEqual(cellHex, playerCellHex) || hasLights && (
         <group>
           <BookStandin
             position={[-1.9, 0.702, -1.9]}

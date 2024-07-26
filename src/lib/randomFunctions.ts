@@ -14,22 +14,15 @@ export function seededRandom(seed: string): number {
 type LCGRandom = (min?: number, max?: number) => number;
 
 function createLCG(seedString: string): LCGRandom {
-  // Generate the initial seed using MurmurHash3
   const initialHash = MurmurHash3.hash32(seedString);
   let seed = Math.abs(initialHash);
-
-  // Define the LCG constants (these are commonly used values)
   const a = 1664525;
   const c = 1013904223;
   const m = 2 ** 32;
 
-  // Return the LCG function
   return (min: number = 0, max: number = 1): number => {
-    // Update the seed using the LCG formula
     seed = (a * seed + c) % m;
-    // Normalize the seed to a value between 0 and 1
     const normalized = seed / m;
-    // Scale and return the value to the specified range
     return min + normalized * (max - min);
   };
 }
@@ -62,11 +55,10 @@ const makeTextBlock = (cell: string, startingValue: string): string => {
   }
   const newHash = hashCode(result);
   const newLcg = createLCG(newHash.toString());
-  while (result.length <= 1000) {
+  while (result.length < 1000) {
     const index = newLcg(0, characters.length);
     result += characters[Math.floor(index)];
   }
-
   return result;
 };
 
@@ -82,6 +74,7 @@ const makeHex = (blockString: string, seed: string): string => {
     })
     .join("");
 };
+
 export function generateSeededText(
   page: number,
   bookCell: CellHex,
@@ -93,7 +86,9 @@ export function generateSeededText(
       bookLocation.book
     }${pad(page.toString(), 3, "0")}${negativeStates}`
   );
+
   const normalizedCell = normalizeCell(bookCell);
+
   const text = Object.values(normalizedCell)
     .map((cellNumber, index) => {
       const text = makeTextBlock(
@@ -103,6 +98,7 @@ export function generateSeededText(
       return text;
     })
     .join("");
+
   return text;
 }
 
@@ -115,8 +111,8 @@ export const findText = (searchString: string) => {
   const negativeState = Math.floor(Math.random() * 7);
   const locHash = hashCode(cabinet + unit + row + book + page + negativeState);
 
-  const fullString = pad(searchString, 3000, " ");
-  const newCellHex = { x: "0", y: "0", z: "0" };
+  const fullString = pad(searchString, 3000, " ", true);
+  const newCellHex = { x: "", y: "", z: "" };
   (Object.keys(newCellHex) as (keyof CellHex)[]).forEach((cell, i) => {
     const pos = i * 1000;
     const blockString = fullString.slice(pos, pos + 1000);

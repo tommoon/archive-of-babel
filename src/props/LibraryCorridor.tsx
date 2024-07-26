@@ -42,10 +42,12 @@ export const LibraryCorridor: React.FC<{
   cellHex: CellHex;
   orientation: Orientation;
   hasColliders?: boolean;
+  hasLights?: boolean;
 }> = ({
   cellHex,
   orientation,
   hasColliders = true,
+  hasLights = false,
 }) => {
   const { adjustedPosition } = useCellHex({
     cellHex,
@@ -73,6 +75,16 @@ export const LibraryCorridor: React.FC<{
           />
         </RigidBody>
       )}
+      {
+        hasLights && (
+          <pointLight
+            color={"#ebf5fe"}
+            position={[0, 0.5, 0]}
+            distance={20}
+            intensity={2}
+          />
+        )
+      }
       {dynamicLights && hasColliders &&(
         <pointLight
           color={"#ebf5fe"}

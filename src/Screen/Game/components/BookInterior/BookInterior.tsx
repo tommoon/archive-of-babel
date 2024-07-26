@@ -41,10 +41,13 @@ export const BookInterior = () => {
   return page && (
     <Dialog open onOpenChange={exitBook}>
       <DialogContent
-        className="max-w-full sm:max-h-screen p-8 max-h-[90vh] sm:mt-auto w-max flex flex-col bg-no-repeat bg-cover"
+        className="max-w-full sm:max-h-screen p-8 max-h-[90vh] h-[90vh] sm:mt-auto w-max flex flex-col bg-no-repeat bg-cover"
         onEscapeKeyDown={exitBook}
         onPointerDownOutside={exitBook}
         onInteractOutside={exitBook}
+        onOpenAutoFocus={(e) => {
+          e.preventDefault()
+        }}
         onClick={(e) => e.stopPropagation()}
         style={{
           backgroundImage:`url(${paper})`
@@ -62,7 +65,7 @@ export const BookInterior = () => {
                generateSeededText(page, cellHex, bookState)}
           </div>
           <div className="flex mt-4 m-8 flex-wrap sm:flex-nowrap justify-evenly gap-y-2">
-            <Input  min={1} max={410} className="w-20" type="number" value={page} onChange={(e) => {
+            <Input autoFocus={false}  min={1} max={410} className="w-20" type="number" value={page} onChange={(e) => {
               e.preventDefault()
               setPage(parseInt(e.target.value))
               }} />

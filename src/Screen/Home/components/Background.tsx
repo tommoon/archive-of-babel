@@ -25,7 +25,10 @@ const BackgroundProps = () => (
       cellHex={{ x: "0", y: "0", z: "0" }}
       orientation="S"
     />
-    <LibraryMainRoom hasColliders={false} cellHex={{ x: "0", y: "0", z: "-1" }} />
+    <LibraryMainRoom
+      hasLights={true}
+      hasColliders={false}
+      cellHex={{ x: "0", y: "0", z: "-1" }} />
     <LibraryCorridor
       hasColliders={false}
       cellHex={{ x: "0", y: "0", z: "-1" }}
