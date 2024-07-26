@@ -14,7 +14,7 @@ export const TextSearch: React.FC = () => {
         Every text that can ever be written is in the Archive. Search for it
         here:
       </p>
-      <form>
+      <form className="max-w-full w-full flex flex-col items-center gap-y-4">
         <textarea
           className="textarea textarea-accent w-full max-w-md"
           placeholder="Search"
@@ -26,7 +26,7 @@ export const TextSearch: React.FC = () => {
           onChange={handleChange} 
         ></textarea>
         {text && text.length > 0 && <Link to={`search?searchstring=${text}`} className='btn btn-accent'>
-          Go
+          Search
         </Link>}
       </form>
     </div>
