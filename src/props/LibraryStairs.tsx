@@ -52,9 +52,12 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
     LibraryStairsColliders,
   ) as GLTFResult;
 
-  const { cellHex: playerCellHex, setCellHex: setPlayerPosition } = gameController();
+  const { setCellHex: setPlayerPosition } = gameController();
   const staircaseRef = useRef<THREE.Group>(null);
   const { dynamicLights } = optionsController();
+
+  const upstairsHex = { ...cellHex, y: base32Add(cellHex.y, '1') }
+  const downstairsHex = { ...cellHex, y: base32Subtract(cellHex.y, '1') }
 
   const { adjustedPosition } = useCellHex({
     cellHex,
@@ -80,10 +83,10 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
         const upstairs = upstairsBBox.containsPoint(playerPos);
         const downstairs = downstairsBBox.containsPoint(playerPos);
         if (upstairs) {
-          setPlayerPosition({ ...playerCellHex, y: base32Add(playerCellHex.y, '1') });
+          setPlayerPosition(upstairsHex);
         }
         if (downstairs) {
-          setPlayerPosition({ ...playerCellHex, y: base32Subtract(playerCellHex.y, '1') });
+          setPlayerPosition(downstairsHex);
         }
       }
     }, 1000);
@@ -113,10 +116,10 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
           /> 
         </>
       )}
-      {[0, 2, 4].map((floor) => (
-        <group key={`stair-${floor}`} position={[0, floor, 0]} dispose={null}>
+      {[downstairsHex, cellHex, upstairsHex].map((hex, index) => (
+        <group key={`stair-${hex.x}-${hex.y}-${hex.z}`} position={[0, index * 2, 0]} dispose={null}>
           <RigidBody
-            key={`stair-${cellHex.x}-${base32Add(playerCellHex.y, '1')}-${cellHex.z}-rigidbody`}
+            key={`stair-${hex.x}-${hex.y}-${hex.z}-rigidbody`}
             type="fixed"
             colliders="trimesh"
           >

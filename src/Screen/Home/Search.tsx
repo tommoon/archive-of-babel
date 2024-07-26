@@ -50,6 +50,7 @@ export const Search = () => {
                 <div className="flex flex-col gap-y-8">
                     <h1 className="mx-auto text-center text-3xl mt-8 mb-4 font-bold">Search</h1>
                     <textarea
+                        autoFocus={false}
                         rows={20}
                         className="w-full p-8"
                         value={textString}

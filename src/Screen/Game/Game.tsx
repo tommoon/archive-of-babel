@@ -1,8 +1,8 @@
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
-import { Suspense, useEffect, useRef, startTransition } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { Player } from "./components/Player/Player";
-import { KeyboardControls, Loader, PointerLockControls, useDetectGPU } from "@react-three/drei";
+import { KeyboardControls, Loader, PointerLockControls } from "@react-three/drei";
 import { gameController } from "@/Controllers/gameController";
 import { Vector3 } from "three";
 import { BookInterior } from "./components/BookInterior/BookInterior";
@@ -12,7 +12,6 @@ import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import { MobileController } from "./components/MobileController";
 import { optionsController } from "@/Controllers/optionsController";
-import { loadFromLocalStorage } from "@/lib/localStorage";
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
