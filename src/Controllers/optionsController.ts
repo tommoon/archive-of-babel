@@ -11,7 +11,7 @@ export type optionsState = {
   setIsMobile: (isMobile: boolean) => void;
 };
 
-export const optionsController = create<optionsState>()((set, get) => ({
+export const optionsController = create<optionsState>()((set) => ({
   dynamicLights: (dynamicLights && JSON.parse(dynamicLights)) || false,
   isMobile: (isMobile && JSON.parse(isMobile)) || false,
   setDynamicLights: (dynamicLights: boolean) => {

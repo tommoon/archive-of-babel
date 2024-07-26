@@ -102,7 +102,7 @@ export function generateSeededText(
   return text;
 }
 
-export const findText = (searchString: string, pure: boolean = false) => {
+export const findText = (searchString: string) => {
   const cabinet = Math.floor(Math.random() * 4).toString();
   const unit = Math.floor(Math.random() * 4).toString();
   const row = Math.floor(Math.random() * 4).toString();

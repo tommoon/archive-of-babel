@@ -3,7 +3,6 @@ import { _objectIsEqual } from "@/lib/comparisons";
 import { SubCell } from "./components/SubCell";
 import { LibraryStairs } from "../../../../props/LibraryStairs";
 import { Books } from "../../../../props/Books";
-import { Suspense } from "react";
 import { base32Add, base32Subtract } from "@/lib/base32Utils";
 
 export const Cell = () => {

@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { optionsController } from "@/Controllers/optionsController";
 import { cn } from "@/lib/utils";
 import { Settings } from "lucide-react";
@@ -56,7 +55,7 @@ export const MainMenu = () => {
                 checked={dynamicLights}
                 type="checkbox"
                 className="toggle toggle-accent"
-                onChange={(e) => {
+                onChange={() => {
                   setDynamicLights(!dynamicLights);
                 }}
                 onClick={(e) => e.stopPropagation()}
