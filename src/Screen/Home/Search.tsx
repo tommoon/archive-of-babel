@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Container } from "./components/Container";
 import { findText } from "@/lib/randomFunctions";
 import { useResetPosition } from "@/hooks/useResetPosition";
+import { characters } from "./components/TextSearch";
 
 export const Search = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -19,7 +20,11 @@ export const Search = () => {
     
     const updateSearchString = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (e.target.value.length > 3000) return
-        setTextString(e.target.value)
+
+        const formattedText = e.target.value.toLowerCase()
+        if(formattedText.split('').every(letter => characters.includes(letter))){
+            setTextString(formattedText);
+          }
     }
 
     const handleSubmit = () => {

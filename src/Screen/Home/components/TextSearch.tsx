@@ -1,10 +1,16 @@
 import React, { useState, ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 
+export const characters = "abcdefghijklmnopqrstuvwxyz, .!?'";
+
 export const TextSearch: React.FC = () => {
   const [text, setText] = useState<string>("");
+
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setText(event.target.value);
+    const formattedText = event.target.value.toLowerCase()
+    if(formattedText.split('').every(letter => characters.includes(letter))){
+      setText(formattedText);
+    }
   };
 
   return (

@@ -1,8 +1,8 @@
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef, startTransition } from "react";
 import { Player } from "./components/Player/Player";
-import { KeyboardControls, PointerLockControls, useDetectGPU } from "@react-three/drei";
+import { KeyboardControls, Loader, PointerLockControls, useDetectGPU } from "@react-three/drei";
 import { gameController } from "@/Controllers/gameController";
 import { Vector3 } from "three";
 import { BookInterior } from "./components/BookInterior/BookInterior";
@@ -28,39 +28,26 @@ const keyboardMap = [
 ];
 
 export const Game = () => {
-  const { cellHex, debug, bookOpen } = gameController();
-  const canvasRef = useRef(null)
+  const { debug, bookOpen } = gameController();
+  const canvasRef = useRef(null);
   useQueryString();
 
   const pointerLockRef = useRef<PointerLockControlsImpl>(null);
   const { screenLocked } = gameController();
-  const { dynamicLights, setDynamicLights, setIsMobile, isMobile } = optionsController();
-  const GPUTier = useDetectGPU();
+  const { dynamicLights, isMobile } = optionsController();
 
   useEffect(() => {
-    if (!loadFromLocalStorage('dynamicLights')) {
-      console.log('dynamic load')
-
-      setDynamicLights(false)
-    }
-    if (!loadFromLocalStorage('isMobile')) {
-      console.log('dynamic load')
-      setIsMobile(GPUTier.isMobile !== undefined && GPUTier.isMobile)
-    }
-  }, [GPUTier])
-  
-  useEffect(() => {
-      if (pointerLockRef.current) {
-        if (screenLocked) {
-          setTimeout(() => {
-            pointerLockRef.current?.unlock();
-          }, 10);
-        } else if (!screenLocked && !pointerLockRef.current.isLocked) {
-          setTimeout(() => {
-            pointerLockRef.current?.lock();
-          }, 10);
-        }
+    if (pointerLockRef.current) {
+      if (screenLocked) {
+        setTimeout(() => {
+          pointerLockRef.current?.unlock();
+        }, 10);
+      } else if (!screenLocked && !pointerLockRef.current.isLocked) {
+        setTimeout(() => {
+          pointerLockRef.current?.lock();
+        }, 10);
       }
+    }
   }, [screenLocked]);
 
   useEffect(() => {
@@ -74,32 +61,32 @@ export const Game = () => {
       }
     };
   }, [canvasRef]);
-  
+
   return (
-    cellHex && (
       <KeyboardControls map={keyboardMap}>
-        {debug && (
-          <div className="fixed z-10 p-4 bg-white/100">{`x:${cellHex.x}, y: ${cellHex.y}, z: ${cellHex.z}`}</div>
-        )}
-        <Canvas ref={canvasRef} frameloop="demand">
+      <Canvas ref={canvasRef} frameloop="demand">
+      <Suspense fallback={null}>
           <color attach="background" args={["black"]} />
-            {!dynamicLights && <>
+          {!dynamicLights && (
+            <>
               <ambientLight />
               <directionalLight />
-            </>}
-            {!debug && <fogExp2 attach={"fog"} args={["black", 0.1]} />}
-            <Physics debug={debug}>
-              <group position={new Vector3(3, 0, 3)}>
-                <Cell />
-              </group>
-              <Player />
-            </Physics>
+            </>
+          )}
+          {!debug && <fogExp2 attach={"fog"} args={["black", 0.1]} />}
+          <Physics debug={debug}>
+            <group position={new Vector3(3, 0, 3)}>
+              <Cell />
+            </group>
+            <Player />
+          </Physics>
           <PointerLockControls ref={pointerLockRef} />
-        </Canvas>
+          </Suspense>
+      </Canvas>
+      <Loader/>
         <div className="absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-2 border-white"></div>
         {bookOpen && <BookInterior />}
         {isMobile && <MobileController />}
       </KeyboardControls>
-    )
   );
 };

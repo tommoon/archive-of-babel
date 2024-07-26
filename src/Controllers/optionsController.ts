@@ -1,3 +1,4 @@
+import { checkTouchDevice } from "@/lib/detectTouchDevice";
 import { loadFromLocalStorage, saveToLocalStorage } from "@/lib/localStorage";
 import { create } from "zustand";
 
@@ -13,7 +14,7 @@ export type optionsState = {
 
 export const optionsController = create<optionsState>()((set) => ({
   dynamicLights: (dynamicLights && JSON.parse(dynamicLights)) || false,
-  isMobile: (isMobile && JSON.parse(isMobile)) || false,
+  isMobile: (isMobile && JSON.parse(isMobile)) || checkTouchDevice(),
   setDynamicLights: (dynamicLights: boolean) => {
     saveToLocalStorage("dynamicLights", dynamicLights);
     set(() => ({

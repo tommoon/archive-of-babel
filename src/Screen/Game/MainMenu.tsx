@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export const MainMenu = () => {
   const [mainMenu, setMainMenu] = useState(false);
-  const { setDynamicLights, dynamicLights } = optionsController();
+  const { setDynamicLights, setIsMobile, dynamicLights, isMobile } = optionsController();
   const menuClick = (
     event: MouseEvent<SVGSVGElement> | TouchEvent<SVGSVGElement>,
   ) => {
@@ -57,6 +57,20 @@ export const MainMenu = () => {
                 className="toggle toggle-accent"
                 onChange={() => {
                   setDynamicLights(!dynamicLights);
+                }}
+                onClick={(e) => e.stopPropagation()}
+              />
+            </label>
+            <label className="label cursor-pointer">
+              <span className="label-text">
+                Mobile Controls
+              </span>
+              <input
+                checked={isMobile}
+                type="checkbox"
+                className="toggle toggle-accent"
+                onChange={() => {
+                  setIsMobile(!isMobile);
                 }}
                 onClick={(e) => e.stopPropagation()}
               />
