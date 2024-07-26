@@ -1,6 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
-import { Suspense, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Player } from "./components/Player/Player";
 import { KeyboardControls, PointerLockControls, useDetectGPU } from "@react-three/drei";
 import { gameController } from "@/Controllers/gameController";
