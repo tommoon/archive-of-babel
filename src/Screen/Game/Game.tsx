@@ -12,6 +12,8 @@ import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import { MobileController } from "./components/MobileController";
 import { optionsController } from "@/Controllers/optionsController";
+import { useAssetsLoading } from "@/hooks/useAssetsLoading";
+import { usePageVisible } from "@/hooks/usePageVisible";
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
@@ -30,6 +32,8 @@ export const Game = () => {
   const { debug, bookOpen } = gameController();
   const canvasRef = useRef(null);
   useQueryString();
+  const loading = useAssetsLoading()
+  const visible = usePageVisible()
 
   const pointerLockRef = useRef<PointerLockControlsImpl>(null);
   const { screenLocked } = gameController();
@@ -62,9 +66,9 @@ export const Game = () => {
   }, [canvasRef]);
 
   return (
-      <KeyboardControls map={keyboardMap}>
-      <Canvas ref={canvasRef} frameloop="demand">
+    <KeyboardControls map={keyboardMap}>
       <Suspense fallback={null}>
+      <Canvas ref={canvasRef} frameloop="demand">
           <color attach="background" args={["black"]} />
           {!dynamicLights && (
             <>
@@ -73,15 +77,15 @@ export const Game = () => {
             </>
           )}
           {!debug && <fogExp2 attach={"fog"} args={["black", 0.1]} />}
-          <Physics debug={debug}>
+          <Physics paused={!visible || loading} debug={debug}>
           <Player />
             <group position={new Vector3(3, 0, 3)}>
               <Cell />
             </group>
           </Physics>
           <PointerLockControls ref={pointerLockRef} />
-          </Suspense>
       </Canvas>
+      </Suspense>
       <Loader/>
         <div className="absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-2 border-white"></div>
         {bookOpen && <BookInterior />}
