@@ -74,10 +74,10 @@ export const Game = () => {
           )}
           {!debug && <fogExp2 attach={"fog"} args={["black", 0.1]} />}
           <Physics debug={debug}>
+          <Player />
             <group position={new Vector3(3, 0, 3)}>
               <Cell />
             </group>
-            <Player />
           </Physics>
           <PointerLockControls ref={pointerLockRef} />
           </Suspense>
