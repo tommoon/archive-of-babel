@@ -1,4 +1,4 @@
-import {transparentMaterial } from "@/lib/utils";
+import { transparentMaterial } from "@/lib/materials";
 import { PerspectiveCamera, Plane } from "@react-three/drei";
 import { Euler, Vector3 } from "three";
 

@@ -7,34 +7,36 @@ import { CellHex, Orientation } from "@/types/CommonTypes";
 import { gameController } from "@/Controllers/gameController";
 import { playerPos } from "../Screen/Game/components/Player/Player";
 import { useCellHex } from "../hooks/useCellHex";
-import { transparentMaterial } from "@/lib/utils";
+import { transparentMaterial } from "@/lib/materials";
 import { base32Add, base32Subtract } from "@/lib/base32Utils";
 import { adjustments } from "@/lib/positions";
-import LibraryStairsModel from '@/assets/models/LibraryStairsNew-transformed.glb'
+import LibraryStairsModel from '@/assets/models/Stairs-transformed.glb'
 import LibraryStairsColliders from '@/assets/models/LibraryStairsNewColliders-transformed.glb'
 import { optionsController } from "@/Controllers/optionsController";
 
 type GLTFResult = GLTF & {
   nodes: {
-    floor2: THREE.Mesh;
-    ramp: THREE.Mesh;
-    lightGem004: THREE.Mesh;
-    object1063: THREE.Mesh;
-    object2008: THREE.Mesh;
-    object1093: THREE.Mesh;
-    object1093_1: THREE.Mesh;
-    stairs: THREE.Mesh;
-  };
+    ramp: any;
+    stairs: THREE.Mesh
+    floor2: THREE.Mesh
+    lightGem001: THREE.Mesh
+    object1002: THREE.Mesh
+    object2004: THREE.Mesh
+    DETAILS: THREE.Mesh
+    upperwALL: THREE.Mesh
+    upperwALL003: THREE.Mesh
+  }
   materials: {
-    fresnelGlow: THREE.MeshStandardMaterial;
-    ["floor.003"]: THREE.MeshStandardMaterial;
-    ["oldwood.004"]: THREE.MeshStandardMaterial;
-    Wall: THREE.MeshStandardMaterial;
-    sandTrim: THREE.MeshStandardMaterial;
-    floor: THREE.MeshStandardMaterial;
-  };
-  animations: any[];
-};
+    stairsStairs: THREE.MeshBasicMaterial
+    stairsFloor: THREE.MeshBasicMaterial
+    ['fresnelGlow.004']: THREE.MeshStandardMaterial
+    ['floor.001']: THREE.MeshStandardMaterial
+    oldwood: THREE.MeshStandardMaterial
+    stairsDetail: THREE.MeshBasicMaterial
+    wallStairsOuter: THREE.MeshBasicMaterial
+    wallStairsInner: THREE.MeshBasicMaterial
+  }
+}
 
 type LibraryStairsProps = {
   cellHex: CellHex;
@@ -48,7 +50,7 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
   const { nodes, materials } = useGLTF(
     LibraryStairsModel,
   ) as GLTFResult;
-  const { nodes: colliders, materials: colliderMat } = useGLTF(
+  const { nodes: colliders } = useGLTF(
     LibraryStairsColliders,
   ) as GLTFResult;
 
@@ -126,9 +128,9 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
             <Box scale={[2.1, 2, 1.1]} position={[-2.5, 0, 0]} />
             <mesh
               name="floor2"
-              geometry={colliders.floor2.geometry}
-              material={colliderMat.floor}
-              position={[-1, 0.1, -1]}
+              geometry={nodes.floor2.geometry}
+              material={materials.stairsFloor}
+              position={[-1.84, -0.25274, -0.045]}
               rotation={[Math.PI / 2, 0, Math.PI]}
             />
             <mesh
@@ -140,49 +142,53 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
             />
           </RigidBody>
           <mesh
-            name="lightGem004"
-            geometry={nodes.lightGem004.geometry}
-            material={materials.fresnelGlow}
-            position={[-0.756, -0.311, -0.001]}
+            name="lightGem001"
+            geometry={nodes.lightGem001.geometry}
+            material={materials['fresnelGlow.004']}
+            position={[-0.75, -0.311, -0.001]}
             rotation={[Math.PI / 2, -1.384, Math.PI / 2]}
             scale={10}
           />
           <mesh
-            name="object1063"
-            geometry={nodes.object1063.geometry}
-            material={materials["floor.003"]}
+            name="object1002"
+            geometry={nodes.object1002.geometry}
+            material={materials["floor.001"]}
             position={[-0.867, -0.643, -0.001]}
             rotation={[Math.PI / 2, 0, Math.PI / 2]}
             scale={0.5}
           />
           <mesh
-            name="object2008"
-            geometry={nodes.object2008.geometry}
-            material={materials["oldwood.004"]}
+            name="object2004"
+            geometry={nodes.object2004.geometry}
+            material={materials.oldwood}
             position={[-0.867, -0.643, -0.001]}
             rotation={[Math.PI / 2, 0, Math.PI / 2]}
             scale={0.5}
           />
           <group
-            name="upperwALL"
             position={[-5, -0.9, 0]}
             rotation={[Math.PI / 2, 0, -Math.PI / 2]}
           >
             <mesh
-              name="object1093"
-              geometry={nodes.object1093.geometry}
-              material={materials.Wall}
+              name="upperwALL"
+              geometry={nodes.upperwALL.geometry}
+              material={materials.wallStairsOuter}
             />
             <mesh
-              name="object1093_1"
-              geometry={nodes.object1093_1.geometry}
-              material={materials.sandTrim}
+              name="upperwALL003"
+              geometry={nodes.upperwALL003.geometry}
+              material={materials.wallStairsInner}
+            />
+            <mesh
+              name="DETAILS"
+              geometry={nodes.DETAILS.geometry}
+              material={materials.stairsDetail}
             />
           </group>
           <mesh
             name="stairs"
             geometry={nodes.stairs.geometry}
-            material={materials.floor}
+            material={materials.stairsStairs}
             position={[-2, -1.9, -1]}
             rotation={[Math.PI / 2, 0, Math.PI / 2]}
           />

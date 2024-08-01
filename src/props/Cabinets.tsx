@@ -13,16 +13,17 @@ import { CellHex } from "@/types/CommonTypes";
 import { RigidBody } from "@react-three/rapier";
 import { gameController } from "@/Controllers/gameController";
 import { _objectIsEqual } from "@/lib/comparisons";
-import cabinetModel from '@/assets/models/cabinet-transformed.glb'
+import cabinetModel from '@/assets/models/Cabinet-transformed.glb'
 
 type GLTFResult = GLTF & {
   nodes: {
     CabinetNew: THREE.Mesh
   }
   materials: {
-    oldwood: THREE.MeshStandardMaterial
+    railingNormalized: THREE.MeshStandardMaterial
   }
 }
+
 
 type CabinetProps = {
   cellHex: CellHex;
@@ -34,16 +35,16 @@ const CabinetArray: React.FC<{ position: THREE.Vector3 }> = ({ position }) => {
   return (
     <group position={position} dispose={null}>
       <group rotation={[0, 0, 0]}>
-      <mesh name="CabinetNew" geometry={nodes.CabinetNew.geometry} material={materials.oldwood} position={[1.95, 0.702, 1.95]} rotation={[0, Math.PI / 4, 0]} />
+      <mesh name="CabinetNew" geometry={nodes.CabinetNew.geometry} material={materials.railingNormalized} position={[1.95, 0.702, 1.95]} rotation={[0, Math.PI / 4, 0]} />
       </group>
       <group rotation={[0, Math.PI / 2, 0]}>
-      <mesh name="CabinetNew" geometry={nodes.CabinetNew.geometry} material={materials.oldwood} position={[1.95, 0.702, 1.95]} rotation={[0, Math.PI / 4, 0]} />
+      <mesh name="CabinetNew" geometry={nodes.CabinetNew.geometry} material={materials.railingNormalized} position={[1.95, 0.702, 1.95]} rotation={[0, Math.PI / 4, 0]} />
       </group>
       <group rotation={[0, Math.PI, 0]}>
-      <mesh name="CabinetNew" geometry={nodes.CabinetNew.geometry} material={materials.oldwood} position={[1.95, 0.702, 1.95]} rotation={[0, Math.PI / 4, 0]} />
+      <mesh name="CabinetNew" geometry={nodes.CabinetNew.geometry} material={materials.railingNormalized} position={[1.95, 0.702, 1.95]} rotation={[0, Math.PI / 4, 0]} />
       </group>
       <group rotation={[0, -Math.PI / 2, 0]}>
-      <mesh name="CabinetNew" geometry={nodes.CabinetNew.geometry} material={materials.oldwood} position={[1.95, 0.702, 1.95]} rotation={[0, Math.PI / 4, 0]} />
+      <mesh name="CabinetNew" geometry={nodes.CabinetNew.geometry} material={materials.railingNormalized} position={[1.95, 0.702, 1.95]} rotation={[0, Math.PI / 4, 0]} />
       </group>
     </group>
   );

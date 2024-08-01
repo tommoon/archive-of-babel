@@ -13,20 +13,20 @@ const SPEED = 2;
 const direction = new Vector3();
 const frontVector = new Vector3();
 const sideVector = new Vector3();
-const startPos = new Vector3(3, 2, 5);
+const startPos = new Vector3(3, 1, 5);
 export const playerPos = new Vector3();
 
 const getStartingPos = (bookState: BookState | undefined) => {
   if (!bookState) return startPos;
   switch (bookState.cabinet) {
     case 0:
-      return new Vector3(1.6, 2, 1.6);
+      return new Vector3(1.6, 1, 1.6);
     case 1:
-      return new Vector3(4.4, 2, 1.6);
+      return new Vector3(4.4, 1, 1.6);
     case 2:
-      return new Vector3(4.4, 2, 4.4);
+      return new Vector3(4.4, 1, 4.4);
     case 3:
-      return new Vector3(1.6, 2, 4.4);
+      return new Vector3(1.6, 1, 4.4);
     default:
       return startPos;
   }

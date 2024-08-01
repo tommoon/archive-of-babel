@@ -1,7 +1,6 @@
 import { CellHex } from "@/types/CommonTypes";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { MeshBasicMaterial } from "three";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -14,11 +13,6 @@ export function degrees_to_radians(degrees: number) {
   // Multiply degrees by pi divided by 180 to convert to radians.
   return degrees * (pi / 180);
 }
-
-export const transparentMaterial = new MeshBasicMaterial({
-  transparent: true,
-  opacity: 0,
-});
 
 const cellHexToBinary = (cellHex: CellHex) =>
   Object.values(cellHex)

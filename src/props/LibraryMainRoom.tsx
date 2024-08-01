@@ -9,37 +9,35 @@ import { _objectIsEqual } from "@/lib/comparisons";
 import { gameController } from "@/Controllers/gameController";
 import { useCellHex } from "../hooks/useCellHex";
 import { Text } from "@react-three/drei";
-import { degrees_to_radians, transparentMaterial } from "@/lib/utils";
-import LibraryMainRoomModel from '@/assets/models/libraryMainRoom-transformed.glb';
+import { degrees_to_radians } from "@/lib/utils";
+import LibraryMainRoomModel from '@/assets/models//MainRoom-transformed.glb';
 import LibraryMainRoomColliders from '@/assets/models/libraryMainRoomColliders.glb';
 import { optionsController } from "@/Controllers/optionsController";
 import books from '@/assets/images/bookstandin.jpg';
 import { useLoader } from "@react-three/fiber";
+import { transparentMaterial } from "@/lib/materials";
+
 
 type GLTFResult = GLTF & {
   nodes: {
-    railing4: any;
-    railing2: any;
-    railing3: any;
-    lowerwallCol: THREE.Mesh;
-    floorCol: THREE.Mesh;
-    railing1: THREE.Mesh;
-    object1004: THREE.Mesh;
-    lightGem004: THREE.Mesh;
-    object1063: THREE.Mesh;
-    object2008: THREE.Mesh;
-  };
+    floorCol: THREE.Mesh
+    lowerwallCol: THREE.Mesh
+    object1021: THREE.Mesh
+    railing1: THREE.Mesh
+    lightGem008: THREE.Mesh
+    object1022: THREE.Mesh
+    object2011: THREE.Mesh
+  }
   materials: {
-    WallBake: THREE.MeshStandardMaterial;
-    floor: THREE.MeshStandardMaterial;
-    SandstoneTrim: THREE.MeshStandardMaterial;
-    oldwood: THREE.MeshStandardMaterial;
-    fresnelGlow: THREE.MeshStandardMaterial;
-    ["floor.003"]: THREE.MeshStandardMaterial;
-    ["oldwood.004"]: THREE.MeshStandardMaterial;
-    ["SandstoneTrim.008"]: THREE.MeshStandardMaterial;
-  };
-};
+    floorMainRoom: THREE.MeshBasicMaterial
+    wallMainRoom: THREE.MeshBasicMaterial
+    detailMainRoom: THREE.MeshBasicMaterial
+    railingNormalized: THREE.MeshBasicMaterial
+    ['fresnelGlow.004']: THREE.MeshStandardMaterial
+    ['floor.001']: THREE.MeshStandardMaterial
+    oldwood: THREE.MeshStandardMaterial
+  }
+}
 
 export const LibraryMainRoom: React.FC<{
   cellHex: CellHex;
@@ -48,7 +46,6 @@ export const LibraryMainRoom: React.FC<{
 }> = ({ cellHex, hasColliders = true, hasLights = false }) => {
   const { nodes, materials } = useGLTF(LibraryMainRoomModel) as GLTFResult;
   const { nodes: colliders } = useGLTF(LibraryMainRoomColliders) as GLTFResult;
-
   const { cellHex: playerCellHex, setCellHex: setPlayerPosition, debug } = gameController();
   const { dynamicLights } = optionsController();
 
@@ -90,14 +87,10 @@ export const LibraryMainRoom: React.FC<{
           <meshNormalMaterial />
         </Text>
       )}
-      {hasColliders && (
+      {hasColliders ? (
         <>
           <RigidBody type="fixed" colliders="trimesh">
-            <mesh
-              geometry={colliders.lowerwallCol.geometry}
-              material={transparentMaterial}
-              rotation={[Math.PI / 2, 0, 0]}
-            />
+          <mesh name="lowerwallCol" geometry={nodes.lowerwallCol.geometry} material={materials.wallMainRoom} rotation={[Math.PI / 2, 0, 0]} />
           </RigidBody>
           <RigidBody type="fixed" colliders="hull">
             <mesh
@@ -105,30 +98,7 @@ export const LibraryMainRoom: React.FC<{
               material={transparentMaterial}
               rotation={[Math.PI / 2, 0, Math.PI]}
             />
-            <mesh
-              geometry={colliders.railing1.geometry}
-              material={transparentMaterial}
-              rotation={[Math.PI / 2, 0, 0]}
-              scale={[1, 1, 0.75]}
-            />
-            <mesh
-              geometry={colliders.railing3.geometry}
-              material={transparentMaterial}
-              rotation={[Math.PI / 2, 0, -Math.PI / 2]}
-              scale={[1, 1, 0.75]}
-            />
-            <mesh
-              geometry={colliders.railing2.geometry}
-              material={transparentMaterial}
-              rotation={[Math.PI / 2, 0, Math.PI / 2]}
-              scale={[1, 1, 0.75]}
-            />
-            <mesh
-              geometry={colliders.railing4.geometry}
-              material={transparentMaterial}
-              rotation={[Math.PI / 2, 0, -Math.PI]}
-              scale={[1, 1, 0.75]}
-            />
+            <mesh name="railing1" geometry={nodes.railing1.geometry} material={materials.railingNormalized} rotation={[Math.PI / 2, 0, 0]} scale={[1, 1, 0.75]} />
           </RigidBody>
           {dynamicLights && (
             <>
@@ -159,6 +129,16 @@ export const LibraryMainRoom: React.FC<{
             </>
           )}
         </>
+      ) : (
+          <>
+      <mesh name="lowerwallCol" geometry={nodes.lowerwallCol.geometry} material={materials.wallMainRoom} rotation={[Math.PI / 2, 0, 0]} />
+      <mesh
+              geometry={colliders.floorCol.geometry}
+              material={transparentMaterial}
+              rotation={[Math.PI / 2, 0, Math.PI]}
+            />
+            <mesh name="railing1" geometry={nodes.railing1.geometry} material={materials.railingNormalized} rotation={[Math.PI / 2, 0, 0]} scale={[1, 1, 0.75]} />
+          </>
       )}
       {hasLights && (
             <>
@@ -188,56 +168,14 @@ export const LibraryMainRoom: React.FC<{
               />
             </>
           )}
-      <mesh
-        name="lowerwallCol"
-        geometry={nodes.lowerwallCol.geometry}
-        material={materials.WallBake}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        name="floorCol"
-        geometry={nodes.floorCol.geometry}
-        material={materials.floor}
-        rotation={[Math.PI / 2, 0, Math.PI]}
-      />
-            <mesh
-        name="lightGem004"
-        geometry={nodes.lightGem004.geometry}
-        material={materials.fresnelGlow}
-        position={[0, 1.589, -2.845]}
-        rotation={[0.187, 0, 0]}
-        scale={10}
-      />
-      <mesh
-        name="railing1"
-        geometry={nodes.railing1.geometry}
-        material={materials.oldwood}
-        rotation={[Math.PI / 2, 0, 0]}
-        scale={[1, 1, 0.75]}
-      />
-      <mesh
-        name="object1004"
-        geometry={nodes.object1004.geometry}
-        material={materials["SandstoneTrim.008"]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        name="object1063"
-        geometry={nodes.object1063.geometry}
-        material={materials["floor.003"]}
-        position={[0, 1.257, -2.734]}
-        rotation={[Math.PI / 2, 0, 0]}
-        scale={0.5}
-      />
-      <mesh
-        name="object2008"
-        geometry={nodes.object2008.geometry}
-        material={materials["oldwood.004"]}
-        position={[0, 1.257, -2.734]}
-        rotation={[Math.PI / 2, 0, 0]}
-        scale={0.5}
-      />
-      {!_objectIsEqual(cellHex, playerCellHex) && (
+   <mesh name="floorCol" geometry={nodes.floorCol.geometry} material={materials.floorMainRoom} rotation={[Math.PI / 2, 0, Math.PI]} />
+      <mesh name="lowerwallCol" geometry={nodes.lowerwallCol.geometry} material={materials.wallMainRoom} rotation={[Math.PI / 2, 0, 0]} />
+      <mesh name="object1021" geometry={nodes.object1021.geometry} material={materials.detailMainRoom} rotation={[Math.PI / 2, 0, 0]} />
+      <mesh name="railing1" geometry={nodes.railing1.geometry} material={materials.railingNormalized} rotation={[Math.PI / 2, 0, 0]} scale={[1, 1, 0.75]} />
+      <mesh name="lightGem008" geometry={nodes.lightGem008.geometry} material={materials['fresnelGlow.004']} position={[0, 1.604, 2.853]} rotation={[2.955, 0, Math.PI]} scale={10} />
+      <mesh name="object1022" geometry={nodes.object1022.geometry} material={materials['floor.001']} position={[0, 1.273, 2.742]} rotation={[Math.PI / 2, 0, Math.PI]} scale={0.5} />
+      <mesh name="object2011" geometry={nodes.object2011.geometry} material={materials.oldwood} position={[0, 1.273, 2.742]} rotation={[Math.PI / 2, 0, Math.PI]} scale={0.5} />
+       {!_objectIsEqual(cellHex, playerCellHex) && (
         <group>
           <BookStandin
             position={[-1.9, 0.702, -1.9]}
