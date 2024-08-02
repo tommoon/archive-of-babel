@@ -16,6 +16,10 @@ export const SubCell: React.FC<{
         hasColliders={false}
         cellHex={{ ...cellHex, y: base32Add(cellHex.y, '2') }}
       />}
+            {!omit && <LibraryMainRoom
+        hasColliders={false}
+        cellHex={{ ...cellHex, y: base32Add(cellHex.y, '3') }}
+      />}
       <LibraryMainRoom
         hasColliders={false}
         cellHex={{ ...cellHex, y: base32Add(cellHex.y, '1') }}
