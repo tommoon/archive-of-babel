@@ -1,3 +1,4 @@
+import { optionsController } from "@/Controllers/optionsController";
 import { touchController } from "@/Controllers/touchController";
 import { PointerEventHandler, useRef, useState } from "react";
 
@@ -10,6 +11,7 @@ const ControlPad: React.FC<ControlPadProps> = ({ pan }) => {
   const [touchPosition, setTouchPosition] = useState<{ dx: number; dy: number }>({ dx: 0, dy: 0 });
   const padRef = useRef<HTMLDivElement | null>(null);
   const { updateMovement } = touchController();
+  const { mobilePanSensitivity } = optionsController();
 
   const handlePointerDown: PointerEventHandler<HTMLDivElement> = (e) => {
     setIsTouching(true);
@@ -20,8 +22,9 @@ const ControlPad: React.FC<ControlPadProps> = ({ pan }) => {
     if (!isTouching) return;
     const boundings = padRef.current?.getBoundingClientRect();
     if (!boundings) return;
-    const dx = (e.clientX - (boundings.left + boundings.width / 2)) / 20;
-    const dy = (e.clientY - (boundings.top + boundings.height / 2)) / 20;
+    const divisor = pan ? mobilePanSensitivity : 20
+    const dx = (e.clientX - (boundings.left + boundings.width / 2)) / divisor;
+    const dy = (e.clientY - (boundings.top + boundings.height / 2)) / divisor;
 
     // Clamping the values to ensure the circle stays within the control pad
     const dxm = Math.max(Math.min(dx, 35 / 30), -35 / 30);

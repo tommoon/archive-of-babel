@@ -15,6 +15,7 @@ import LibraryMainRoomColliders from '@/assets/models/libraryMainRoomColliders.g
 import books from '@/assets/images/bookstandin.jpg';
 import { useLoader } from "@react-three/fiber";
 import { transparentMaterial } from "@/lib/materials";
+import { Fire } from "./Fire";
 
 
 type GLTFResult = GLTF & {

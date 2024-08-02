@@ -56,7 +56,6 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
 
   const { setCellHex: setPlayerPosition } = gameController();
   const staircaseRef = useRef<THREE.Group>(null);
-  const { dynamicLights } = optionsController();
 
   const upstairsHex = { ...cellHex, y: base32Add(cellHex.y, '1') }
   const downstairsHex = { ...cellHex, y: base32Subtract(cellHex.y, '1') }
@@ -102,22 +101,6 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
       position={adjustedPosition}
       ref={staircaseRef}
     >
-                {dynamicLights && (
-        <>
-                  <pointLight
-          color={"#ebf5fe"}
-          position={[-1, 1.7, 0]}
-          distance={20}
-          intensity={2}
-          /> 
-                         <pointLight
-          color={"#ebf5fe"}
-          position={[-4, 1.7, 0]}
-          distance={20}
-          intensity={2}
-          /> 
-        </>
-      )}
       {[downstairsHex, cellHex, upstairsHex].map((hex, index) => (
         <group key={`stair-${hex.x}-${hex.y}-${hex.z}`} position={[0, index * 2, 0]} dispose={null}>
           <RigidBody

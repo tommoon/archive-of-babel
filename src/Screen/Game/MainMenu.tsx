@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export const MainMenu = () => {
   const [mainMenu, setMainMenu] = useState(false);
-  const { setDynamicLights, setIsMobile, dynamicLights, isMobile } = optionsController();
+  const { setIsMobile, isMobile, mobilePanSensitivity, setPanSensitivity } = optionsController();
   const menuClick = (
     event: MouseEvent<SVGSVGElement> | TouchEvent<SVGSVGElement>,
   ) => {
@@ -48,21 +48,6 @@ export const MainMenu = () => {
           <div className="modal-action flex flex-col gap-4">
             <label className="label cursor-pointer">
               <span className="label-text">
-                Dynamic Lights{" "}
-                <span className="text-muted text-xs">(can affect performance)</span>
-              </span>
-              <input
-                checked={dynamicLights}
-                type="checkbox"
-                className="toggle toggle-accent"
-                onChange={() => {
-                  setDynamicLights(!dynamicLights);
-                }}
-                onClick={(e) => e.stopPropagation()}
-              />
-            </label>
-            <label className="label cursor-pointer">
-              <span className="label-text">
                 Mobile Controls
               </span>
               <input
@@ -75,6 +60,18 @@ export const MainMenu = () => {
                 onClick={(e) => e.stopPropagation()}
               />
             </label>
+            {isMobile && <label className="label cursor-pointer">
+              <span className="label-text">
+                Pan Sensitivity
+              </span>
+              <input
+                type="range"
+                min={5}
+                max={50}
+                value={mobilePanSensitivity}
+                onChange={(e) => setPanSensitivity(parseInt(e.target.value))}
+                className="range range-accent range-sm max-w-[50%]" />
+            </label>}
             <div className="flex justify-between">
               <button onClick={closeMenu} className="btn btn-accent">close</button>
               <Link className="btn btn-neutral" type="button" to={"/"}>

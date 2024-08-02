@@ -2,29 +2,30 @@ import { checkTouchDevice } from "@/lib/detectTouchDevice";
 import { loadFromLocalStorage, saveToLocalStorage } from "@/lib/localStorage";
 import { create } from "zustand";
 
-const dynamicLights = loadFromLocalStorage("dynamicLights");
 const isMobile = loadFromLocalStorage("isMobile");
+const mobilePanSensitivity = loadFromLocalStorage("mobilePanSensitivity");
 
 export type optionsState = {
-  dynamicLights: boolean;
   isMobile: boolean;
-  setDynamicLights: (dynamicLights: boolean) => void;
+  mobilePanSensitivity: number;
   setIsMobile: (isMobile: boolean) => void;
+  setPanSensitivity: (mobilePanSensitivity: number) => void;
 };
 
 export const optionsController = create<optionsState>()((set) => ({
-  dynamicLights: (dynamicLights && JSON.parse(dynamicLights)) || false,
   isMobile: (isMobile && JSON.parse(isMobile)) || checkTouchDevice(),
-  setDynamicLights: (dynamicLights: boolean) => {
-    saveToLocalStorage("dynamicLights", dynamicLights);
-    set(() => ({
-      dynamicLights: dynamicLights,
-    }));
-  },
+  mobilePanSensitivity:
+    (mobilePanSensitivity && JSON.parse(mobilePanSensitivity)) || 20,
   setIsMobile: (isMobile: boolean) => {
     saveToLocalStorage("isMobile", isMobile);
     set(() => ({
       isMobile: isMobile,
+    }));
+  },
+  setPanSensitivity: (mobilePanSensitivity: number) => {
+    saveToLocalStorage("mobilePanSensitivity", mobilePanSensitivity);
+    set(() => ({
+      mobilePanSensitivity: mobilePanSensitivity,
     }));
   },
 }));

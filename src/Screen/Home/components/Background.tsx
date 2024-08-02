@@ -77,7 +77,7 @@ export const Background = () => {
         <color attach="background" args={["black"]} />
         <MenuCamera />
         <BackgroundProps />
-      </Canvas>
-    </div>
+        </Canvas>
+      </div>
   );
 };
