@@ -125,7 +125,7 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
             type="fixed"
             colliders="trimesh"
           >
-            <Box scale={[2.1, 2, 1.1]} position={[-2.5, 0, 0]} />
+            <Box material={transparentMaterial} scale={[2.1, 2, 1.1]} position={[-2.5, 0, 0]} />
             <mesh
               name="floor2"
               geometry={nodes.floor2.geometry}

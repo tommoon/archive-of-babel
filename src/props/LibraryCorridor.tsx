@@ -19,6 +19,7 @@ import LibraryCorridorColliders from '@/assets/models/LibraryCorridorColliders-t
 type GLTFResult = GLTF & {
   nodes: {
     col004: THREE.Mesh
+    col: THREE.Mesh
     door012: THREE.Mesh
     object1083: THREE.Mesh
     lightGem007: THREE.Mesh
