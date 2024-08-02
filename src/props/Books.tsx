@@ -95,9 +95,9 @@ const Book: React.FC<BookProps> = React.memo(
     const startColor = useMemo(
       () =>
         new THREE.Color(
-          seededRandom(seed + "red") / 2,
-          seededRandom(seed + "green") / 2,
-          seededRandom(seed + "blue") / 2,
+          seededRandom(seed + "red") / 3,
+          seededRandom(seed + "green") / 3,
+          seededRandom(seed + "blue") / 3,
         ),
       [seed],
     );
