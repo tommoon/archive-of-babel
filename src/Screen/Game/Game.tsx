@@ -37,7 +37,7 @@ export const Game = () => {
 
   const pointerLockRef = useRef<PointerLockControlsImpl>(null);
   const { screenLocked } = gameController();
-  const { dynamicLights, isMobile } = optionsController();
+  const { isMobile } = optionsController();
 
   useEffect(() => {
     if (pointerLockRef.current) {
@@ -70,12 +70,10 @@ export const Game = () => {
       <Suspense fallback={null}>
       <Canvas ref={canvasRef} frameloop="demand">
           <color attach="background" args={["black"]} />
-          {!dynamicLights && (
             <>
-              <ambientLight />
+              <ambientLight intensity={1} />
               <directionalLight />
             </>
-          )}
           {!debug && <fogExp2 attach={"fog"} args={["black", 0.1]} />}
           <Physics paused={!visible || loading} debug={debug}>
           <Player />

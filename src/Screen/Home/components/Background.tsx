@@ -9,24 +9,24 @@ const BackgroundProps = () => (
   <>
     <fogExp2 attach={"fog"} args={["black", 0.1]} />
     <LibraryMainRoom
-      hasLights={true}
+      demo={true}
       hasColliders={false}
       cellHex={{ x: "0", y: "0", z: "0" }}
     />
     <LibraryCorridor
-      hasLights={true}
+      demo={true}
       hasColliders={false}
       cellHex={{ x: "0", y: "0", z: "0" }}
       orientation="N"
     />
     <LibraryCorridor
-      hasLights={true}
+      demo={true}
       hasColliders={false}
       cellHex={{ x: "0", y: "0", z: "0" }}
       orientation="S"
     />
     <LibraryMainRoom
-      hasLights={true}
+      demo={true}
       hasColliders={false}
       cellHex={{ x: "0", y: "0", z: "-1" }} />
     <LibraryCorridor
@@ -78,7 +78,6 @@ export const Background = () => {
         <MenuCamera />
         <BackgroundProps />
       </Canvas>
-      <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50 pointer-events-none" />
     </div>
   );
 };
