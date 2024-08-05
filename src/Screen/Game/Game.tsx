@@ -92,6 +92,12 @@ export const Game = () => {
     };
   }, [canvasRef]);
 
+  useEffect(() => {
+    if (bookOpen) {
+      setPaused(false)
+    }
+  },[bookOpen])
+
   const startup = () => {
     setPaused(false)
   }
@@ -107,7 +113,7 @@ export const Game = () => {
               <directionalLight />
             </>
           {!debug && <fogExp2 attach={"fog"} args={["black", 0.1]} />}
-          <Physics paused={paused} debug={debug}>
+          <Physics paused={bookOpen || paused} debug={debug}>
           <Player />
             <group position={new Vector3(3, 0, 3)}>
               <Cell />
