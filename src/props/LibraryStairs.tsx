@@ -12,7 +12,6 @@ import { base32Add, base32Subtract } from "@/lib/base32Utils";
 import { adjustments } from "@/lib/positions";
 import LibraryStairsModel from '@/assets/models/Stairs-transformed.glb'
 import LibraryStairsColliders from '@/assets/models/LibraryStairsNewColliders-transformed.glb'
-import { optionsController } from "@/Controllers/optionsController";
 
 type GLTFResult = GLTF & {
   nodes: {

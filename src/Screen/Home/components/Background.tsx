@@ -4,6 +4,7 @@ import { PerspectiveCamera as DreiPerspectiveCamera } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useEffect, useRef, useState } from "react";
 import { MathUtils, PerspectiveCamera } from "three";
+import fallbackImg from '@/assets/images/standinbackground.png'
 
 const BackgroundProps = () => (
   <>
@@ -72,7 +73,12 @@ const MenuCamera = () => {
 
 export const Background = () => {
   return (
-    <div className="fixed top-0 left-0 w-screen h-screen">
+    <div
+      className="fixed top-0 left-0 w-screen h-screen"
+      style={{
+        backgroundImage:`url(${fallbackImg}`
+      }}
+    >
       <Canvas className="w-full h-full">
         <color attach="background" args={["black"]} />
         <MenuCamera />
