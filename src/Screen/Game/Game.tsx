@@ -1,8 +1,8 @@
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
-import { Suspense, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Player } from "./components/Player/Player";
-import { KeyboardControls, Loader, PointerLockControls } from "@react-three/drei";
+import { KeyboardControls, PointerLockControls, useProgress } from "@react-three/drei";
 import { gameController } from "@/Controllers/gameController";
 import { Vector3 } from "three";
 import { BookInterior } from "./components/BookInterior/BookInterior";
@@ -12,8 +12,6 @@ import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import { MobileController } from "./components/MobileController";
 import { optionsController } from "@/Controllers/optionsController";
-import { useAssetsLoading } from "@/hooks/useAssetsLoading";
-import { usePageVisible } from "@/hooks/usePageVisible";
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
@@ -28,16 +26,45 @@ const keyboardMap = [
   { name: "action4", keys: ["KeyF"] },
 ];
 
+const PreLoadScreen:React.FC<{onStart:() => void}> = ({onStart}) => {
+  const { active, progress, loaded, total } = useProgress();
+
+  const [loadingMessage, setLoadingMessage] = useState<string | null>('preparing')
+  const [loadingProgress, setProgress] = useState<number>(0)
+
+  useEffect(() => { setLoadingMessage(`Loading assets (${loaded}/${total})`) }, [loaded, total])
+  useEffect(() => { setProgress(progress*0.9) }, [progress])
+  
+  useEffect(() => {
+    if (!active && progress === 100) {
+      setLoadingMessage(`Control Initialization`)
+      setTimeout(() => {
+        setProgress(100)
+        setLoadingMessage('Ready')
+      },1500)
+  }}, [active, progress])
+  
+  return (
+    <div onClick={(e) => e.stopPropagation()} className="fixed top-0 left-0 h-full w-full bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <div className="absolute flex flex-col gap-y-4 backdrop-blur-md p-16 rounded-md">
+        <div className="flex flex-col">
+          <progress className="progress progress-accent w-56" value={loadingProgress} max="100"></progress>
+          <span className="text-white self-end">{loadingMessage}</span>
+        </div>
+        <button onClick={onStart} disabled={loadingMessage !== 'Ready'} className="btn btn-accent">Enter</button>
+      </div>
+    </div>
+  );
+};
+
 export const Game = () => {
   const { debug, bookOpen } = gameController();
   const canvasRef = useRef(null);
   useQueryString();
-  const loading = useAssetsLoading()
-  const visible = usePageVisible()
-
   const pointerLockRef = useRef<PointerLockControlsImpl>(null);
   const { screenLocked } = gameController();
   const { isMobile } = optionsController();
+  const [paused, setPaused] = useState(true)
 
   useEffect(() => {
     if (pointerLockRef.current) {
@@ -65,9 +92,14 @@ export const Game = () => {
     };
   }, [canvasRef]);
 
+  const startup = () => {
+    setPaused(false)
+  }
+
   return (
+    <>
+    {paused && <PreLoadScreen onStart={startup}/>}
     <KeyboardControls map={keyboardMap}>
-      <Suspense fallback={null}>
       <Canvas ref={canvasRef} frameloop="demand">
           <color attach="background" args={["black"]} />
             <>
@@ -75,7 +107,7 @@ export const Game = () => {
               <directionalLight />
             </>
           {!debug && <fogExp2 attach={"fog"} args={["black", 0.1]} />}
-          <Physics paused={!visible || loading} debug={debug}>
+          <Physics paused={paused} debug={debug}>
           <Player />
             <group position={new Vector3(3, 0, 3)}>
               <Cell />
@@ -83,11 +115,10 @@ export const Game = () => {
           </Physics>
           <PointerLockControls ref={pointerLockRef} />
       </Canvas>
-      </Suspense>
-      <Loader/>
         <div className="absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-2 border-white"></div>
         {bookOpen && <BookInterior />}
         {isMobile && <MobileController />}
       </KeyboardControls>
+      </>
   );
 };
