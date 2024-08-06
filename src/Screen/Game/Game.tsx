@@ -12,6 +12,7 @@ import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import { MobileController } from "./components/MobileController";
 import { optionsController } from "@/Controllers/optionsController";
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
@@ -103,8 +104,13 @@ export const Game = () => {
   }
 
   return (
-    <>
-    {paused && <PreLoadScreen onStart={startup}/>}
+<HelmetProvider>
+      <Helmet>
+      <title>Archive of Babel - Play</title>
+      <meta name="description" content="Explore a 3D Archive based on the Library of Babel" />
+      <meta name="keywords" content="Library of babel, play, free game, infinite" />
+      </Helmet>
+      {paused && <PreLoadScreen onStart={startup} />}
     <KeyboardControls map={keyboardMap}>
       <Canvas ref={canvasRef} frameloop="demand">
           <color attach="background" args={["black"]} />
@@ -125,6 +131,6 @@ export const Game = () => {
         {bookOpen && <BookInterior />}
         {isMobile && <MobileController />}
       </KeyboardControls>
-      </>
+      </HelmetProvider>
   );
 };

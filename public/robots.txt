@@ -1,0 +1,8 @@
+User-agent: yandex 
+Disallow: / 
+
+User-agent: baiduspider 
+Disallow: / 
+
+User-agent: * 
+Disallow: 

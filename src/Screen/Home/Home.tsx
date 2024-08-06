@@ -6,6 +6,7 @@ import { TextSearch } from "./components/TextSearch";
 import { useEffect } from "react";
 import { gameController } from "@/Controllers/gameController";
 import { useResetPosition } from "@/hooks/useResetPosition";
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 export const Home = () => {
   const [, setSearchParams] = useSearchParams();
@@ -24,6 +25,12 @@ export const Home = () => {
   },[])
 
   return (
+    <HelmetProvider>
+      <Helmet>
+      <title>Archive of Babel</title>
+      <meta name="description" content="Based on the Library of babel by Louis Borges." />
+      <meta name="keywords" content="Library of babel, online game, infinity" />
+        </Helmet>
     <div className="space-y-[50vh]">
     <Hero />
         <Container>
@@ -32,6 +39,7 @@ export const Home = () => {
         <Container>
           <About />
         </Container>
-    </div>
+        </div>
+      </HelmetProvider>
   );
 };

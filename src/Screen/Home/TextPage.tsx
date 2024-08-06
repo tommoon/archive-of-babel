@@ -3,7 +3,16 @@ import { Container } from "./components/Container";
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
+type TextPageProps = {
+  markdownContent: string,
+  helmetContents?: {
+    title: string,
+    description: string,
+    keywords: string
+  } | null 
+}
 const styles = {
   h1: {
     marginTop: '2em',
@@ -42,11 +51,17 @@ const styles = {
   },
 };
 
-export const TextPage: React.FC<{ markdownContent: string }> = ({ markdownContent }) => {
+export const TextPage: React.FC<TextPageProps> = ({ markdownContent, helmetContents = null }) => {
   
   useResetPosition();
 
   return (
+    <HelmetProvider>
+      {helmetContents && <Helmet>
+        <title>{helmetContents.title}</title>
+      <meta name="description" content={helmetContents.description} />
+      <meta name="keywords" content={helmetContents.keywords} />
+      </Helmet>}
     <div
       className="pt-16 m-auto md:max-w-screen-md max-w-full text-base"
       style={{ fontSize: 'unset' }}
@@ -67,6 +82,7 @@ export const TextPage: React.FC<{ markdownContent: string }> = ({ markdownConten
           }}
         />
       </Container>
-    </div>
+      </div>
+      </HelmetProvider>
   );
 };

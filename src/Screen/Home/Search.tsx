@@ -52,7 +52,7 @@ export const Search = () => {
                     <textarea
                         autoFocus={false}
                         rows={20}
-                        className="w-full p-8"
+                        className="w-full p-8 text-[16px]"
                         value={textString}
                         onChange={updateSearchString}
                         maxLength={3000}
@@ -69,7 +69,6 @@ export const Search = () => {
                         <Link className="btn btn-accent truncate max-w-full text-left justify-start text-xs h-fit p-4" to={`/game?${exactMatch.toString()}`}>
                             <div className="flex flex-col">
                                 {Array.from(exactMatch.entries()).map(([key, value]) => {
-                                    console.log(key)
                                     return (
                                 <div className="" key={key}>
                                     {`${key}: ${value}`}

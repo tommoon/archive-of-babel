@@ -1,6 +1,14 @@
 import algorithmImage from "../../assets/images/coding-screen.jpg";
 
-export const algorithm = `# The Algorithms behind the Archive
+export const algorithm = {
+  helmet: {
+    title: "The Algorithms of the Archive of Babel",
+    description:
+      "how to generate an infinite library of unique books using code",
+    keywords:
+      "javascript, random, typescript, library of babel, coding, generation",
+  },
+  contents: `# The Algorithms behind the Archive
 
 ![code](${algorithmImage})
 
@@ -405,4 +413,5 @@ function findText(searchString: string) {
 ## Conclusion
 
 There we go, with these functions we provided a way to translate a pages location in the Archive into a page of text and a way to reverse it. Much easier than writing and storing each book ;)
-`;
+`,
+};

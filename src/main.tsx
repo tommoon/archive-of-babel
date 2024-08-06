@@ -14,6 +14,10 @@ import { Search } from "./Screen/Home/Search.tsx";
 import { Contents } from "./Screen/Home/Contents.tsx";
 import * as tutorials from './lib/tutorials';
 import * as thoery from './lib/theory';
+import ReactGA from 'react-ga4';
+
+const measurementId = 'G-5SKV0LSE4T'; // Replace with your Measurement ID
+ReactGA.initialize(measurementId);
 
 // Dynamically create routes for tutorials
 const tutorialRoutes = [
@@ -23,17 +27,17 @@ const tutorialRoutes = [
   },
   ...Object.entries(tutorials).map(([key, value]) => ({
   path: key,
-  element: <TextPage markdownContent={value} />,
+  element: <TextPage markdownContent={value.contents} />,
 }))];
 
 const theoryRoutes = [
   {
     index:true,
-    element: < Contents contents={thoery} title={'Tutorials'} />
+    element: < Contents contents={thoery} title={'Theory'} />
   },
   ...Object.entries(thoery).map(([key, value]) => ({
   path: key,
-  element: <TextPage markdownContent={value} />,
+  element: <TextPage markdownContent={value.contents} />,
   }))];
 
 const router = createBrowserRouter([
@@ -95,6 +99,6 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+      <RouterProvider router={router} />
   </React.StrictMode>,
 );

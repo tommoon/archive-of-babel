@@ -5,11 +5,12 @@ import { Link, Outlet } from "react-router-dom";
 import { Spin as Hamburger } from 'hamburger-react';
 import { BookText, GraduationCap, TextSearch } from "lucide-react";
 import { Background } from "@/Screen/Home/components/Background";
+import { useAnalyticsTracker } from "@/useAnalyticsTracker";
 
 export const HomeLayout = () => {
   const [yPos, setYPos] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-
+  useAnalyticsTracker()
   useEffect(() => {
     const handleScroll = () => setYPos(window.scrollY);
     window.addEventListener("scroll", handleScroll);

@@ -2,10 +2,11 @@ import React from "react";
 import { Container } from "./components/Container";
 import { Link } from "react-router-dom";
 import { useResetPosition } from "@/hooks/useResetPosition";
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 type ContentsProps = {
-  contents: { [key: string]: string }; // Assuming `contents` is an object with string keys and values
-  title: string;
+  contents: { [key: string]: any }; // Assuming `contents` is an object with string keys and values
+  title: 'Tutorials' | 'Theory';
 };
 
 const extractImage = (markdownText: string): string | null => {
@@ -20,10 +21,28 @@ const extractIntroText = (markdown: string): string | null => {
   return match ? match[1].trim() : null;
 };
 
+const helmetContents = {
+  Tutorials: {
+    title: 'Archive of Babel tutorials',
+    description: 'Coding Tutorials around the Library of Babel and its digital implementation',
+    keywords: 'random, seeded, generation, library of babel, typescript, javascript'
+  },
+  Theory: {
+    title: 'Archive of Babel theory',
+    description: 'Philosophy and theory surrounding the library of babel',
+    keywords: 'Theory, philosophy, library of babel'
+  }
+}
 export const Contents: React.FC<ContentsProps> = ({ contents, title }) => {
   useResetPosition();
-
+  const helmetMetaContent = helmetContents[title]
   return (
+    <HelmetProvider>
+      {helmetMetaContent && <Helmet>
+        <title>{ helmetMetaContent.title }</title>
+        <meta name="description" content={helmetMetaContent.description} />
+      <meta name="keywords" content={helmetMetaContent.keywords} />
+      </Helmet>}
     <div className="pt-32 m-auto max-w-prose text-base flex flex-col gap-y-16">
       <Container>
         <h1 className="text-4xl font-bold py-8">{title}</h1>
@@ -36,7 +55,7 @@ export const Contents: React.FC<ContentsProps> = ({ contents, title }) => {
               <div className="flex-shrink-0 m-auto">
                 <img
                   className="w-full md:w-48 h-32 rounded-md object-cover"
-                  src={extractImage(value) || ""}
+                  src={extractImage(value.contents) || ""}
                   alt={`${key} image`}
                 />
                 <figcaption className="text-xs text-muted">
@@ -52,13 +71,14 @@ export const Contents: React.FC<ContentsProps> = ({ contents, title }) => {
               <Link to={key} className="flex flex-col grow">
                 <h2 className="text-xl font-bold">{key}</h2>
                 <p className="overflow-hidden text-ellipsis max-h-28">
-                  {extractIntroText(value)}
+                  {extractIntroText(value.contents)}
                 </p>
               </Link>
             </li>
           ))}
         </div>
       </Container>
-    </div>
+      </div>
+      </HelmetProvider>
   );
 };
