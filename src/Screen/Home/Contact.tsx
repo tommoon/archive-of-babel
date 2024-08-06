@@ -44,11 +44,13 @@ export default function Contact() {
   }
 
 
-    return <div className=" m-auto max-w-prose text-base h-screen flex flex-col gap-y-8 justify-center"
+    return <div className=" m-auto max-w-prose text-base h-screen flex flex-col gap-y-8 justify-center my-32"
     style={{
     fontSize:'unset'
     }}>
       <Container>
+        <p>Want to reach out? Send us a message!</p>
+        <br/>
     <form className='flex flex-col gap-y-4' onSubmit={(e) => onSubmit(e)}>
 
 <label className="input input-bordered flex items-center gap-2">
