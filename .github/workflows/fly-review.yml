@@ -15,12 +15,12 @@ jobs:
       url: ${{ steps.deploy.outputs.url }}
     # Only run one deployment at a time per PR.
     concurrency:
-      group: pr-${{ github.event.number }}
+      group: archive-of-babel-${{ github.event.pull_request.number }}
 
     # Create a GitHub deployment environment per staging app so it shows up
     # in the pull request UI.
     environment:
-      name: pr-${{ github.event.number }}
+      name: app-name-${{ github.event.pull_request.number }}
       url: ${{ steps.deploy.outputs.url }}
 
     steps:
@@ -28,4 +28,6 @@ jobs:
 
       - name: Deploy
         id: deploy
-        uses: superfly/fly-pr-review-apps@1.0.0
+        uses: superfly/fly-pr-review-apps@1.2.1
+        with:
+          app-name: app-name-${{ github.event.pull_request.number }}
