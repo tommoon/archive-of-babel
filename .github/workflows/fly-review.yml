@@ -31,3 +31,12 @@ jobs:
         uses: superfly/fly-pr-review-apps@1.2.1
         with:
           app-name: app-name-${{ github.event.pull_request.number }}
+
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Test Branch Deployed here: [${{steps.deploy.outputs.url}}][1]
+
+            [1]: ${{steps.deploy.outputs.url}}
