@@ -40,3 +40,9 @@ jobs:
             Test Branch Deployed here: [${{steps.deploy.outputs.url}}][1]
 
             [1]: ${{steps.deploy.outputs.url}}
+      - name: Clean up GitHub environment
+        uses: strumwolf/delete-deployment-environment@v2
+        if: ${{ github.event.action == 'closed' }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: pr-${{ github.event.number }}
