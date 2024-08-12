@@ -10,6 +10,7 @@ import { Cell } from "./components/Cell/Cell";
 import { useQueryString } from "@/hooks/useQueryString";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { NewMobileController } from "./components/NewMobileController";
+import { optionsController } from "@/Controllers/optionsController";
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
@@ -57,36 +58,11 @@ const PreLoadScreen:React.FC<{onStart:() => void}> = ({onStart}) => {
 
 export const Game = () => {
   const { debug, bookOpen } = gameController();
+  const { isMobile } = optionsController();
   const canvasRef = useRef(null);
   useQueryString();
   const [paused, setPaused] = useState(true)
 
-/*   useEffect(() => {
-    if (pointerLockRef.current) {
-      if (screenLocked) {
-        setTimeout(() => {
-          pointerLockRef.current?.unlock();
-        }, 10);
-      } else if (!screenLocked && !pointerLockRef.current.isLocked) {
-        setTimeout(() => {
-          pointerLockRef.current?.lock();
-        }, 10);
-      }
-    }
-  }, [screenLocked]); */
-
-  useEffect(() => {
-    const canvasElement = canvasRef.current;
-    if (canvasElement) {
-      console.log(canvasElement)
-      //disableBodyScroll(canvasElement);
-    }
-    return () => {
-      if (canvasElement) {
-        //enableBodyScroll(canvasElement);
-      }
-    };
-  }, [canvasRef]);
 
   useEffect(() => {
     if (bookOpen) {
@@ -107,9 +83,6 @@ export const Game = () => {
       </Helmet>
       {paused && <PreLoadScreen onStart={startup} />}
       <KeyboardControls map={keyboardMap}>
-        <div id='test3'>
-            <div id='test4'></div>
-          </div>
         <Canvas camera={{
         position: new Vector3(3, 1, 3)
       }} ref={canvasRef} frameloop="demand">
@@ -125,18 +98,11 @@ export const Game = () => {
               <Cell />
             </group>
           </Physics>
-          {/* <PointerLockControls ref={pointerLockRef} /> */}
-          <NewMobileController />
+          {isMobile && <NewMobileController />}
           </Canvas>
-          <div id='test'></div>
-          <div id='test2'>
-            <div id='test3'></div>
-          </div>
-
         <div className="absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-2 border-white"></div>
         {bookOpen && <BookInterior />}
-{/*         {isMobile && <MobileController />}
- */}      </KeyboardControls>
+      </KeyboardControls>
       </HelmetProvider>
   );
 };
