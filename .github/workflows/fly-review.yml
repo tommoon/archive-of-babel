@@ -9,9 +9,10 @@ env:
   FLY_ORG: personal
 
 jobs:
-  staging_app:
+  review_app:
     runs-on: ubuntu-latest
-
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
     # Only run one deployment at a time per PR.
     concurrency:
       group: pr-${{ github.event.number }}
