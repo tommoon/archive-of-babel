@@ -1,12 +1,10 @@
-name: Deploy Review App
+name: Staging App
 on:
-  # Run this workflow on every PR event. Existing review apps will be updated when the PR is updated.
   pull_request:
     types: [opened, reopened, synchronize, closed]
 
 env:
-  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-  # Set these to your Fly.io organization and preferred region.
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_SHORT }}
   FLY_REGION: iad
   FLY_ORG: personal
 
@@ -17,18 +15,34 @@ jobs:
       url: ${{ steps.deploy.outputs.url }}
     # Only run one deployment at a time per PR.
     concurrency:
-      group: pr-${{ github.event.number }}
+      group: archive-of-babel-${{ github.event.pull_request.number }}
 
-    # Deploying apps with this "review" environment allows the URL for the app to be displayed in the PR UI.
-    # Feel free to change the name of this environment.
+    # Create a GitHub deployment environment per staging app so it shows up
+    # in the pull request UI.
     environment:
-      name: review
-      # The script in the `deploy` sets the URL output for each review app.
+      name: app-name-${{ github.event.pull_request.number }}
       url: ${{ steps.deploy.outputs.url }}
-    steps:
-      - name: Get code
-        uses: actions/checkout@v4
 
-      - name: Deploy PR app to Fly
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy
         id: deploy
         uses: superfly/fly-pr-review-apps@1.2.1
+        with:
+          app-name: app-name-${{ github.event.pull_request.number }}
+
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Test Branch Deployed here: [${{steps.deploy.outputs.url}}][1]
+
+            [1]: ${{steps.deploy.outputs.url}}
+      - name: Clean up GitHub environment
+        uses: strumwolf/delete-deployment-environment@v2
+        if: ${{ github.event.action == 'closed' }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: pr-${{ github.event.number }}
