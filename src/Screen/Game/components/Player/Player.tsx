@@ -4,7 +4,6 @@ import { useFrame } from "@react-three/fiber";
 import { CapsuleCollider, RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { useMemo, useRef } from "react";
 import { Euler, Quaternion, Vector3 } from "three";
-import { Camera } from "./Camera";
 import { useCellHex } from "@/hooks/useCellHex";
 import { degrees_to_radians } from "@/lib/utils";
 import { touchController } from "@/Controllers/touchController";
@@ -64,31 +63,6 @@ const useInitialPosition = (bookState: BookState | undefined, adjustedPosition: 
   }, []);
 };
 
-const useInitialRotation = (bookState: BookState | undefined) => {
-  return useMemo(() => {
-    if (!bookState) return new Euler(0, 0, 0);
-    let y = getRoomRotation(bookState?.cabinet);
-    if (bookState?.book !== undefined) {
-      let starting = 15 - (bookState.book * 3.3);
-      y += starting;
-    }
-    // Initial Y-axis rotation
-    const initialQuat = new Quaternion().setFromEuler(new Euler(0, degrees_to_radians(y), 0));
-    const initialRotation = new Euler().setFromQuaternion(initialQuat);
-
-    // Check if we need to tilt the camera down
-    if (bookState.row !== undefined) {
-      // Apply a local rotation of -10 degrees around the X-axis
-      const rowDegrees = -32 + (bookState.row * 16)
-      const tiltQuat = new Quaternion().setFromEuler(new Euler(degrees_to_radians(rowDegrees), 0, 0));
-      initialQuat.multiplyQuaternions(initialQuat, tiltQuat);
-      initialRotation.setFromQuaternion(initialQuat);
-    }
-
-    return initialRotation;
-  }, [bookState]);
-};
-
 export const Player = () => {
   const ref = useRef<RapierRigidBody>(null);
   const [, get] = useKeyboardControls();
@@ -96,7 +70,6 @@ export const Player = () => {
   const { move, pan } = touchController();
   const { adjustedPosition } = useCellHex({ cellHex, addition: getStartingPos(bookState) });
   const initialPosition = useInitialPosition(bookState, adjustedPosition);
-  const initialRotation = useInitialRotation(bookState);
 
   useFrame((state) => {
     if (ref.current) {

@@ -2,16 +2,12 @@ import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import { useEffect, useRef, useState } from "react";
 import { Player } from "./components/Player/Player";
-import { KeyboardControls, PointerLockControls, useProgress } from "@react-three/drei";
+import { KeyboardControls, useProgress } from "@react-three/drei";
 import { gameController } from "@/Controllers/gameController";
 import { Vector3 } from "three";
 import { BookInterior } from "./components/BookInterior/BookInterior";
 import { Cell } from "./components/Cell/Cell";
 import { useQueryString } from "@/hooks/useQueryString";
-import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
-import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
-import { MobileController } from "./components/MobileController";
-import { optionsController } from "@/Controllers/optionsController";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { NewMobileController } from "./components/NewMobileController";
 
@@ -63,9 +59,6 @@ export const Game = () => {
   const { debug, bookOpen } = gameController();
   const canvasRef = useRef(null);
   useQueryString();
-  const pointerLockRef = useRef<PointerLockControlsImpl>(null);
-  const { screenLocked } = gameController();
-  const { isMobile } = optionsController();
   const [paused, setPaused] = useState(true)
 
 /*   useEffect(() => {
