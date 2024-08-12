@@ -2,17 +2,15 @@ import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/rapier";
 import { useEffect, useRef, useState } from "react";
 import { Player } from "./components/Player/Player";
-import { KeyboardControls, PointerLockControls, useProgress } from "@react-three/drei";
+import { KeyboardControls, useProgress } from "@react-three/drei";
 import { gameController } from "@/Controllers/gameController";
 import { Vector3 } from "three";
 import { BookInterior } from "./components/BookInterior/BookInterior";
 import { Cell } from "./components/Cell/Cell";
 import { useQueryString } from "@/hooks/useQueryString";
-import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
-import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
-import { MobileController } from "./components/MobileController";
-import { optionsController } from "@/Controllers/optionsController";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { NewMobileController } from "./components/NewMobileController";
+import { optionsController } from "@/Controllers/optionsController";
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
@@ -60,38 +58,11 @@ const PreLoadScreen:React.FC<{onStart:() => void}> = ({onStart}) => {
 
 export const Game = () => {
   const { debug, bookOpen } = gameController();
+  const { isMobile } = optionsController();
   const canvasRef = useRef(null);
   useQueryString();
-  const pointerLockRef = useRef<PointerLockControlsImpl>(null);
-  const { screenLocked } = gameController();
-  const { isMobile } = optionsController();
   const [paused, setPaused] = useState(true)
 
-  useEffect(() => {
-    if (pointerLockRef.current) {
-      if (screenLocked) {
-        setTimeout(() => {
-          pointerLockRef.current?.unlock();
-        }, 10);
-      } else if (!screenLocked && !pointerLockRef.current.isLocked) {
-        setTimeout(() => {
-          pointerLockRef.current?.lock();
-        }, 10);
-      }
-    }
-  }, [screenLocked]);
-
-  useEffect(() => {
-    const canvasElement = canvasRef.current;
-    if (canvasElement) {
-      disableBodyScroll(canvasElement);
-    }
-    return () => {
-      if (canvasElement) {
-        enableBodyScroll(canvasElement);
-      }
-    };
-  }, [canvasRef]);
 
   useEffect(() => {
     if (bookOpen) {
@@ -111,8 +82,10 @@ export const Game = () => {
       <meta name="keywords" content="Library of babel, play, free game, infinite" />
       </Helmet>
       {paused && <PreLoadScreen onStart={startup} />}
-    <KeyboardControls map={keyboardMap}>
-      <Canvas ref={canvasRef} frameloop="demand">
+      <KeyboardControls map={keyboardMap}>
+        <Canvas camera={{
+        position: new Vector3(3, 1, 3)
+      }} ref={canvasRef} frameloop="demand">
           <color attach="background" args={["black"]} />
             <>
               <ambientLight intensity={1} />
@@ -120,16 +93,15 @@ export const Game = () => {
             </>
           {!debug && <fogExp2 attach={"fog"} args={["black", 0.1]} />}
           <Physics paused={bookOpen || paused} debug={debug}>
-          <Player />
+           <Player />
             <group position={new Vector3(3, 0, 3)}>
               <Cell />
             </group>
           </Physics>
-          <PointerLockControls ref={pointerLockRef} />
-      </Canvas>
+          {isMobile && <NewMobileController />}
+          </Canvas>
         <div className="absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-2 border-white"></div>
         {bookOpen && <BookInterior />}
-        {isMobile && <MobileController />}
       </KeyboardControls>
       </HelmetProvider>
   );
