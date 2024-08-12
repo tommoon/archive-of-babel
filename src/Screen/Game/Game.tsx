@@ -13,6 +13,7 @@ import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import { MobileController } from "./components/MobileController";
 import { optionsController } from "@/Controllers/optionsController";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { NewMobileController } from "./components/NewMobileController";
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
@@ -67,7 +68,7 @@ export const Game = () => {
   const { isMobile } = optionsController();
   const [paused, setPaused] = useState(true)
 
-  useEffect(() => {
+/*   useEffect(() => {
     if (pointerLockRef.current) {
       if (screenLocked) {
         setTimeout(() => {
@@ -79,16 +80,17 @@ export const Game = () => {
         }, 10);
       }
     }
-  }, [screenLocked]);
+  }, [screenLocked]); */
 
   useEffect(() => {
     const canvasElement = canvasRef.current;
     if (canvasElement) {
-      disableBodyScroll(canvasElement);
+      console.log(canvasElement)
+      //disableBodyScroll(canvasElement);
     }
     return () => {
       if (canvasElement) {
-        enableBodyScroll(canvasElement);
+        //enableBodyScroll(canvasElement);
       }
     };
   }, [canvasRef]);
@@ -111,8 +113,13 @@ export const Game = () => {
       <meta name="keywords" content="Library of babel, play, free game, infinite" />
       </Helmet>
       {paused && <PreLoadScreen onStart={startup} />}
-    <KeyboardControls map={keyboardMap}>
-      <Canvas ref={canvasRef} frameloop="demand">
+      <KeyboardControls map={keyboardMap}>
+        <div id='test3'>
+            <div id='test4'></div>
+          </div>
+        <Canvas camera={{
+        position: new Vector3(3, 1, 3)
+      }} ref={canvasRef} frameloop="demand">
           <color attach="background" args={["black"]} />
             <>
               <ambientLight intensity={1} />
@@ -120,17 +127,23 @@ export const Game = () => {
             </>
           {!debug && <fogExp2 attach={"fog"} args={["black", 0.1]} />}
           <Physics paused={bookOpen || paused} debug={debug}>
-          <Player />
+           <Player />
             <group position={new Vector3(3, 0, 3)}>
               <Cell />
             </group>
           </Physics>
-          <PointerLockControls ref={pointerLockRef} />
-      </Canvas>
+          {/* <PointerLockControls ref={pointerLockRef} /> */}
+          <NewMobileController />
+          </Canvas>
+          <div id='test'></div>
+          <div id='test2'>
+            <div id='test3'></div>
+          </div>
+
         <div className="absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-2 border-white"></div>
         {bookOpen && <BookInterior />}
-        {isMobile && <MobileController />}
-      </KeyboardControls>
+{/*         {isMobile && <MobileController />}
+ */}      </KeyboardControls>
       </HelmetProvider>
   );
 };

@@ -138,7 +138,7 @@ export const Player = () => {
 
   return cellHex ? (
     <group>
-      <Camera initialRotation={initialRotation} />
+      {/* <Camera initialRotation={initialRotation} /> */}
       <RigidBody
         canSleep={false}
         ref={ref}
