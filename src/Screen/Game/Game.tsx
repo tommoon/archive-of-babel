@@ -13,6 +13,7 @@ import { PointerLockControls as PointerLockControlsImpl } from "three-stdlib";
 import { MobileController } from "./components/MobileController";
 import { optionsController } from "@/Controllers/optionsController";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { AdSenseAd } from "../Home/components/AdSenseAd";
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
@@ -46,8 +47,9 @@ const PreLoadScreen:React.FC<{onStart:() => void}> = ({onStart}) => {
   }}, [active, progress])
   
   return (
-    <div onClick={(e) => e.stopPropagation()} className="fixed top-0 left-0 h-full w-full bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="absolute flex flex-col gap-y-4 backdrop-blur-md p-16 rounded-md">
+    <div onClick={(e) => e.stopPropagation()} className=" flex flex-col gap-y-8 fixed top-0 left-0 h-full w-full bg-black bg-opacity-50 flex justify-center items-center z-50">
+      <AdSenseAd dataAdSlot="7256317371"/>
+      <div className="flex flex-col gap-y-4 backdrop-blur-md p-16 rounded-md">
         <div className="flex flex-col">
           <progress className="progress progress-accent w-56" value={loadingProgress} max="100"></progress>
           <span className="text-white self-end">{loadingMessage}</span>
