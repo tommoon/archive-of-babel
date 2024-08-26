@@ -21,9 +21,10 @@ const pageCount = 410;
 export const BookInterior = () => {
   const textBlockRef = useRef(null);
   const [shareClicked,setShareClicked] = useState(false)
-  const { setBookOpen, cellHex: cellHex, bookState, page, setPage } = gameController();
+  const { setBookOpen, cellHex: cellHex, bookState, page, searchString, setPage, setSearchstring } = gameController();
   const exitBook = () => {
-    setPage(undefined)
+    setPage(undefined);
+    setSearchstring(null);
     setBookOpen(false);
     setScreenLocked(false);
   };
@@ -62,7 +63,12 @@ export const BookInterior = () => {
             }}
           >
             {cellHex &&
-               generateSeededText(page, cellHex, bookState)}
+            generateSeededText(page, cellHex, bookState, searchString).map((part, i) => 
+              <span key={i} style={part.toLowerCase() === searchString && searchString.toLowerCase() ? { fontWeight: 'bold', color: 'red' } : {} }>
+                  { part }
+              </span>
+            )
+          }
           </div>
           <div className="flex mt-4 m-8 flex-wrap sm:flex-nowrap justify-evenly gap-y-2">
             <Input autoFocus={false}  min={1} max={410} className="w-20" type="number" value={page} onChange={(e) => {
