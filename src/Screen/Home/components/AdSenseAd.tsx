@@ -1,10 +1,13 @@
 import { Adsense } from '@ctrl/react-adsense';
 
-export const AdSenseAd: React.FC<{dataAdSlot: string}> = ({dataAdSlot}) => {
-
+export const AdSenseAd: React.FC<{dataAdSlot: string, extraProps?:any}> = ({dataAdSlot, extraProps}) => {
     return window.adsbygoogle && (
-        <div className="text-center mt-2">
+        <div className="text-center">
             <Adsense
+                style={{
+   ...extraProps,
+                    display: 'block'
+                }}
                 className='ExampleAdSlot'
                 client="ca-pub-4658165198708977"
                 slot={dataAdSlot}
