@@ -2,7 +2,6 @@ import { BookState } from "@/Controllers/gameController";
 import { CellHex } from "@/types/CommonTypes";
 import { x86 as MurmurHash3 } from "murmurhash3js";
 import { hashCode, pad, randPad, roomsToSenary, senaryToRooms } from "./utils";
-import nlp from "compromise";
 
 export function seededRandom(seed: string): number {
   const hash = MurmurHash3.hash32(seed);
