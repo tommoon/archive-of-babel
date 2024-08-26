@@ -8,6 +8,7 @@ import { gameController } from "@/Controllers/gameController";
 import { useResetPosition } from "@/hooks/useResetPosition";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import image from '@/assets/images/standinbackground.png';
+import { AdSenseAd } from "./components/AdSenseAd";
 
 export const Home = () => {
   const [, setSearchParams] = useSearchParams();
@@ -44,6 +45,7 @@ export const Home = () => {
         <Container>
           <TextSearch />
         </Container>
+        <AdSenseAd dataAdSlot="6092205678"/>
         <Container>
           <About />
         </Container>
