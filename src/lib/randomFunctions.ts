@@ -1,7 +1,8 @@
 import { BookState } from "@/Controllers/gameController";
 import { CellHex } from "@/types/CommonTypes";
 import { x86 as MurmurHash3 } from "murmurhash3js";
-import { hashCode, pad, roomsToSenary, senaryToRooms } from "./utils";
+import { hashCode, pad, randPad, roomsToSenary, senaryToRooms } from "./utils";
+import nlp from "compromise";
 
 export function seededRandom(seed: string): number {
   const hash = MurmurHash3.hash32(seed);
@@ -78,8 +79,9 @@ const makeHex = (blockString: string, seed: string): string => {
 export function generateSeededText(
   page: number,
   bookCell: CellHex,
-  bookLocation: BookState
-): string {
+  bookLocation: BookState,
+  searchString: string | null = null
+): string[] {
   const negativeStates = roomsToSenary(bookCell);
   const locHash = hashCode(
     `${bookLocation.cabinet}${bookLocation.unit}${bookLocation.row}${
@@ -98,11 +100,10 @@ export function generateSeededText(
       return text;
     })
     .join("");
-
-  return text;
+  return text.split(new RegExp(`(${searchString})`, "gi"));
 }
 
-export const findText = (searchString: string) => {
+export const findText = (searchString: string, exact = true) => {
   const cabinet = Math.floor(Math.random() * 4).toString();
   const unit = Math.floor(Math.random() * 4).toString();
   const row = Math.floor(Math.random() * 4).toString();
@@ -111,7 +112,10 @@ export const findText = (searchString: string) => {
   const negativeState = Math.floor(Math.random() * 7);
   const locHash = hashCode(cabinet + unit + row + book + page + negativeState);
 
-  const fullString = pad(searchString, 3000, " ", true);
+  const fullString = exact
+    ? pad(searchString, 3000, " ", true)
+    : randPad(searchString, 3000, characters);
+
   const newCellHex = { x: "", y: "", z: "" };
   (Object.keys(newCellHex) as (keyof CellHex)[]).forEach((cell, i) => {
     const pos = i * 1000;

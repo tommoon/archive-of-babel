@@ -42,8 +42,25 @@ export const Search = () => {
                 searchParams.append(key, value.toString());
             }
         });
+        searchParams.append('searchString', searchString.toString());
         return searchParams;
     }, [searchString]);
+
+    const partialMatches = useMemo(() => {
+        if (!searchString) return null;
+        return [0, 1, 2].map(() => {
+            const bookLoc = findText(searchString, false);
+            const searchParams = new URLSearchParams();
+            Object.entries(bookLoc).forEach(([key, value]) => {
+                if (value !== undefined && value !== null) {
+                    searchParams.append(key, value.toString());
+                }
+            });
+            searchParams.append('searchString', searchString.toString());
+            return searchParams;
+        })
+    }, [searchString]);
+
     return (
         <div className="pt-16 m-auto max-w-prose text-base flex flex-col gap-y-8">
             <Container>
@@ -78,6 +95,27 @@ export const Search = () => {
                     </Link>
                 </>
             )}
+            {
+                searchString &&
+                partialMatches &&
+                <h2 className="m-auto text-xl">Partial Matches</h2>
+            }
+            {
+                searchString &&
+                partialMatches &&
+                partialMatches.map(match =>
+                    <Link className="btn btn-accent truncate max-w-full text-left justify-start text-xs h-fit p-4" to={`/game?${match.toString()}`}>
+                        <div className="flex flex-col">
+                            {Array.from(match.entries()).map(([key, value]) => {
+                                return (
+                            <div className="" key={key}>
+                                {`${key}: ${value}`}
+                            </div>
+                            )})}
+                        </div>
+                    </Link>
+                )
+            }
         </div>
     );
 }

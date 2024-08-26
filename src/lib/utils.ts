@@ -65,6 +65,35 @@ export const pad = (
   return reverse ? input.padEnd(length, char) : input.padStart(length, char);
 };
 
+export const randPad = (input: string, length: number, characters: string) => {
+  // Function to generate a random character from the characters string
+  const getRandomChar = () =>
+    characters[Math.floor(Math.random() * characters.length)];
+
+  // Calculate how much padding is needed
+  const padLength = length - input.length;
+
+  // If no padding is needed, return the input as is
+  if (padLength <= 0) {
+    return input;
+  }
+
+  // Generate a random string of characters for padding
+  const generateRandomString = (len: number) =>
+    Array.from({ length: len }, getRandomChar).join("");
+
+  // Randomly decide how much padding to add to the start and end
+  const startPadLength = Math.floor(Math.random() * padLength);
+  const endPadLength = padLength - startPadLength;
+
+  // Generate padding strings
+  const startPadding = generateRandomString(startPadLength);
+  const endPadding = generateRandomString(endPadLength);
+
+  // Return the string with random padding added to both sides
+  return startPadding + input + endPadding;
+};
+
 export const hashCode = (s: string) => {
   let hash = 0,
     i,
