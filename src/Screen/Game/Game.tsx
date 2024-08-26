@@ -51,7 +51,7 @@ const PreLoadScreen:React.FC<{onStart:() => void}> = ({onStart}) => {
       <AdSenseAd dataAdSlot="7256317371" extraProps={
         {
           height: '250px',
-          width: '970px'
+          width: '100%'
         }
         } />
       <div className="flex flex-col gap-y-4 backdrop-blur-md p-16 rounded-md">

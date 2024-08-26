@@ -2,7 +2,7 @@ import { Adsense } from '@ctrl/react-adsense';
 
 export const AdSenseAd: React.FC<{dataAdSlot: string, extraProps?:any}> = ({dataAdSlot, extraProps}) => {
     return window.adsbygoogle && (
-        <div className="text-center">
+        <div className="text-center w-full px-5">
             <Adsense
                 style={{
    ...extraProps,
