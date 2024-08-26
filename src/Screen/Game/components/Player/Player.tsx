@@ -8,6 +8,7 @@ import { Camera } from "./Camera";
 import { useCellHex } from "@/hooks/useCellHex";
 import { degrees_to_radians } from "@/lib/utils";
 import { touchController } from "@/Controllers/touchController";
+import { optionsController } from "@/Controllers/optionsController";
 
 const SPEED = 2;
 const direction = new Vector3();
@@ -94,6 +95,7 @@ export const Player = () => {
   const [, get] = useKeyboardControls();
   const { cellHex, bookState } = gameController();
   const { move, pan } = touchController();
+  const { fov } = optionsController()
   const { adjustedPosition } = useCellHex({ cellHex, addition: getStartingPos(bookState) });
   const initialPosition = useInitialPosition(bookState, adjustedPosition);
   const initialRotation = useInitialRotation(bookState);
@@ -138,7 +140,7 @@ export const Player = () => {
 
   return cellHex ? (
     <group>
-      <Camera initialRotation={initialRotation} />
+      <Camera initialRotation={initialRotation} fov={fov} />
       <RigidBody
         canSleep={false}
         ref={ref}
