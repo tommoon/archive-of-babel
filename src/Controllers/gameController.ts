@@ -14,11 +14,13 @@ type gameState = {
   bookOpen: boolean;
   debug: boolean;
   page: number;
+  searchString: string | null;
   screenLocked: boolean;
   setCellHex: (cellHex: CellHex) => void;
   setBookState: (bookState: BookState) => void;
   setBookOpen: (bookOpen: boolean) => void;
   setPage: (page: number | undefined) => void;
+  setSearchstring: (searchString: string | null) => void;
 };
 
 export const gameController = create<gameState>()((set, get) => ({
@@ -31,6 +33,7 @@ export const gameController = create<gameState>()((set, get) => ({
   },
   bookOpen: false,
   page: 0,
+  searchString: null,
   debug: false,
   screenLocked: false,
   setCellHex: (cellHex: CellHex) => {
@@ -53,6 +56,11 @@ export const gameController = create<gameState>()((set, get) => ({
   setPage: (page: number | undefined) => {
     set(() => ({
       page: page,
+    }));
+  },
+  setSearchstring: (searchString: string | null) => {
+    set(() => ({
+      searchString: searchString,
     }));
   },
 }));

@@ -14,10 +14,12 @@ export const useQueryString = () => {
     bookState,
     cellHex,
     page,
+    searchString,
     setCellHex,
     setBookState,
     setBookOpen,
     setPage,
+    setSearchstring,
     debug,
   } = gameController();
 
@@ -32,10 +34,11 @@ export const useQueryString = () => {
       ...Object.fromEntries(convertToParams(cellHex)),
       ...Object.fromEntries(convertToParams(bookState)),
       ...(page && { page: page }),
+      ...(searchString && { searchString: searchString }),
     };
 
     setSearchParams(stringifiedParams);
-  }, [cellHex, bookState, page, debug, setSearchParams]);
+  }, [cellHex, bookState, searchString, page, debug, setSearchParams]);
 
   useEffect(() => {
     const x = searchParams.get("x");
@@ -46,6 +49,7 @@ export const useQueryString = () => {
     const row = searchParams.get("row");
     const book = searchParams.get("book");
     const page = searchParams.get("page");
+    const searchString = searchParams.get("searchString");
 
     const debug = searchParams.get("debug");
     if (debug) {
@@ -70,10 +74,13 @@ export const useQueryString = () => {
       });
     }
 
+    if (searchString) {
+      setSearchstring(searchString);
+    }
     if (page) {
       setBookOpen(true);
       setScreenLocked(true);
       setPage(parseInt(page));
     }
-  }, [setCellHex, setBookState, setDebug]);
+  }, [setCellHex, setBookState, setSearchstring, setDebug]);
 };
