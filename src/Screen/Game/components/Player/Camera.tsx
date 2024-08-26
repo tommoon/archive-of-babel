@@ -8,7 +8,8 @@ const handleClick = (e: any) => {
 
 export const cameraForard = new Vector3()
 
-export const Camera:React.FC<{initialRotation: Euler}> = ({initialRotation}) => <PerspectiveCamera
+export const Camera: React.FC<{ initialRotation: Euler, fov: number }> = ({ initialRotation, fov }) => <PerspectiveCamera
+      fov={fov}
       rotation={initialRotation}
       makeDefault>
       <Plane

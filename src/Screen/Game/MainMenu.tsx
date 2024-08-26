@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export const MainMenu = () => {
   const [mainMenu, setMainMenu] = useState(false);
-  const { setIsMobile, isMobile, mobilePanSensitivity, setPanSensitivity } = optionsController();
+  const { setIsMobile, isMobile, mobilePanSensitivity, fov, setPanSensitivity, setFov } = optionsController();
   const menuClick = (
     event: MouseEvent<SVGSVGElement> | TouchEvent<SVGSVGElement>,
   ) => {
@@ -70,6 +70,18 @@ export const MainMenu = () => {
                 max={50}
                 value={mobilePanSensitivity}
                 onChange={(e) => setPanSensitivity(parseInt(e.target.value))}
+                className="range range-accent range-sm max-w-[50%]" />
+            </label>}
+            {<label className="label cursor-pointer">
+              <span className="label-text">
+                Field of View
+              </span>
+              <input
+                type="range"
+                min={20}
+                max={120}
+                value={fov}
+                onChange={(e) => setFov(parseInt(e.target.value))}
                 className="range range-accent range-sm max-w-[50%]" />
             </label>}
             <div className="flex justify-between">

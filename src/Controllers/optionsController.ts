@@ -3,10 +3,13 @@ import { loadFromLocalStorage, saveToLocalStorage } from "@/lib/localStorage";
 import { create } from "zustand";
 
 const isMobile = loadFromLocalStorage("isMobile");
+const fov = loadFromLocalStorage("fov");
 const mobilePanSensitivity = loadFromLocalStorage("mobilePanSensitivity");
 
 export type optionsState = {
   isMobile: boolean;
+  fov: number;
+  setFov: (fov: number) => void;
   mobilePanSensitivity: number;
   setIsMobile: (isMobile: boolean) => void;
   setPanSensitivity: (mobilePanSensitivity: number) => void;
@@ -14,6 +17,7 @@ export type optionsState = {
 
 export const optionsController = create<optionsState>()((set) => ({
   isMobile: (isMobile && JSON.parse(isMobile)) || checkTouchDevice(),
+  fov: (fov && JSON.parse(fov)) || 60,
   mobilePanSensitivity:
     (mobilePanSensitivity && JSON.parse(mobilePanSensitivity)) || 20,
   setIsMobile: (isMobile: boolean) => {
@@ -26,6 +30,12 @@ export const optionsController = create<optionsState>()((set) => ({
     saveToLocalStorage("mobilePanSensitivity", mobilePanSensitivity);
     set(() => ({
       mobilePanSensitivity: mobilePanSensitivity,
+    }));
+  },
+  setFov: (fov: number) => {
+    saveToLocalStorage("fov", fov);
+    set(() => ({
+      fov: fov,
     }));
   },
 }));
