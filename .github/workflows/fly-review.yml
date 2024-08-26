@@ -37,7 +37,7 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Test Branch Deployed here: [${{steps.deploy.outputs.url}}][1]
+            Test Branch Deployed here: [${{steps.deploy.outputs.url}}][1 "Title" target="_blank"]
 
             [1]: ${{steps.deploy.outputs.url}}
       - name: Clean up GitHub environment
