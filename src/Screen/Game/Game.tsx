@@ -29,7 +29,7 @@ const keyboardMap = [
 ];
 
 const PreLoadScreen:React.FC<{onStart:() => void}> = ({onStart}) => {
-  const { active, progress, loaded, total } = useProgress();
+  const { progress, loaded, total } = useProgress();
 
   const [loadingMessage, setLoadingMessage] = useState<string | null>('preparing')
   const [loadingProgress, setProgress] = useState<number>(0)
