@@ -26,7 +26,7 @@ type BooksProps = {
 export const Painting: React.FC<BooksProps> = ({ cellHex, orientation }) => {
     const { nodes, materials } = useGLTF(paintingModel) as GLTFResult;
     const { adjustedPosition } = useCellHex({ cellHex });
-    const { setPainting, setImage, setBookState } = gameController()
+    const { setPainting, setImage } = gameController()
   const texture = useMemo(() =>  generatePainting(cellHex, orientation), [cellHex, orientation])
   
   const canvasTexture = useMemo(() => {
