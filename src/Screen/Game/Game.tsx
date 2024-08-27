@@ -38,7 +38,7 @@ const PreLoadScreen:React.FC<{onStart:() => void}> = ({onStart}) => {
   useEffect(() => { setProgress(progress*0.9) }, [progress])
   
   useEffect(() => {
-    if (!active && progress === 100) {
+    if (!active && (progress === 100 || loaded === total)) {
       setLoadingMessage(`Control Initialization`)
       setTimeout(() => {
         setProgress(100)
