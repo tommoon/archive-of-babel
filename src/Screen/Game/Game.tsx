@@ -44,7 +44,7 @@ const PreLoadScreen:React.FC<{onStart:() => void}> = ({onStart}) => {
         setProgress(100)
         setLoadingMessage('Ready')
       },1500)
-  }}, [ progress])
+  }}, [loaded, total, progress])
   
   return (
     <div onClick={(e) => e.stopPropagation()} className=" flex flex-col gap-y-8 fixed inset-0 h-full w-full bg-black bg-opacity-50 flex justify-center items-center z-50">
