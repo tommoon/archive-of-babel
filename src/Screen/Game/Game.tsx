@@ -14,6 +14,7 @@ import { MobileController } from "./components/MobileController";
 import { optionsController } from "@/Controllers/optionsController";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { AdSenseAd } from "../Home/components/AdSenseAd";
+import { PaintingInterior } from "./components/PaintingInterior";
 
 const keyboardMap = [
   { name: "forward", keys: ["ArrowUp", "KeyW"] },
@@ -66,7 +67,7 @@ const PreLoadScreen:React.FC<{onStart:() => void}> = ({onStart}) => {
 };
 
 export const Game = () => {
-  const { debug, bookOpen } = gameController();
+  const { debug, bookOpen, image } = gameController();
   const canvasRef = useRef(null);
   useQueryString();
   const pointerLockRef = useRef<PointerLockControlsImpl>(null);
@@ -136,6 +137,7 @@ export const Game = () => {
       </Canvas>
         <div className="absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-full transform -translate-x-1/2 -translate-y-1/2 border-2 border-white"></div>
         {bookOpen && <BookInterior />}
+        {image && <PaintingInterior image={image} />}
         {isMobile && <MobileController />}
       </KeyboardControls>
       </HelmetProvider>

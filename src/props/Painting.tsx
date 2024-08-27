@@ -5,7 +5,8 @@ import * as THREE from "three";
 import { GLTF } from "three-stdlib";
 import { CellHex, Orientation } from "@/types/CommonTypes";
 import { generatePainting } from "@/lib/randomFunctions";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
+import { gameController, setScreenLocked } from "@/Controllers/gameController";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -25,14 +26,27 @@ type BooksProps = {
 export const Painting: React.FC<BooksProps> = ({ cellHex, orientation }) => {
     const { nodes, materials } = useGLTF(paintingModel) as GLTFResult;
     const { adjustedPosition } = useCellHex({ cellHex });
-    
-  const texture = useMemo(() => {
-    const canvas = generatePainting(cellHex, orientation);
-    if(!canvas) return
-    return new THREE.CanvasTexture(canvas);
-   }, [cellHex, orientation])
+    const { setPainting, setImage, setBookState } = gameController()
+  const texture = useMemo(() =>  generatePainting(cellHex, orientation), [cellHex, orientation])
   
+  const canvasTexture = useMemo(() => {
+    if(!texture) return
+    return new THREE.CanvasTexture(texture);
+
+  }, [texture])
   
+   const handleClick = useCallback(
+    (e: any) => {
+       e.stopPropagation();
+       if (texture) {
+          setPainting(orientation);
+         setImage(texture);
+         setScreenLocked(true);
+       }
+    },
+    [orientation],
+   );
+
   return (
     <group
       rotation={[0, ['N', 'S'].includes(orientation) ? Math.PI / 2 : 0, 0]}
@@ -48,13 +62,15 @@ export const Painting: React.FC<BooksProps> = ({ cellHex, orientation }) => {
         >
         
         </mesh>
-        <Plane
+      <Plane
+        onClick={handleClick}
           name="painting"
-          material={new THREE.MeshBasicMaterial({ map: texture })}
+          material={new THREE.MeshBasicMaterial({ map: canvasTexture })}
           rotation={[0, 0, 0]}  // Plane is facing up (towards positive Y)
           position={[-5.5, 0.6, -1.38]}
           args={[0.5, 0.65]}         // Size of the plane
-        />
+      >
+        </Plane>
       </group>
     );
 };
