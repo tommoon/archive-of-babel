@@ -1,12 +1,12 @@
 import { optionsController } from "@/Controllers/optionsController";
 import { cn } from "@/lib/utils";
-import { Settings } from "lucide-react";
+import { Settings, Volume2, VolumeX } from "lucide-react";
 import { useState, MouseEvent, TouchEvent } from "react";
 import { Link } from "react-router-dom";
 
 export const MainMenu = () => {
   const [mainMenu, setMainMenu] = useState(false);
-  const { setIsMobile, isMobile, mobilePanSensitivity, fov, setPanSensitivity, setFov } = optionsController();
+  const { setIsMobile, isMobile, mobilePanSensitivity, fov, fxVol, ambienceVol, setFxVol, setAmbienceVol, setPanSensitivity, setFov } = optionsController();
   const menuClick = (
     event: MouseEvent<SVGSVGElement> | TouchEvent<SVGSVGElement>,
   ) => {
@@ -84,6 +84,59 @@ export const MainMenu = () => {
                 onChange={(e) => setFov(parseInt(e.target.value))}
                 className="range range-accent range-sm max-w-[50%]" />
             </label>}
+            <div className="divider" />
+            <label className="label cursor-pointer">
+              <span className="label-text">
+                FX Volume
+              </span>
+              <div
+                className="flex gap-x-2 items-center"
+                style={{
+                  width: 'calc(50% + 2.5rem)',
+                  maxWidth: 'calc(50% + 2.5rem)'
+                }}
+              >
+              <button disabled={fxVol === 0} onClick={() => setFxVol(0)} className="btn btn-accent btn-circle btn-sm">
+                {
+                fxVol === 0 ? <VolumeX/> : <Volume2 />
+                }
+              </button>
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.01}
+                value={fxVol}
+                onChange={(e) => setFxVol(parseFloat(e.target.value))}
+                  className="range range-accent range-sm" />
+                </div>
+            </label>
+            <label className="label cursor-pointer">
+              <span className="label-text">
+                Ambient Sounds
+              </span>
+              <div
+                className="flex gap-x-2 items-center"
+                style={{
+                  width: 'calc(50% + 2.5rem)',
+                  maxWidth: 'calc(50% + 2.5rem)'
+                }}
+              >
+              <button disabled={ambienceVol === 0} onClick={() => setAmbienceVol(0)} className="btn btn-accent btn-circle btn-sm">
+                {
+                ambienceVol === 0 ? <VolumeX/> : <Volume2 />
+                }
+              </button>
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.01}
+                value={ambienceVol}
+                onChange={(e) => setAmbienceVol(parseFloat(e.target.value))}
+                  className="range range-accent range-sm" />
+                </div>
+            </label>
             <div className="flex justify-between">
               <button onClick={closeMenu} className="btn btn-accent">close</button>
               <Link className="btn btn-neutral" type="button" to={"/"}>

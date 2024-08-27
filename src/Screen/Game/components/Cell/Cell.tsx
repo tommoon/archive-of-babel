@@ -4,9 +4,16 @@ import { SubCell } from "./components/SubCell";
 import { LibraryStairs } from "../../../../props/LibraryStairs";
 import { Books } from "../../../../props/Books";
 import { base32Add, base32Subtract } from "@/lib/base32Utils";
+import { PositionalAudio } from "@react-three/drei";
+import ambience from '@/assets/sounds/ambience.mp3'
+import { useRef } from "react";
+import { PositionalAudio as PositionalAudioImpl } from 'three'
+import { optionsController } from "@/Controllers/optionsController";
 
 export const Cell = () => {
   const { cellHex } = gameController();
+  const { ambienceVol } = optionsController()
+  const soundRef = useRef<PositionalAudioImpl>(null);
 
   return (
     cellHex && (
@@ -41,7 +48,14 @@ export const Cell = () => {
           cellHex={{ ...cellHex, x: base32Subtract(cellHex.x, '1')}}
           omit={["N", "W", "S"]}
         />
-
+          <PositionalAudio
+            url={ambience}
+            ref={soundRef}
+            loop
+            distance={ambienceVol}
+          autoplay
+          /
+        >
           <Books cellHex={cellHex} />
       </group>
     )

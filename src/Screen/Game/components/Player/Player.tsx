@@ -1,14 +1,15 @@
 import { BookState, gameController } from "@/Controllers/gameController";
-import { useKeyboardControls } from "@react-three/drei";
+import { PositionalAudio, useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { CapsuleCollider, RapierRigidBody, RigidBody } from "@react-three/rapier";
-import { useMemo, useRef } from "react";
-import { Euler, Quaternion, Vector3 } from "three";
+import { useEffect, useMemo, useRef } from "react";
+import { Euler, Quaternion, Vector3, PositionalAudio as ThreePositionalAudio } from "three";
 import { Camera } from "./Camera";
 import { useCellHex } from "@/hooks/useCellHex";
 import { degrees_to_radians } from "@/lib/utils";
 import { touchController } from "@/Controllers/touchController";
 import { optionsController } from "@/Controllers/optionsController";
+import footsteps from '@/assets/sounds/footstep.mp3'
 
 const SPEED = 2;
 const direction = new Vector3();
@@ -92,16 +93,36 @@ const useInitialRotation = (bookState: BookState | undefined) => {
 
 export const Player = () => {
   const ref = useRef<RapierRigidBody>(null);
+  const footstepAudio = useRef<ThreePositionalAudio>(null);
   const [, get] = useKeyboardControls();
   const { cellHex, bookState } = gameController();
   const { move, pan } = touchController();
-  const { fov } = optionsController()
+  const { fov, fxVol } = optionsController()
   const { adjustedPosition } = useCellHex({ cellHex, addition: getStartingPos(bookState) });
   const initialPosition = useInitialPosition(bookState, adjustedPosition);
   const initialRotation = useInitialRotation(bookState);
+  
+  useEffect(() => {
+    const footstepAudioListener = footstepAudio.current
 
+    const alterAudio = () => {
+      if (footstepAudioListener) {
+        const tune = Math.random() * 600 - 300
+       // const playbackRate = Math.random() * 0.1 + 0.95
+      //  footstepAudioListener.setPlaybackRate(playbackRate)
+        footstepAudioListener.setDetune(tune)
+      }
+    };
+
+    // Set interval to play audio every second
+      const intervalId = setInterval(alterAudio, 500);
+      // Cleanup interval on component unmount
+      return () => clearInterval(intervalId);
+
+  }, [footstepAudio])
+  
   useFrame((state) => {
-    if (ref.current) {
+    if (ref.current && footstepAudio.current) {
       const { forward = 0, backward = 0, leftward = 0, rightward = 0 } = get();
       const velocity = ref.current.linvel();
       const rigidBodyTranslation = ref.current.translation();
@@ -132,9 +153,20 @@ export const Player = () => {
         },
         true,
       );
+
       const tiltQuat = new Quaternion().setFromEuler(new Euler(pan.dy * -0.01, 0, 0));
       state.camera.rotateOnWorldAxis(new Vector3(0,1,0),pan.dx * -0.01)
       state.camera.quaternion.multiply(tiltQuat)
+
+      // Check if the player is moving and control footstep sound
+      if (direction.length() > 0) {
+        if (!footstepAudio.current.isPlaying) {
+          footstepAudio.current.setLoop(true);
+          footstepAudio.current.play();
+        }
+      } else {
+        footstepAudio.current.setLoop(false);
+      }
     }
   });
 
@@ -150,6 +182,8 @@ export const Player = () => {
         position={initialPosition}
       >
         <CapsuleCollider args={[0.2, 0.18]} />
+        {/* Attach footstep sound */}
+        <PositionalAudio ref={footstepAudio} url={footsteps} distance={fxVol * 2} />
       </RigidBody>
     </group>
   ) : null;

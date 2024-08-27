@@ -2,6 +2,6 @@ export const saveToLocalStorage = (key: string, value: any) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
 
-export const loadFromLocalStorage = (key: string): string | null => {
-  return localStorage.getItem(key);
+export const loadFromLocalStorage = (keys: string[]): (string | null)[] => {
+  return keys.map((key) => localStorage.getItem(key));
 };

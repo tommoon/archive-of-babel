@@ -117,6 +117,9 @@ for the models, I used [the Modular Temple Pack](https://fertile-soil-production
 ## Engine
 The game is built in three.js, using [react three fiber, Drei and Zustand](https://docs.pmnd.rs/).
 The physics engine used is [a react optimised version of the rapier engine](https://github.com/pmndrs/react-three-rapier)
+
+## Sounds
+All sounds were taken from [Zapsplat](https://www.zapsplat.com/). A great resource for free sound effects and atmospheres.
 `;
 
 export const ABOUT = `
