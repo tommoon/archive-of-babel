@@ -38,13 +38,13 @@ const PreLoadScreen:React.FC<{onStart:() => void}> = ({onStart}) => {
   useEffect(() => { setProgress(progress*0.9) }, [progress])
   
   useEffect(() => {
-    if (!active && (progress === 100 || loaded === total)) {
+    if ((progress === 100 || loaded === total)) {
       setLoadingMessage(`Control Initialization`)
       setTimeout(() => {
         setProgress(100)
         setLoadingMessage('Ready')
       },1500)
-  }}, [active, progress])
+  }}, [ progress])
   
   return (
     <div onClick={(e) => e.stopPropagation()} className=" flex flex-col gap-y-8 fixed inset-0 h-full w-full bg-black bg-opacity-50 flex justify-center items-center z-50">
