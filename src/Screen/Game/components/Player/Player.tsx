@@ -3,7 +3,7 @@ import { PositionalAudio, useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { CapsuleCollider, RapierRigidBody, RigidBody } from "@react-three/rapier";
 import { useEffect, useMemo, useRef } from "react";
-import { Euler, Quaternion, Vector3, PositionalAudio as ThreePositionalAudio, MathUtils } from "three";
+import { Euler, Quaternion, Vector3, PositionalAudio as ThreePositionalAudio } from "three";
 import { Camera } from "./Camera";
 import { useCellHex } from "@/hooks/useCellHex";
 import { degrees_to_radians } from "@/lib/utils";
