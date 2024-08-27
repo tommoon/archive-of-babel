@@ -103,8 +103,8 @@ export const Search = () => {
             {
                 searchString &&
                 partialMatches &&
-                partialMatches.map(match =>
-                    <Link className="btn btn-accent truncate max-w-full text-left justify-start text-xs h-fit p-4" to={`/game?${match.toString()}`}>
+                partialMatches.map((match,i) =>
+                    <Link key={i} className="btn btn-accent truncate max-w-full text-left justify-start text-xs h-fit p-4" to={`/game?${match.toString()}`}>
                         <div className="flex flex-col">
                             {Array.from(match.entries()).map(([key, value]) => {
                                 return (
