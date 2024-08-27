@@ -45,7 +45,7 @@ export const Home = () => {
         <Container>
           <TextSearch />
         </Container>
-        <AdSenseAd dataAdSlot="2984834217" dataAdLayoutKey={"-4y+do+4q-ol+hp"} />
+        <AdSenseAd dataAdSlot="1072986746" dataAdLayoutKey={"-4y+do+4q-ol+hp"} />
         <Container>
           <About />
         </Container>

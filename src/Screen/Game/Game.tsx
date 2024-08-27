@@ -49,7 +49,7 @@ const PreLoadScreen:React.FC<{onStart:() => void}> = ({onStart}) => {
   
   return (
     <div onClick={(e) => e.stopPropagation()} className=" flex flex-col gap-y-8 fixed inset-0 h-full w-full bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <AdSenseAd dataAdSlot="1072986746" dataAdLayoutKey={"-gn-9+54-75-4e"} />
+      <AdSenseAd dataAdSlot="3109753452" dataAdLayoutKey={"-gn-9+54-75-4e"} />
       <div className="flex flex-col gap-y-4 backdrop-blur-md p-16 rounded-md">
         <div className="flex flex-col">
           <progress className="progress progress-accent w-56" value={loadingProgress} max="100"></progress>
