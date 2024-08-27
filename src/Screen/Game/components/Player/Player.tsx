@@ -10,6 +10,7 @@ import { degrees_to_radians } from "@/lib/utils";
 import { touchController } from "@/Controllers/touchController";
 import { optionsController } from "@/Controllers/optionsController";
 import footsteps from '@/assets/sounds/footstep.mp3'
+import { Orientation } from "@/types/CommonTypes";
 
 const SPEED = 2;
 const direction = new Vector3();
@@ -48,10 +49,19 @@ const getRoomRotation = (cabinet: number | undefined) => {
       return 0;
   }
 };
-
-const useInitialPosition = (bookState: BookState | undefined, adjustedPosition: Vector3) => {
-  return useMemo(() => {
-    if (!bookState) return adjustedPosition;
+  
+const useInitialPosition = (bookState: BookState | undefined, adjustedPosition: Vector3,  painting: Orientation | undefined) => {
+  if (!bookState) return adjustedPosition;
+  if (painting) {
+      let vector = new Vector3();
+      if (['N', 'S'].includes(painting)) {
+        vector.setZ('N' === painting ? -7.5 : 3.5)
+      } else {
+        vector.setX('E' === painting ? -5.5 : 5.5)
+        vector.setZ(-2.5)
+      }
+      return adjustedPosition.clone().add(vector);
+  } else {
     let unitAdjustment = 0;
     if (bookState.unit !== undefined) {
       if (bookState.cabinet === 0) {
@@ -63,12 +73,15 @@ const useInitialPosition = (bookState: BookState | undefined, adjustedPosition: 
     const quat = new Quaternion().setFromEuler(new Euler(0, degrees_to_radians(getRoomRotation(bookState.cabinet)), 0));
     const vector = new Vector3(unitAdjustment * 0.447, 0, 0).applyQuaternion(quat);
     return adjustedPosition.clone().add(vector);
-  }, []);
+  }
 };
 
-const useInitialRotation = (bookState: BookState | undefined) => {
-  return useMemo(() => {
+const useInitialRotation = (bookState: BookState | undefined, painting: Orientation | undefined) => {
     if (!bookState) return new Euler(0, 0, 0);
+ 
+  if (painting) {
+    return new Euler(0, ['N', 'S'].includes(painting) ? Math.PI / 2 : 0, 0)
+  } else {
     let y = getRoomRotation(bookState?.cabinet);
     if (bookState?.book !== undefined) {
       let starting = 15 - (bookState.book * 3.3);
@@ -88,19 +101,21 @@ const useInitialRotation = (bookState: BookState | undefined) => {
     }
 
     return initialRotation;
-  }, [bookState]);
+  }
 };
 
 export const Player = () => {
   const ref = useRef<RapierRigidBody>(null);
   const footstepAudio = useRef<ThreePositionalAudio>(null);
   const [, get] = useKeyboardControls();
-  const { cellHex, bookState } = gameController();
+  const { cellHex, bookState, painting } = gameController();
   const { move, pan } = touchController();
   const { fov, fxVol } = optionsController()
   const { adjustedPosition } = useCellHex({ cellHex, addition: getStartingPos(bookState) });
-  const initialPosition = useInitialPosition(bookState, adjustedPosition);
-  const initialRotation = useInitialRotation(bookState);
+
+  const initialPosition = useMemo(() => useInitialPosition(bookState, adjustedPosition, painting),[]);
+
+  const initialRotation = useMemo(() => useInitialRotation(bookState, painting),[]);
   
   useEffect(() => {
     const footstepAudioListener = footstepAudio.current

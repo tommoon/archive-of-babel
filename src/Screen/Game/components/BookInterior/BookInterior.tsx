@@ -12,7 +12,7 @@ import { useRef } from "react";
 import { generateSeededText } from "@/lib/randomFunctions";
 import { Input } from "@/components/ui/input";
 import paper from "@/assets/images/paperBackground.jpg";
-import { ShareButton } from "./ShareButton";
+import { ShareButton } from "../ShareButton";
 
 const pageCount = 410;
 

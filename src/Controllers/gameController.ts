@@ -1,4 +1,4 @@
-import { CellHex } from "@/types/CommonTypes";
+import { CellHex, Orientation } from "@/types/CommonTypes";
 import { create } from "zustand";
 
 export type BookState = {
@@ -10,12 +10,16 @@ export type BookState = {
 
 type gameState = {
   cellHex: CellHex;
+  painting: Orientation | undefined;
+  image: HTMLCanvasElement | null;
   bookState: BookState;
   bookOpen: boolean;
   debug: boolean;
   page: number;
   searchString: string | null;
   screenLocked: boolean;
+  setImage: (image: HTMLCanvasElement | null) => void;
+  setPainting: (painting: Orientation | undefined) => void;
   setCellHex: (cellHex: CellHex) => void;
   setBookState: (bookState: BookState) => void;
   setBookOpen: (bookOpen: boolean) => void;
@@ -25,6 +29,8 @@ type gameState = {
 
 export const gameController = create<gameState>()((set, get) => ({
   cellHex: { x: "0", y: "0", z: "0" },
+  painting: undefined,
+  image: null,
   bookState: {
     cabinet: undefined,
     unit: undefined,
@@ -43,8 +49,25 @@ export const gameController = create<gameState>()((set, get) => ({
       cellHex: cellHex,
     }));
   },
+  setImage: (image: HTMLCanvasElement | null) => {
+    set(() => ({
+      image: image,
+    }));
+  },
+  setPainting: (painting: Orientation | undefined) => {
+    set(() => ({
+      bookState: {
+        cabinet: undefined,
+        unit: undefined,
+        row: undefined,
+        book: undefined,
+      },
+      painting: painting,
+    }));
+  },
   setBookState: (bookState: BookState) => {
     set(() => ({
+      painting: undefined,
       bookState: bookState,
     }));
   },

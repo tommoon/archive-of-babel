@@ -9,6 +9,7 @@ import ambience from '@/assets/sounds/ambience.mp3'
 import { useRef } from "react";
 import { PositionalAudio as PositionalAudioImpl } from 'three'
 import { optionsController } from "@/Controllers/optionsController";
+import { Painting } from "@/props/Painting";
 
 export const Cell = () => {
   const { cellHex } = gameController();
@@ -28,6 +29,11 @@ export const Cell = () => {
         <LibraryStairs cellHex={cellHex} orientation="W" />
         <LibraryStairs cellHex={cellHex} orientation="E" />
 
+        <Painting cellHex={cellHex} orientation="N" />
+        <Painting cellHex={cellHex} orientation="S" />
+        <Painting cellHex={cellHex} orientation="W" />
+        <Painting cellHex={cellHex} orientation="E" />
+        
         <SubCell
           key={`${cellHex.x}-${cellHex.y}-${base32Add(cellHex.z, '1')}`}
           cellHex={{ ...cellHex, z: base32Add(cellHex.z, '1') }}

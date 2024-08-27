@@ -6,7 +6,7 @@ import {
   setDebug,
   setScreenLocked,
 } from "@/Controllers/gameController";
-import { CellHex } from "@/types/CommonTypes";
+import { CellHex, Orientation } from "@/types/CommonTypes";
 
 export const useQueryString = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -14,7 +14,9 @@ export const useQueryString = () => {
     bookState,
     cellHex,
     page,
+    painting,
     searchString,
+    setPainting,
     setCellHex,
     setBookState,
     setBookOpen,
@@ -33,12 +35,21 @@ export const useQueryString = () => {
     const stringifiedParams = {
       ...Object.fromEntries(convertToParams(cellHex)),
       ...Object.fromEntries(convertToParams(bookState)),
+      ...(painting && { painting: painting }),
       ...(page && { page: page }),
       ...(searchString && { searchString: searchString }),
     };
 
     setSearchParams(stringifiedParams);
-  }, [cellHex, bookState, searchString, page, debug, setSearchParams]);
+  }, [
+    cellHex,
+    bookState,
+    searchString,
+    page,
+    debug,
+    painting,
+    setSearchParams,
+  ]);
 
   useEffect(() => {
     const x = searchParams.get("x");
@@ -50,6 +61,7 @@ export const useQueryString = () => {
     const book = searchParams.get("book");
     const page = searchParams.get("page");
     const searchString = searchParams.get("searchString");
+    const painting = searchParams.get("painting") as Orientation;
 
     const debug = searchParams.get("debug");
     if (debug) {
@@ -73,7 +85,9 @@ export const useQueryString = () => {
         unit: unit ? parseInt(unit) : undefined,
       });
     }
-
+    if (painting && ["N", "S", "E", "W"].includes(painting)) {
+      setPainting(painting);
+    }
     if (searchString) {
       setSearchstring(searchString);
     }

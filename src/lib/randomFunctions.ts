@@ -1,5 +1,5 @@
 import { BookState } from "@/Controllers/gameController";
-import { CellHex } from "@/types/CommonTypes";
+import { CellHex, Orientation } from "@/types/CommonTypes";
 import { x86 as MurmurHash3 } from "murmurhash3js";
 import { hashCode, pad, randPad, roomsToSenary, senaryToRooms } from "./utils";
 
@@ -130,4 +130,37 @@ export const findText = (searchString: string, exact = true) => {
     unit: unit,
     page: page,
   };
+};
+
+export const generatePainting = (
+  bookCell: CellHex,
+  orientation: Orientation
+) => {
+  const negativeStates = roomsToSenary(bookCell);
+  const normalizedCell = normalizeCell(bookCell);
+  const orientationValue = ["W", "N", "E", "S"].indexOf(orientation);
+
+  const canvas = document.createElement("canvas");
+  canvas.width = 500;
+  canvas.height = 700;
+  const ctx = canvas.getContext("2d");
+
+  if (!ctx) return;
+  const newLcg = createLCG(
+    `${negativeStates}${normalizedCell}${orientationValue}`
+  );
+
+  const imageData = ctx.createImageData(500, 700);
+  const data = imageData.data;
+
+  for (let i = 0; i < data.length; i += 4) {
+    data[i] = Math.floor(newLcg(0, 256)); // Red
+    data[i + 1] = Math.floor(newLcg(0, 256)); // Green
+    data[i + 2] = Math.floor(newLcg(0, 256)); // Blue
+    data[i + 3] = 255; // Alpha (fully opaque)
+  }
+
+  ctx.putImageData(imageData, 0, 0);
+
+  return canvas;
 };
