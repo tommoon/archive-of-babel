@@ -11,6 +11,9 @@ env:
 jobs:
   review_app:
     runs-on: ubuntu-latest
+    # Secrets are withheld from pull requests opened from forks, so this job
+    # cannot deploy for outside contributors. Skip it rather than fail loudly.
+    if: github.event.pull_request.head.repo.full_name == github.repository
     outputs:
       url: ${{ steps.deploy.outputs.url }}
     # Only run one deployment at a time per PR.
