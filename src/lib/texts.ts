@@ -104,7 +104,7 @@ If you have any questions or concerns about this Privacy Policy, please contact 
 export const CREDITS = `
 # Credits
 
-The Archive of babel is inspired by the short story "The Library of Babel" by Jorges Luis Borges. [You can read it here for free](https://sites.evergreen.edu/politicalshakespeares/wp-content/uploads/sites/226/2015/12/Borges-The-Library-of-Babel.pdf)
+The Archive of babel is inspired by the short story "The Library of Babel" by Jorge Luis Borges. [You can read it here for free](https://sites.evergreen.edu/politicalshakespeares/wp-content/uploads/sites/226/2015/12/Borges-The-Library-of-Babel.pdf)
 
 ## codebase
 the inspiration to make a digital version has been done before, and I took inspiration from [the original digital implimentation](https://libraryofbabel.info/) by Johnathan Bastille.
