@@ -7,7 +7,7 @@
   "homepage": "https://www.archiveofbabel.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tommoon/archiveOfBabel.git"
+    "url": "https://github.com/tommoon/archive-of-babel.git"
   },
   "type": "module",
   "scripts": {

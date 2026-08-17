@@ -51,8 +51,8 @@ The library is never stored. It is **computed on demand**, and the interesting p
 Requires Node 18+.
 
 ```bash
-git clone https://github.com/tommoon/archiveOfBabel.git
-cd archiveOfBabel
+git clone https://github.com/tommoon/archive-of-babel.git
+cd archive-of-babel
 npm install
 npm run dev
 ```
