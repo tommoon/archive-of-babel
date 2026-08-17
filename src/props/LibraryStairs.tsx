@@ -5,7 +5,7 @@ import { GLTF } from "three-stdlib";
 import { RigidBody } from "@react-three/rapier";
 import { CellHex, Orientation } from "@/types/CommonTypes";
 import { gameController } from "@/Controllers/gameController";
-import { playerPos } from "../Screen/Game/components/Player/Player";
+import { playerPos } from "@/lib/playerPosition";
 import { useCellHex } from "../hooks/useCellHex";
 import { transparentMaterial } from "@/lib/materials";
 import { base32Add, base32Subtract } from "@/lib/base32Utils";
@@ -15,7 +15,7 @@ import LibraryStairsColliders from '@/assets/models/LibraryStairsNewColliders-tr
 
 type GLTFResult = GLTF & {
   nodes: {
-    ramp: any;
+    ramp: THREE.Mesh;
     stairs: THREE.Mesh
     floor2: THREE.Mesh
     lightGem001: THREE.Mesh
@@ -92,7 +92,9 @@ export const LibraryStairs: React.FC<LibraryStairsProps> = ({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [cellHex, setPlayerPosition, cellHex]);
+    // upstairsHex/downstairsHex are derived from cellHex, so it covers them.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cellHex, setPlayerPosition]);
 
   return (
     <group

@@ -4,7 +4,7 @@ import { useGLTF, Plane } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { RigidBody } from "@react-three/rapier";
 import { CellHex, Vector3Like } from "@/types/CommonTypes";
-import { playerPos } from "../Screen/Game/components/Player/Player";
+import { playerPos } from "@/lib/playerPosition";
 import { _objectIsEqual } from "@/lib/comparisons";
 import { gameController } from "@/Controllers/gameController";
 import { useCellHex } from "../hooks/useCellHex";

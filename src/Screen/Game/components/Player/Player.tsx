@@ -11,13 +11,13 @@ import { touchController } from "@/Controllers/touchController";
 import { optionsController } from "@/Controllers/optionsController";
 import footsteps from '@/assets/sounds/footstep.mp3'
 import { Orientation } from "@/types/CommonTypes";
+import { playerPos } from "@/lib/playerPosition";
 
 const SPEED = 2;
 const direction = new Vector3();
 const frontVector = new Vector3();
 const sideVector = new Vector3();
 const startPos = new Vector3(3, 1, 5);
-export const playerPos = new Vector3();
 
 const getStartingPos = (bookState: BookState | undefined) => {
   if (!bookState) return startPos;
@@ -50,10 +50,10 @@ const getRoomRotation = (cabinet: number | undefined) => {
   }
 };
   
-const useInitialPosition = (bookState: BookState | undefined, adjustedPosition: Vector3,  painting: Orientation | undefined) => {
+const getInitialPosition = (bookState: BookState | undefined, adjustedPosition: Vector3,  painting: Orientation | undefined) => {
   if (!bookState) return adjustedPosition;
   if (painting) {
-      let vector = new Vector3();
+      const vector = new Vector3();
       if (['N', 'S'].includes(painting)) {
         vector.setZ('N' === painting ? -7.5 : 3.5)
       } else {
@@ -76,7 +76,7 @@ const useInitialPosition = (bookState: BookState | undefined, adjustedPosition: 
   }
 };
 
-const useInitialRotation = (bookState: BookState | undefined, painting: Orientation | undefined) => {
+const getInitialRotation = (bookState: BookState | undefined, painting: Orientation | undefined) => {
     if (!bookState) return new Euler(0, 0, 0);
  
   if (painting) {
@@ -84,7 +84,7 @@ const useInitialRotation = (bookState: BookState | undefined, painting: Orientat
   } else {
     let y = getRoomRotation(bookState?.cabinet);
     if (bookState?.book !== undefined) {
-      let starting = 15 - (bookState.book * 3.3);
+      const starting = 15 - (bookState.book * 3.3);
       y += starting;
     }
     // Initial Y-axis rotation
@@ -113,9 +113,12 @@ export const Player = () => {
   const { fov, fxVol } = optionsController()
   const { adjustedPosition } = useCellHex({ cellHex, addition: getStartingPos(bookState) });
 
-  const initialPosition = useMemo(() => useInitialPosition(bookState, adjustedPosition, painting),[]);
-
-  const initialRotation = useMemo(() => useInitialRotation(bookState, painting),[]);
+  // Spawn placement is deliberately computed once on mount: recomputing it while
+  // the player is moving would teleport them back to the entry point.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const initialPosition = useMemo(() => getInitialPosition(bookState, adjustedPosition, painting), []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const initialRotation = useMemo(() => getInitialRotation(bookState, painting), []);
   
   useEffect(() => {
     const footstepAudioListener = footstepAudio.current
@@ -123,8 +126,6 @@ export const Player = () => {
     const alterAudio = () => {
       if (footstepAudioListener) {
         const tune = Math.random() * 600 - 300
-       // const playbackRate = Math.random() * 0.1 + 0.95
-      //  footstepAudioListener.setPlaybackRate(playbackRate)
         footstepAudioListener.setDetune(tune)
       }
     };
@@ -151,9 +152,9 @@ export const Player = () => {
         rigidBodyTranslation.y + 0.2,
         rigidBodyTranslation.z,
       );
-      // @ts-ignore
+      // @ts-expect-error - useKeyboardControls() returns booleans; arithmetic on them is intentional
       frontVector.set(0, 0, backward - forward + move.dy * 0.01);
-      // @ts-ignore
+      // @ts-expect-error - see above
       sideVector.set(leftward - rightward - move.dx * 0.01, 0, 0);
       direction
         .subVectors(frontVector, sideVector)

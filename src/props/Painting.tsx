@@ -1,4 +1,5 @@
 import { Plane, useGLTF } from "@react-three/drei";
+import { ThreeEvent } from "@react-three/fiber";
 import paintingModel from '@/assets/models/Painting.glb'
 import { useCellHex } from "@/hooks/useCellHex";
 import * as THREE from "three";
@@ -35,17 +36,19 @@ export const Painting: React.FC<BooksProps> = ({ cellHex, orientation }) => {
 
   }, [texture])
   
-   const handleClick = useCallback(
-    (e: any) => {
-       e.stopPropagation();
-       if (texture) {
-          setPainting(orientation);
-         setImage(texture);
-         setScreenLocked(true);
-       }
+  const handleClick = useCallback(
+    (e: ThreeEvent<MouseEvent>) => {
+      e.stopPropagation();
+      if (texture) {
+        setPainting(orientation);
+        setImage(texture);
+        setScreenLocked(true);
+      }
     },
-    [orientation],
-   );
+    // `texture` is keyed on cellHex, so it must be a dependency: without it the
+    // handler keeps a stale canvas and opens the previous cell's painting.
+    [orientation, texture, setPainting, setImage],
+  );
 
   return (
     <group

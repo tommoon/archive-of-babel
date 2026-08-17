@@ -1,12 +1,11 @@
 import { transparentMaterial } from "@/lib/materials";
 import { PerspectiveCamera, Plane } from "@react-three/drei";
-import { Euler, Vector3 } from "three";
+import { Euler } from "three";
+import { ThreeEvent } from "@react-three/fiber";
 
-const handleClick = (e: any) => {
+const handleClick = (e: ThreeEvent<MouseEvent>) => {
   e.stopPropagation();
 };
-
-export const cameraForard = new Vector3()
 
 export const Camera: React.FC<{ initialRotation: Euler, fov: number }> = ({ initialRotation, fov }) => <PerspectiveCamera
       fov={fov}
