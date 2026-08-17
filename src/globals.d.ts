@@ -4,5 +4,5 @@ declare module "*.glb" {
   export default value;
 }
 interface Window {
-  adsbygoogle: any[];
+  adsbygoogle: unknown[];
 }

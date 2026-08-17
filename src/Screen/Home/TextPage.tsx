@@ -77,7 +77,7 @@ export const TextPage: React.FC<TextPageProps> = ({ markdownContent, helmetConte
             li: ({ ...props }) => <li style={styles.li} {...props} />,
             a: ({ ...props }) => <a style={styles.a} {...props} />,
             code: ({ ...props }) => 
-              //@ts-ignore
+              // @ts-expect-error - react-markdown's code renderer props do not line up with SyntaxHighlighter's
                 <SyntaxHighlighter style={dark} language="javascript" {...props} />
           }}
         />

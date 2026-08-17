@@ -16,6 +16,8 @@ export const Search = () => {
         const searchstring = searchParams.get("searchstring");
         setSearchString(searchstring || '')
         setTextString(searchstring || '')
+        // Seeds the field from the URL once; later edits must not be overwritten.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     
     const updateSearchString = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

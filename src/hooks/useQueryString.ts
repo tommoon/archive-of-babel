@@ -28,7 +28,7 @@ export const useQueryString = () => {
   useEffect(() => {
     const convertToParams = (obj: CellHex | BookState) => {
       return Object.entries(obj || {})
-        .filter(([_, value]) => value !== undefined)
+        .filter(([, value]) => value !== undefined)
         .map(([key, value]) => [key, value?.toString()]);
     };
 
@@ -96,5 +96,8 @@ export const useQueryString = () => {
       setScreenLocked(true);
       setPage(parseInt(page));
     }
+    // Hydrates game state from the URL once; re-running would fight the user's
+    // own navigation. Setters are stable zustand actions.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setCellHex, setBookState, setSearchstring, setDebug]);
 };

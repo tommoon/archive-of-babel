@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { Instance, Instances, useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
-import { useFrame } from "@react-three/fiber";
+import { ThreeEvent, useFrame } from "@react-three/fiber";
 import { CellHex } from "@/types/CommonTypes";
 import { seededRandom } from "@/lib/randomFunctions";
 import { gameController, setScreenLocked } from "@/Controllers/gameController";
@@ -109,7 +109,7 @@ const Book: React.FC<BookProps> = React.memo(
             .clone()
             .add(getPositions({ book, cabinet, row, unit })),
         );
-        // @ts-ignore
+        // @ts-expect-error - drei's <Instance> ref exposes .color at runtime but it is not in the type
         ref.current.color.copy(startColor);
         ref.current.scale.set(0.6, 0.4, 0.4 + scale);
         ref.current.rotation.set(0, 0, rotations[cabinet]);
@@ -146,7 +146,7 @@ const Book: React.FC<BookProps> = React.memo(
             0.1,
           );
         }
-        // @ts-ignore
+        // @ts-expect-error - see above: .color is present at runtime, absent from the type
         ref.current.color.lerp(
           COLOR.set(hovered ? "white" : startColor),
           hovered ? 1 : 0.1,
@@ -154,7 +154,7 @@ const Book: React.FC<BookProps> = React.memo(
       }
     });
 
-    const handlePointerOver = useCallback((e: any) => {
+    const handlePointerOver = useCallback((e: ThreeEvent<PointerEvent>) => {
       e.stopPropagation();
       setHover(true);
     }, []);
@@ -164,7 +164,7 @@ const Book: React.FC<BookProps> = React.memo(
     }, []);
 
     const handleClick = useCallback(
-      (e: any) => {
+      (e: ThreeEvent<MouseEvent>) => {
         e.stopPropagation();
         setBookState({
           book: book,
@@ -176,6 +176,9 @@ const Book: React.FC<BookProps> = React.memo(
         setScreenLocked(true);
         setPage(1)
       },
+      // `seed` is derived from cellHex + cabinet/unit/row/book, so it changes
+      // whenever any of them do.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [seed],
     );
 

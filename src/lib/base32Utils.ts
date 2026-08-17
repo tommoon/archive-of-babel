@@ -4,7 +4,7 @@ export function base32ToBigInt(base32Str: string): bigint {
 
   // Determine if the number is negative
   const isNegative = base32Str[0] === "-";
-  let startIndex = isNegative ? 1 : 0;
+  const startIndex = isNegative ? 1 : 0;
 
   for (let i = startIndex; i < base32Str.length; i++) {
     const char = base32Str[i];
@@ -48,23 +48,12 @@ export const base32Add = (num1: string, num2: string) => {
   const bigInt1 = base32ToBigInt(num1);
   const bigInt2 = base32ToBigInt(num2);
 
-  // Subtract the second BigInt from the first
-  const resultBigInt = bigInt1 + bigInt2;
-
-  // Convert the result back to a hexadecimal string
-  const resultHex = bigIntToBase32(resultBigInt);
-
-  return resultHex;
+  return bigIntToBase32(bigInt1 + bigInt2);
 };
 
 export const base32Subtract = (num1: string, num2: string) => {
   const bigInt1 = base32ToBigInt(num1);
   const bigInt2 = base32ToBigInt(num2);
 
-  // Subtract the second BigInt from the first
-  const resultBigInt = bigInt1 - bigInt2;
-  // Convert the result back to a hexadecimal string
-  const resultHex = bigIntToBase32(resultBigInt);
-
-  return resultHex;
+  return bigIntToBase32(bigInt1 - bigInt2);
 };

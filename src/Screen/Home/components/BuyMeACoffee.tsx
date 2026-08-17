@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 export const BuyMeACoffee = () => {
     useEffect(() => {
-        let script = document.createElement("script");
+        const script = document.createElement("script");
         script.setAttribute('data-name', 'BMC-Widget');
         script.src = "https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js";
         script.setAttribute('data-id', 'twombles');

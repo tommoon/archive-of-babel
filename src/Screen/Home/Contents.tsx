@@ -4,8 +4,11 @@ import { Link } from "react-router-dom";
 import { useResetPosition } from "@/hooks/useResetPosition";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
+/** Each tutorial/theory module exports a `contents` markdown string. */
+export type MarkdownModule = { contents: string };
+
 type ContentsProps = {
-  contents: { [key: string]: any }; // Assuming `contents` is an object with string keys and values
+  contents: Record<string, MarkdownModule>;
   title: 'Tutorials' | 'Theory';
 };
 
@@ -16,7 +19,7 @@ const extractImage = (markdownText: string): string | null => {
 };
 
 const extractIntroText = (markdown: string): string | null => {
-  const regex = /\[Designed by Freepik\]\([^\)]+\)([\s\S]*?)(?=#)/;
+  const regex = /\[Designed by Freepik\]\([^)]+\)([\s\S]*?)(?=#)/;
   const match = markdown.match(regex);
   return match ? match[1].trim() : null;
 };

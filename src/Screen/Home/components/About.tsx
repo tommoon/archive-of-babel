@@ -31,7 +31,7 @@ export const About = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
      const queryParams = Object.entries(formValues)
-      .filter(([_, value]) => value !== '')
+      .filter(([, value]) => value !== '')
       .map(([key, value]) => `${key}=${['unit', 'cabinet', 'row', 'book'].includes(key) ? parseInt(value) - 1 : value}`)
        .join("&");
     navigate(`/game?${queryParams}`);

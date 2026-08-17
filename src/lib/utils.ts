@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 // Define a function named degrees_to_radians that converts degrees to radians.
 export function degrees_to_radians(degrees: number) {
   // Store the value of pi.
-  var pi = Math.PI;
+  const pi = Math.PI;
   // Multiply degrees by pi divided by 180 to convert to radians.
   return degrees * (pi / 180);
 }
@@ -38,11 +38,10 @@ export const senaryToRooms = (
   const binary = senaryNumber.toString(2).padStart(numCells, "0");
 
   const updatedCellHex: CellHex = { ...cellHex };
+  // A "0" bit marks a negative axis; "1" leaves the coordinate untouched.
   binary.split("").forEach((bit, index) => {
     if (bit === "0") {
       updatedCellHex[cellKeys[index]] = "-" + updatedCellHex[cellKeys[index]];
-    } else {
-      updatedCellHex[cellKeys[index]] = updatedCellHex[cellKeys[index]];
     }
   });
   return updatedCellHex;
