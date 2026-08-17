@@ -1,17 +1,8 @@
-import { Material, Vector3 } from "three";
+import { Vector3 } from "three";
 
 export type Option = {
   value: string;
   label: string;
-};
-export type StaticElementProps = {
-  transformInfo: any;
-  selected?: boolean;
-  hovered?: boolean;
-  attachedMaterial?: Material | null;
-  onClick?: () => void;
-  onPointerOver?: () => void;
-  onPointerOut?: () => void;
 };
 
 export type CellHex = {
